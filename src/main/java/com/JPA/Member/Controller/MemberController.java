@@ -30,29 +30,26 @@ public class MemberController {
     public String findAll(Model model) {
         List<MemberDTO> memberDTOList = ms.findAll();
         model.addAttribute("memberDTOList", memberDTOList);
-
         return "/member/list";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute MemberDTO memberdto) {
-
         ms.save(memberdto);
-
         return "/home";
     }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
         MemberDTO memberDTO = ms.findById(id);
-
         model.addAttribute("member", memberDTO);
         return "/member/detail";
     }
 
-    @GetMapping("/update")
-    public String update(@RequestParam Long id, Model model) {
-        
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable Long id, Model model) {
+        MemberDTO memberDTO = ms.findById(id);
+        model.addAttribute("updateMember", memberDTO);
         return "/member/update";
     }
 
@@ -62,10 +59,11 @@ public class MemberController {
 
         if (loginresult != null) {
             // 세션에 로그인한 사용자의 ID를 저장
-            session.setAttribute("loginId", loginresult.getId());
+            session.setAttribute("loginId", loginresult.getId()); // Long으로 저장
+            session.setAttribute("loginEmail", loginresult.getMemberEmail());
             return "/home";
         } else {
-            return "/home";
+            return "/home"; // 로그인 실패 처리 추가 필요
         }
     }
 
@@ -80,5 +78,22 @@ public class MemberController {
             return "/member/login";
         }
     }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberDTO memberdto) {
+        ms.update(memberdto);
+
+        //redirect: 새 URL 요청을 지시 (삭제나 수정 후 같이 새로운 url로 이동해야 하는 경우 사용)
+        //return: 서버 내에서 뷰 렌더링 -> 사용자에게 응답
+        return "redirect:/member/myPage";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("loginId");     // 로그인 ID 세션 속성 제거
+        session.removeAttribute("loginEmail");  // 로그인 이메일 세션 속성 제거
+        return "redirect:/";                // 로그아웃 후 홈으로 리다이렉트
+    }
+
 
 }

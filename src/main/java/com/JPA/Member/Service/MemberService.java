@@ -55,4 +55,18 @@ public class MemberService {
             return null;
         }
     }
+
+    public MemberDTO updateForm(String myEmail) {
+        Optional<MemberEntity> optionalMemberEntity = mr.findByMemberEmail(myEmail);
+
+        if(optionalMemberEntity.isPresent()) {
+            return MemberDTO.toMemberDTO(optionalMemberEntity.get());
+        } else{
+            return null;
+        }
+    }
+
+    public void update(MemberDTO memberdto) {
+        mr.save(MemberEntity.toUpdateMemberEntity(memberdto));
+    }
 }

@@ -19,6 +19,7 @@
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 20px;
         }
 
         table {
@@ -28,6 +29,7 @@
             background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            overflow: hidden;
         }
 
         th, td {
@@ -51,7 +53,7 @@
         }
 
         .update-button {
-            display: block;
+            display: inline-block;
             width: 150px;
             margin: 20px auto;
             padding: 10px;
@@ -59,13 +61,17 @@
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             text-align: center;
             text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
         .update-button:hover {
             background-color: #218838;
+        }
+
+        .button-container {
+            text-align: center;
         }
     </style>
 </head>
@@ -91,7 +97,9 @@
             <td th:text="${member.memberName}"></td>
         </tr>
     </table>
-    <a class="update-button" th:href="@{/member/update}">정보 수정</a>
+    <div class="button-container">
+        <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
+    </div>
 </div>
 </body>
 
