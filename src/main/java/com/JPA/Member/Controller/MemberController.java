@@ -42,20 +42,6 @@ public class MemberController {
         return "/home";
     }
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute MemberDTO memberdto, HttpSession session) {
-        MemberDTO loginresult = ms.login(memberdto);
-
-        if(loginresult != null) {
-            session.setAttribute("loginEmail", loginresult);
-
-            return "/home";
-
-        } else{
-            return "/home";
-        }
-    }
-
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
         MemberDTO memberDTO = ms.findById(id);
@@ -63,4 +49,36 @@ public class MemberController {
         model.addAttribute("member", memberDTO);
         return "/member/detail";
     }
+
+    @GetMapping("/update")
+    public String update(@RequestParam Long id, Model model) {
+        
+        return "/member/update";
+    }
+
+    @PostMapping("/login")
+    public String login(@ModelAttribute MemberDTO memberdto, HttpSession session) {
+        MemberDTO loginresult = ms.login(memberdto);
+
+        if (loginresult != null) {
+            // 세션에 로그인한 사용자의 ID를 저장
+            session.setAttribute("loginId", loginresult.getId());
+            return "/home";
+        } else {
+            return "/home";
+        }
+    }
+
+    @GetMapping("/myPage")
+    public String myPage(HttpSession session, Model model) {
+        Long memberId = (Long) session.getAttribute("loginId");
+
+        if (memberId != null) {
+            model.addAttribute("member", ms.findById(memberId));
+            return "/member/myPage";
+        } else {
+            return "/member/login";
+        }
+    }
+
 }

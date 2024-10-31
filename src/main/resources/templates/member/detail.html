@@ -49,6 +49,24 @@
     tr:last-child td {
       border-bottom: none;
     }
+
+    .update-button {
+      display: block;
+      width: 150px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .update-button:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 
@@ -65,10 +83,15 @@
       <td th:text="${member.memberEmail}"></td>
     </tr>
     <tr>
+      <th>Password</th>
+      <td th:text="${member.memberPassword}"></td>
+    </tr>
+    <tr>
       <th>Name</th>
       <td th:text="${member.memberName}"></td>
     </tr>
   </table>
+  <a class="update-button" th:href="@{/member/update}">정보 수정</a>
 </div>
 </body>
 
