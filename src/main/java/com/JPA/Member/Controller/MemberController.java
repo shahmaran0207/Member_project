@@ -55,4 +55,12 @@ public class MemberController {
             return "/home";
         }
     }
+
+    @GetMapping("/{id}")
+    public String findById(@PathVariable Long id, Model model) {
+        MemberDTO memberDTO = ms.findById(id);
+
+        model.addAttribute("member", memberDTO);
+        return "/member/detail";
+    }
 }

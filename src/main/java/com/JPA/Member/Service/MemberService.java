@@ -45,4 +45,14 @@ public class MemberService {
 
         return dtoList;
     }
+
+    public MemberDTO findById(Long id) {
+        Optional<MemberEntity> optionalMemberEntity = mr.findById(id);
+
+        if(optionalMemberEntity.isPresent()) {
+            return MemberDTO.toMemberDTO(optionalMemberEntity.get());
+        } else{
+            return null;
+        }
+    }
 }

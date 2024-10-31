@@ -3,16 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <style>
+        /* 폼 전체 중앙 배치 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* 폼 스타일 */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            width: 100%;
+        }
+
+        /* 입력 필드와 버튼 스타일 */
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 16px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* 제출 버튼 스타일 */
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* 제목 스타일 */
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-<body>
 <form action="/member/save" method="post">
-    이메일: <input type="text" name="memberEmail" id="memberEmail"> <br>
-    비밀번호: <input type="password" name="memberPassword"> <br>
-    이름: <input type="text" name="memberName"> <br>
+    <h2>회원가입</h2>
+    <label for="memberEmail">이메일:</label>
+    <input type="text" name="memberEmail" id="memberEmail">
+
+    <label for="memberPassword">비밀번호:</label>
+    <input type="password" name="memberPassword" id="memberPassword">
+
+    <label for="memberName">이름:</label>
+    <input type="text" name="memberName" id="memberName">
+
     <input type="submit" value="회원가입">
-
 </form>
-
 </body>
 </html>
