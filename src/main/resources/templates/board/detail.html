@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detail</title>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+          integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+          crossorigin="anonymous"></script>
+
+  <style>
+    body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #333; margin-bottom: 20px; }
+    table { width: 80%; margin: 0 auto; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    th { background-color: #4CAF50; color: white; }
+    img { max-width: 100%; height: auto; border-radius: 8px; }
+    .button-container { text-align: center; margin-top: 20px; }
+    button { background-color: #007BFF; color: white; border: none; padding: 10px 15px; margin: 5px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s, transform 0.1s; }
+    button:hover { background-color: #0056b3; transform: scale(1.05); }
+    #comment-write { width: 80%; margin: 20px auto; display: flex; justify-content: space-between; }
+    #comment-write input { width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-right: 10px; }
+    #comment-write-button { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s, transform 0.1s; }
+    #comment-write-button:hover { background-color: #218838; transform: scale(1.05); }
+    #comment-list { width: 80%; margin: 20px auto; background: white; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    .comment-item { margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #ddd; }
+    .comment-item:last-child { border-bottom: none; }
+    .comment-author { font-weight: bold; margin-bottom: 5px; }
+    .comment-content { color: #555; }
+  </style>
+</head>
+
+<body>
+<h1>게시판 상세 정보</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <td th:text="${board.id}"></td>
+  </tr>
+  <tr>
+    <th>Title</th>
+    <td th:text="${board.boardTitle}"></td>
+  </tr>
+  <tr>
+    <th>Writer</th>
+    <td th:text="${board.memberName}"></td>
+  </tr>
+  <tr>
+    <th>Date</th>
+    <td th:text="${#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+  </tr>
+  <tr>
+    <th>Hits</th>
+    <td th:text="${board.boardHits}"></td>
+  </tr>
+  <tr>
+    <th>Contents</th>
+    <td th:text="${board.boardContents}"></td>
+  </tr>
+  <tr th:if="${board.fileAttached == 1}">
+    <th>Image</th>
+    <td th:each="fileName: ${board.storedFileName}">
+      <img th:src="@{|/upload/${fileName}|}" alt="Uploaded Image">
+    </td>
+  </tr>
+</table>
+
+<div class="button-container">
+  <button onclick="listReq()">목록</button>
+  <button onclick="updateReq()">수정</button>
+  <button onclick="deleteReq()">삭제</button>
+</div>
+
+<div id="comment-write">
+  <input type="text" id="commentWrite" th:value="${session.loginName}" th:readonly="true" placeholder="작성자">
+  <input type="text" id="commentContents" placeholder="내용">
+  <button id="comment-write-button" onclick="commentWrite()">댓글 작성</button>
+</div>
+
+<!-- 댓글 리스트 부분 -->
+<div id="comment-list">
+</div>
+
+<script th:inline="javascript">
+  // 페이지 로드 시 댓글을 자동으로 로드
+  $(document).ready(function () {
+    loadComments(); // 초기 로드 시 댓글 불러오기
+  });
+
+  // 댓글 목록 불러오기 함수
+  const loadComments = () => {
+    const id = [[${board.id}]];
+
+    $.ajax({
+      type: "GET",
+      url: "/comment/list/" + id,
+      success: function (res) {
+        renderComments(res); // 성공 시 댓글 렌더링
+      },
+      error: function (err) {
+        console.log("댓글 로드 실패", err);
+      }
+    });
+  };
+
+  // 댓글 목록을 렌더링하는 함수
+  const renderComments = (res) => {
+    let output = "<table>";
+    output += "<tr><th>댓글번호</th><th>작성자</th><th>내용</th><th>작성시간</th></tr>";
+    for (let i in res) {
+      output += "<tr>";
+      output += "<td>" + res[i].id + "</td>";
+      output += "<td>" + res[i].commentWriter + "</td>";
+      output += "<td>" + res[i].commentContents + "</td>";
+      output += "<td>" + res[i].commentCreatedTime + "</td>";
+      output += "</tr>";
+    }
+    output += "</table>";
+    document.getElementById('comment-list').innerHTML = output;
+  };
+
+  // 댓글 작성 함수
+  const commentWrite = () => {
+    const writer = document.getElementById('commentWrite').value;
+    const contents = document.getElementById('commentContents').value;
+    const id = [[${board.id}]];
+
+    $.ajax({
+      type: "POST",
+      url: "/comment/save",
+      data: {
+        "commentWriter": writer,
+        "commentContents": contents,
+        "boardId": id
+      },
+      success: function (res) {
+        console.log("댓글 저장 성공", res);
+        renderComments(res); // 댓글 작성 후 다시 렌더링
+        document.getElementById('commentContents').value = '';
+      },
+      error: function (err) {
+        console.log("댓글 저장 실패", err);
+      }
+    });
+  };
+
+  const listReq = () => {
+    const page = [[${page}]];
+    location.href = "/board/paging?page=" + page;
+  };
+
+  const updateReq = () => {
+    const id = [[${board.id}]];
+    location.href = "/board/update/" + id;
+  };
+
+  const deleteReq = () => {
+    const id = [[${board.id}]];
+    location.href = "/board/delete/" + id;
+  };
+</script>
+</body>
+</html>

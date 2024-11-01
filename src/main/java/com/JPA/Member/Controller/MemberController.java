@@ -57,6 +57,7 @@ public class MemberController {
     public String delete(@PathVariable Long id, HttpSession session) {
         session.removeAttribute("loginId");
         session.removeAttribute("loginEmail");
+        session.removeAttribute("loginName");
         ms.deleteById(id);
         return "redirect:/";
     }
@@ -69,6 +70,8 @@ public class MemberController {
             // 세션에 로그인한 사용자의 ID를 저장
             session.setAttribute("loginId", loginresult.getId()); // Long으로 저장
             session.setAttribute("loginEmail", loginresult.getMemberEmail());
+            session.setAttribute("loginName", loginresult.getMemberName()); // 사용자 이름 저장
+
             return "/home";
         } else {
             return "/home"; // 로그인 실패 처리 추가 필요
@@ -100,6 +103,7 @@ public class MemberController {
     public String logout(HttpSession session) {
         session.removeAttribute("loginId");
         session.removeAttribute("loginEmail");
+        session.removeAttribute("loginName");
         return "redirect:/";
     }
 

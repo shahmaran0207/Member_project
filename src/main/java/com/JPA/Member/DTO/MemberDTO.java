@@ -1,6 +1,11 @@
 package com.JPA.Member.DTO;
 
+import com.JPA.Member.Entity.BoardEntity;
 import com.JPA.Member.Entity.MemberEntity;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 
 @Getter
@@ -13,6 +18,9 @@ public class MemberDTO {
     private String memberEmail;
     private String memberPassword;
     private String memberName;
+
+    @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardEntity> boardEntities = new ArrayList<>();
 
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
