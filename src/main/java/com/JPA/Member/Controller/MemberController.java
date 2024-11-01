@@ -103,5 +103,13 @@ public class MemberController {
         return "redirect:/";
     }
 
-
+    @PostMapping("/email-check")
+    public @ResponseBody String emailCheck(@RequestParam("memberEmail") String memberEmail) {
+        String checkResult = ms.emailCheck(memberEmail);
+            if (checkResult != null) {
+                return "no";
+            } else {
+                return "ok";
+            }
+    }
 }

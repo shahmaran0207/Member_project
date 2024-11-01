@@ -73,4 +73,12 @@ public class MemberService {
     public void deleteById(Long id) {
         mr.deleteById(id);
     }
+
+    public String emailCheck(String memberemail) {
+        Optional<MemberEntity> optionalMemberEntity = mr.findByMemberEmail(memberemail);
+        if(optionalMemberEntity.isPresent()) {
+            MemberEntity memberEntity = optionalMemberEntity.get();
+            return memberEntity.getMemberEmail();
+        } else return null;
+    }
 }

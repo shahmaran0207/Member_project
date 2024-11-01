@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+            crossorigin="anonymous"></script>
+
     <style>
-        /* 폼 전체 중앙 배치 */
+        /* Center form on page */
         body {
             display: flex;
             justify-content: center;
@@ -14,7 +20,7 @@
             background-color: #f5f5f5;
         }
 
-        /* 폼 스타일 */
+        /* Form styling */
         form {
             background-color: #fff;
             padding: 20px;
@@ -24,7 +30,7 @@
             width: 100%;
         }
 
-        /* 입력 필드와 버튼 스타일 */
+        /* Input fields and button styling */
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -34,7 +40,7 @@
             box-sizing: border-box;
         }
 
-        /* 제출 버튼 스타일 */
+        /* Submit button styling */
         input[type="submit"] {
             width: 100%;
             padding: 12px;
@@ -50,10 +56,16 @@
             background-color: #0056b3;
         }
 
-        /* 제목 스타일 */
+        /* Title styling */
         h2 {
             text-align: center;
             color: #333;
+        }
+
+        /* Email check result styling */
+        #check-result {
+            font-size: 14px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -61,15 +73,77 @@
 <form action="/member/save" method="post">
     <h2>회원가입</h2>
     <label for="memberEmail">이메일:</label>
-    <input type="text" name="memberEmail" id="memberEmail">
+    <input type="text" name="memberEmail" id="memberEmail" onblur="emailCheck()" oninput="resetEmailCheckResult()">
+    <div id="check-result"></div> <!-- Email check result display -->
 
     <label for="memberPassword">비밀번호:</label>
-    <input type="password" name="memberPassword" id="memberPassword">
+    <input type="password" name="memberPassword" id="memberPassword" onkeyup="checkFormValidity()">
 
     <label for="memberName">이름:</label>
-    <input type="text" name="memberName" id="memberName">
+    <input type="text" name="memberName" id="memberName" onkeyup="checkFormValidity()">
 
-    <input type="submit" value="회원가입">
+    <input type="submit" value="회원가입" id="submit-btn" disabled>
 </form>
+
+<script th:inline="javascript">
+    const emailCheck = () => {
+        const email = document.getElementById("memberEmail").value;
+        const checkResult = document.getElementById("check-result");
+        const submitBtn = document.getElementById("submit-btn");
+
+        // Reset the email check result before new check
+        checkResult.innerHTML = "Checking email...";
+        checkResult.style.color = "blue";
+        submitBtn.disabled = true;
+
+        $.ajax({
+            type: "post",
+            url: "/member/email-check",
+            data: {
+                "memberEmail": email
+            },
+            success: function(res) {
+                if (res === "ok") {
+                    checkResult.style.color = "green";
+                    checkResult.innerHTML = "사용 가능한 이메일 입니다.";
+                    checkFormValidity(); // Re-check form validity on success
+                } else {
+                    checkResult.style.color = "red";
+                    checkResult.innerHTML = "이미 사용중인 이메일 입니다.";
+                    submitBtn.disabled = true; // Disable button if email is already used
+                }
+            },
+            error: function(err) {
+                console.log("Error:", err);
+                submitBtn.disabled = true; // Disable button in case of error
+            }
+        });
+    };
+
+    const resetEmailCheckResult = () => {
+        const checkResult = document.getElementById("check-result");
+        checkResult.innerHTML = "";
+        checkResult.style.color = "black";
+        document.getElementById("submit-btn").disabled = true; // Reset button state
+    };
+
+    const checkFormValidity = () => {
+        const email = document.getElementById("memberEmail").value;
+        const password = document.getElementById("memberPassword").value;
+        const name = document.getElementById("memberName").value;
+        const isEmailValid = document.getElementById("check-result").style.color === "green";
+
+        // Enable button only if all fields are filled and email check passes
+        document.getElementById("submit-btn").disabled = !(email && password && name && isEmailValid);
+    };
+
+    // Attach listeners
+    document.getElementById("memberEmail").addEventListener("blur", emailCheck);
+    document.getElementById("memberEmail").addEventListener("input", resetEmailCheckResult);
+    document.getElementById("memberPassword").addEventListener("input", checkFormValidity);
+    document.getElementById("memberName").addEventListener("input", checkFormValidity);
+</script>
+
+
 </body>
 </html>
