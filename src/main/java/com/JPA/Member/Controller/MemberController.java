@@ -53,6 +53,14 @@ public class MemberController {
         return "/member/update";
     }
 
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id, HttpSession session) {
+        session.removeAttribute("loginId");
+        session.removeAttribute("loginEmail");
+        ms.deleteById(id);
+        return "redirect:/";
+    }
+
     @PostMapping("/login")
     public String login(@ModelAttribute MemberDTO memberdto, HttpSession session) {
         MemberDTO loginresult = ms.login(memberdto);
@@ -90,9 +98,9 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("loginId");     // 로그인 ID 세션 속성 제거
-        session.removeAttribute("loginEmail");  // 로그인 이메일 세션 속성 제거
-        return "redirect:/";                // 로그아웃 후 홈으로 리다이렉트
+        session.removeAttribute("loginId");
+        session.removeAttribute("loginEmail");
+        return "redirect:/";
     }
 
 
