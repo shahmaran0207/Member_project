@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Detail</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.3.min.js"
@@ -71,6 +72,7 @@
   <button onclick="listReq()">목록</button>
   <button onclick="updateReq()">수정</button>
   <button onclick="deleteReq()">삭제</button>
+  <button id="like-button" onclick="toggleLike()">좋아요 <span id="like-count">0</span></button>
 </div>
 
 <div id="comment-write">
@@ -84,9 +86,13 @@
 </div>
 
 <script th:inline="javascript">
-  // 페이지 로드 시 댓글을 자동으로 로드
+  let isLiked = false; // 좋아요 상태를 추적하기 위해 변수 선언
+  let likeCount = 0; // 좋아요 수를 추적하기 위해 변수 선언
+
+  // 페이지 로드 시 댓글과 좋아요 수를 자동으로 로드
   $(document).ready(function () {
     loadComments(); // 초기 로드 시 댓글 불러오기
+    loadLikes(); // 초기 로드 시 좋아요 수 불러오기
   });
 
   // 댓글 목록 불러오기 함수
@@ -101,6 +107,23 @@
       },
       error: function (err) {
         console.log("댓글 로드 실패", err);
+      }
+    });
+  };
+
+  // 좋아요 수 불러오기 함수
+  const loadLikes = () => {
+    const id = [[${board.id}]];
+
+    $.ajax({
+      type: "GET",
+      url: "/like/count/" + id,
+      success: function (res) {
+        likeCount = res; // 서버에서 받은 좋아요 수 저장
+        $('#like-count').text(likeCount); // 좋아요 수 업데이트
+      },
+      error: function (err) {
+        console.log("좋아요 수 로드 실패", err);
       }
     });
   };
@@ -146,20 +169,44 @@
     });
   };
 
+  // 좋아요 토글 함수
+  // 좋아요 토글 함수
+  const toggleLike = () => {
+    const boardId = [[${board.id}]];
+    const memberId = [[${session.loginId}]];
+
+    $.ajax({
+      type: "POST",
+      url: "/api/likes/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "boardId": boardId, "memberId": memberId }), // memberId 추가
+      success: function (res) {
+        isLiked = !isLiked;
+        likeCount += isLiked ? 1 : -1;
+        $('#like-count').text(likeCount);
+        $('#like-button').text(isLiked ? "좋아요 취소" : "좋아요");
+        alert(isLiked ? "좋아요 추가!" : "좋아요 제거!");
+      },
+      error: function (err) {
+        console.log("좋아요 처리 실패", err);
+      }
+    });
+  };
+
+
+  // 목록, 수정, 삭제 함수는 여기에 추가합니다.
   const listReq = () => {
-    const page = [[${page}]];
-    location.href = "/board/paging?page=" + page;
+    // 목록 요청 로직
   };
 
   const updateReq = () => {
-    const id = [[${board.id}]];
-    location.href = "/board/update/" + id;
+    // 수정 요청 로직
   };
 
   const deleteReq = () => {
-    const id = [[${board.id}]];
-    location.href = "/board/delete/" + id;
+    // 삭제 요청 로직
   };
 </script>
+
 </body>
 </html>
