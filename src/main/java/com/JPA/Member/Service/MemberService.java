@@ -81,4 +81,9 @@ public class MemberService {
             return memberEntity.getMemberEmail();
         } else return null;
     }
+
+    public void guidesave(MemberDTO memberDTO) {
+        MemberEntity memberEntity = MemberEntity.toMemberEntity(memberDTO);
+        mr.save(memberEntity);
+    }
 }

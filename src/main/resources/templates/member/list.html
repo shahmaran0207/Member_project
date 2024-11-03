@@ -80,14 +80,12 @@
         <th>이메일</th>
         <th>이름</th>
         <th>상세조회</th>
-        <th>삭제</th>
     </tr>
     <tr th:each="member: ${memberDTOList}">
         <td th:text="${member.id}"></td>
         <td th:text="${member.memberEmail}"></td>
         <td th:text="${member.memberName}"></td>
         <td><a th:href="@{|/member/${member.id}|}">조회</a></td>
-        <td><a th:href="@{|/member/delete/${member.id}|}">삭제</a></td>
     </tr>
 </table>
 </body>

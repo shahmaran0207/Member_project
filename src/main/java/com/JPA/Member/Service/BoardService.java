@@ -1,9 +1,9 @@
 package com.JPA.Member.Service;
 
-import com.JPA.Member.Repository.MemberRepository;
 import org.springframework.web.multipart.MultipartFile;
 import com.JPA.Member.Repository.BoardFileRepository;
 import org.springframework.data.domain.PageRequest;
+import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Repository.BoardRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.JPA.Member.DTO;
 
-import com.JPA.Member.Entity.BoardEntity;
 import com.JPA.Member.Entity.MemberEntity;
+import com.JPA.Member.Entity.BoardEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;

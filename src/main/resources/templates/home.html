@@ -11,11 +11,16 @@
 <button onclick="PagingReq()">페이징 목록</button>
 <button onclick="list()">멤버 목록 확인</button>
 <button onclick="myPage()">마이 페이지</button>
+<button onclick="guide()">가이드 목록</button>
 <a href="/member/logout">로그아웃</a>
 
 
 </body>
 <script>
+    const guide = () => {
+        location.href="/guide/list"
+    }
+
     const saveReq = () => {
         location.href="/board/save"
     }

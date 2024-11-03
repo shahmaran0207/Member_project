@@ -3,10 +3,12 @@ package com.JPA.Member.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.JPA.Member.Service.MemberService;
+import com.JPA.Member.Service.GuideService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import com.JPA.Member.DTO.MemberDTO;
 import org.springframework.ui.Model;
+import com.JPA.Member.DTO.MemberDTO;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -15,6 +17,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService ms;
+    private final GuideService gs;
 
     @GetMapping("/save")
     public String save() {
@@ -51,6 +54,16 @@ public class MemberController {
         MemberDTO memberDTO = ms.findById(id);
         model.addAttribute("updateMember", memberDTO);
         return "/member/update";
+    }
+
+    @GetMapping("/guide/{id}")
+    public String guide(HttpSession session, Model model) throws IOException {
+        Long id = (Long) session.getAttribute("loginId");
+        MemberDTO memberDTO = ms.findById(id);
+
+        gs.save(memberDTO, id);
+
+        return "redirect:/";
     }
 
     @GetMapping("/delete/{id}")
