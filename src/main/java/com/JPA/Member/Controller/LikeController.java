@@ -21,4 +21,11 @@ public class LikeController {
     public int getLikeCount(@PathVariable Long boardId) {
         return likeService.getLikeCount(boardId);
     }
+
+    @GetMapping("/status/{boardId}/{memberId}")
+    public boolean checkLikeStatus(@PathVariable Long boardId, @PathVariable Long memberId) {
+        return likeService.isLikedByMember(boardId, memberId);
+    }
+
 }
+

@@ -23,18 +23,20 @@ public class BoardDTO {
 
     private int boardHits;
     private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
+    private int likesCount;
 
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;
 
     private MultipartFile boardFile; // save.html -> Controller 파일 담는 용도
 
-    public BoardDTO(Long id, String boardTitle, int boardHits, LocalDateTime boardCreatedTime, String memberName) {
+    public BoardDTO(Long id, String boardTitle, int boardHits, LocalDateTime boardCreatedTime, String memberName, int likesCount) {
         this.id = id;
         this.boardTitle = boardTitle;
         this.boardHits = boardHits;
         this.boardCreatedTime = boardCreatedTime;
         this.memberName = memberName;
+        this.likesCount =likesCount;
     }
 
     public static BoardDTO toBoardDTO(BoardEntity boardEntity) {
@@ -46,6 +48,7 @@ public class BoardDTO {
         boardDTO.setBoardHits(boardEntity.getBoardHits());
         boardDTO.setBoardCreatedTime(boardEntity.getCreatedTime());
         boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
+        boardDTO.setLikesCount((boardEntity.getLikesCount()));
 
         // MemberEntity의 이름 필드 설정
         boardDTO.setMemberName(boardEntity.getMemberEntity().getMemberName());

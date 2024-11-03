@@ -103,7 +103,7 @@ public class BoardService {
                 boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
 
         Page<BoardDTO> boardDTOS = boardEntities.map(board ->
-                new BoardDTO(board.getId(), board.getBoardTitle(), board.getBoardHits(), board.getCreatedTime(), board.getMemberEntity().getMemberName()));
+                new BoardDTO(board.getId(), board.getBoardTitle(), board.getBoardHits(), board.getCreatedTime(), board.getMemberEntity().getMemberName(), board.getLikesCount()));
         return boardDTOS;
     }
 }
