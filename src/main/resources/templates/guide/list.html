@@ -1,10 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>가이드 목록</title>
+  <meta charset="UTF-8">
+  <title>가이드 목록</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 80%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #e9f5ff;
+    }
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border: 1px solid #007bff;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .center {
+      text-align: center;
+      padding-top: 20px;
+      font-size: 1.5em;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-
+<h1 class="center">멤버 목록</h1>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>이메일</th>
+    <th>이름</th>
+    <th>상세조회</th>
+  </tr>
+  <tr th:each="guide: ${GuideDTOLIST}">
+    <td th:text="${guide.id}"></td>
+    <td th:text="${guide.guideEmail}"></td>
+    <td th:text="${guide.guideName}"></td>
+    <td><a th:href="@{|/guide/${guide.id}|}">조회</a></td>
+  </tr>
+</table>
 </body>
 </html>

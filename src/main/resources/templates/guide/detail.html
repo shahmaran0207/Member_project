@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Guide Detail</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 80%;
+      max-width: 600px;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 1em;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    td {
+      color: #555;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .button-container { text-align: center; margin-top: 20px; }
+    button { background-color: #007BFF; color: white; border: none; padding: 10px 15px; margin: 5px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s, transform 0.1s; }
+    button:hover { background-color: #0056b3; transform: scale(1.05); }
+
+    .update-button {
+      display: block;
+      width: 200px;
+      padding: 12px;
+      margin: 30px auto 0;
+      background-color: #28a745;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .update-button:hover {
+      background-color: #218838;
+    }
+
+    .like-count {
+      display: inline-block; /* 버튼처럼 보이게 하기 위해 inline-block으로 설정 */
+      background-color: #007BFF; /* 버튼 색상 */
+      color: white; /* 글자 색상 */
+      border-radius: 5px; /* 모서리 둥글게 */
+      padding: 10px 15px; /* 패딩 설정 */
+      margin-left: 10px; /* 버튼과 간격 설정 */
+      cursor: default; /* 커서 기본 설정으로 변경 */
+      pointer-events: none; /* 클릭 이벤트 비활성화 */
+    }
+  </style>
+</head>
+
+<body>
+<div>
+  <h1>Guide Details</h1>
+  <table>
+    <tr>
+      <th>ID</th>
+      <td th:text="${guide.id}"></td>
+    </tr>
+    <tr>
+      <th>Email</th>
+      <td th:text="${guide.GuideEmail}"></td>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <td th:text="${guide.guideName}"></td>
+    </tr>
+  </table>
+
+  <div class="button-container">
+    <button id="like-button" onclick="toggleLike()">싫어요</button>
+    <span id="like-count" class="like-count" th:text="${guide.hateCounts}">0</span> <!-- 수정된 부분 -->
+  </div>
+
+</div>
+</body>
+
+  <script th:inline="javascript">
+    let isLiked = false; // 좋아요 상태를 추적하기 위해 변수 선언
+    let likeCount = 0; // 좋아요 수를 추적하기 위해 변수 선언
+
+    $(document).ready(function () {
+      loadLikes(); // 초기 로드 시 좋아요 수 불러오기
+    });
+
+    const loadLikes = () => {
+      const boardId = [[${guide.id}]];
+      const memberId = [[${session.loginId}]];
+
+      $.ajax({
+        type: "GET",
+        url: `/like/count/${boardId}`,
+        success: function (count) {
+          likeCount = count; // Initialize likeCount with the loaded value
+          $('#like-count').text(likeCount); // Update the like count display
+        },
+        error: function (err) {
+          console.log("싫어요 수 로드 실패", err);
+        }
+      });
+
+      $.ajax({
+        type: "GET",
+        url: `/api/likes/status/${boardId}/${memberId}`,
+        success: function (isLiked) {
+          $('#like-button').text(isLiked ? "싫어요 취소" : "싫어요");
+        },
+        error: function (err) {
+          console.log("싫어요 상태 로드 실패", err);
+        }
+      });
+    };
+
+
+  </script>
+</html>

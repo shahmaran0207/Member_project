@@ -25,4 +25,5 @@ public class GuideDTO {
         guideDTO.setHateCounts(0);
         return guideDTO;
     }
+
 }
