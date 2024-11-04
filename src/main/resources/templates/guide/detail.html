@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Guide Detail</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -118,64 +119,61 @@
 </div>
 </body>
 
-  <script th:inline="javascript">
-    let isHated = false;
-    let hateCount = 0;
+<script>
+  let isHated = false;
+  let hateCount = 0;
 
-    $(document).ready(function () {
-      loadHates();
+  document.addEventListener("DOMContentLoaded", function () {
+    loadHates();
+  });
+
+  const loadHates = () => {
+    const guideId = [[${guide.id}]];
+    const memberId =[[${session.loginId}]];
+
+    $.ajax({
+      type: "GET",
+      url: `/api/hates/count/${guideId}`,
+      success: function (count) {
+        hateCount = count;
+        $('#hate-count').text(hateCount);
+      },
+      error: function (err) {
+        console.log("싫어요 수 로드 실패", err);
+      }
     });
 
-    const loadHates = () => {
-      const guideId = [[${guide.id}]];
-      const memberId = [[${session.loginId}]];
+    $.ajax({
+      type: "GET",
+      url: `/api/hates/status/${guideId}/${memberId}`,
+      success: function (isHated) {
+        $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 상태 로드 실패", err);
+      }
+    });
+  };
 
-      $.ajax({
-        type: "GET",
-        url: `/hate/count/${guideId}`,
-        success: function (count) {
-          hateCount = count;
-          $('#hate-count').text(hateCount);
-        },
-        error: function (err) {
-          console.log("싫어요 수 로드 실패", err);
-        }
-      });
+  window.toggleHate = () => {
+    const guideId = [[${guide.id}]];
+    const memberId = [[${session.loginId}]];
 
-      $.ajax({
-        type: "GET",
-        url: `/api/hates/status/${guideId}/${memberId}`,
-        success: function (isHated) {
-          $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
-        },
-        error: function (err) {
-          console.log("싫어요 상태 로드 실패", err);
-        }
-      });
-    };
-
-    const toggleHate = () => {
-      const guideId = [[${guide.id}]];
-      const memberId = [[${session.loginId}]];
-
-      $.ajax({
-        type: "POST",
-        url: "/api/hates/toggle",
-        contentType: "application/json",
-        data: JSON.stringify({ "guideId": guideId, "memberId": memberId }),
-        success: function (res) {
-          isHated = res === "Hate added";
-          hateCount += isHated ? 1 : -1;
-          $('#hate-count').text(hateCount);
-          $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
-        },
-        error: function (err) {
-          console.log("싫어요 처리 실패", err);
-        }
-      });
-    };
-
-
-
-  </script>
+    $.ajax({
+      type: "POST",
+      url: "/api/hates/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "guideId": guideId, "memberId": memberId }),
+      success: function (res) {
+        isHated = res === "Hate added";
+        hateCount += isHated ? 1 : -1;
+        $('#hate-count').text(hateCount);
+        $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 처리 실패", err);
+      }
+    });
+  };
+</script>
 </html>

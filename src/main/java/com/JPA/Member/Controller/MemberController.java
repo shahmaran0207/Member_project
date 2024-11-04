@@ -3,7 +3,7 @@ package com.JPA.Member.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.JPA.Member.Service.MemberService;
-import com.JPA.Member.Service.GuideService;
+import com.JPA.Member.Service.Guide.GuideService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
