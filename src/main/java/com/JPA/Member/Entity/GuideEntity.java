@@ -27,6 +27,16 @@ public class GuideEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
 
+    public void increaseHatesCount() {
+        this.hateCounts++;
+    }
+
+    public void decreaseHatesCount() {
+        if (this.hateCounts > 0) {
+            this.hateCounts--;
+        }
+    }
+
     public static GuideEntity toSaveEntity(MemberDTO memberDTO, MemberEntity memberEntity) {
         GuideEntity guideEntity = new GuideEntity();
         guideEntity.setGuideName(memberEntity.getMemberName());
