@@ -50,7 +50,6 @@ public class BoardDTO {
         boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
         boardDTO.setLikesCount((boardEntity.getLikesCount()));
 
-        // MemberEntity의 이름 필드 설정
         boardDTO.setMemberName(boardEntity.getMemberEntity().getMemberName());
 
         if (boardEntity.getFileAttached() == 0) {

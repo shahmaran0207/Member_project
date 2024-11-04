@@ -2,8 +2,8 @@ package com.JPA.Member.Controller.Board;
 
 import org.springframework.web.bind.annotation.*;
 import com.JPA.Member.Service.Board.LikeService;
-import lombok.RequiredArgsConstructor;
 import com.JPA.Member.DTO.Board.LikeDTO;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/likes")

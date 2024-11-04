@@ -1,16 +1,16 @@
 package com.JPA.Member.Service.Guide;
 
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.persistence.EntityNotFoundException;
-import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Repository.Guide.GuideRepository;
 import com.JPA.Member.Repository.Guide.HateRepository;
-import org.springframework.stereotype.Service;
-import com.JPA.Member.Entity.MemberEntity;
+import jakarta.persistence.EntityNotFoundException;
+import com.JPA.Member.Repository.MemberRepository;
+import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Guide.GuideEntity;
 import com.JPA.Member.Entity.Guide.HateEntity;
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import com.JPA.Member.DTO.Guide.HateDTO;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

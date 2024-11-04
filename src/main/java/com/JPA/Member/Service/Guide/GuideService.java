@@ -1,13 +1,13 @@
 package com.JPA.Member.Service.Guide;
 
-import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Repository.Guide.GuideRepository;
-import org.springframework.stereotype.Service;
-import com.JPA.Member.Entity.MemberEntity;
+import com.JPA.Member.Repository.MemberRepository;
+import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Guide.GuideEntity;
+import org.springframework.stereotype.Service;
+import com.JPA.Member.DTO.Guide.GuideDTO;
 import lombok.RequiredArgsConstructor;
 import com.JPA.Member.DTO.MemberDTO;
-import com.JPA.Member.DTO.Guide.GuideDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;

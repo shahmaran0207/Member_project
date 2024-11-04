@@ -1,14 +1,14 @@
 package com.JPA.Member.Service.Board;
 
-import com.JPA.Member.Entity.MemberEntity;
 import com.JPA.Member.Repository.Board.CommentRepository;
 import com.JPA.Member.Repository.Board.BoardRepository;
 import com.JPA.Member.Repository.MemberRepository;
-import org.springframework.stereotype.Service;
+import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Board.CommentEntity;
 import com.JPA.Member.Entity.Board.BoardEntity;
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import com.JPA.Member.DTO.Board.CommentDTO;
+import lombok.RequiredArgsConstructor;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;

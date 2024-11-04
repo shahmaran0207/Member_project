@@ -1,7 +1,7 @@
 package com.JPA.Member.Entity.Board;
 
+import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.DTO.Board.CommentDTO;
-import com.JPA.Member.Entity.MemberEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

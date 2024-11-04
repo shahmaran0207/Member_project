@@ -1,13 +1,13 @@
 package com.JPA.Member.Controller;
 
+import com.JPA.Member.Service.Member.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.JPA.Member.Service.MemberService;
 import com.JPA.Member.Service.Guide.GuideService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import com.JPA.Member.DTO.MemberDTO;
+import org.springframework.ui.Model;
 import java.io.IOException;
 import java.util.List;
 

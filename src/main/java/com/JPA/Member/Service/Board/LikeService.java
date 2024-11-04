@@ -1,16 +1,16 @@
 package com.JPA.Member.Service.Board;
 
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.persistence.EntityNotFoundException;
-import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Repository.Board.BoardRepository;
 import com.JPA.Member.Repository.Board.LikeRepository;
-import org.springframework.stereotype.Service;
-import com.JPA.Member.Entity.MemberEntity;
+import jakarta.persistence.EntityNotFoundException;
+import com.JPA.Member.Repository.MemberRepository;
+import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Board.BoardEntity;
 import com.JPA.Member.Entity.Board.LikeEntity;
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import com.JPA.Member.DTO.Board.LikeDTO;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

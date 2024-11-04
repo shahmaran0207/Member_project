@@ -1,8 +1,8 @@
-package com.JPA.Member.Service;
+package com.JPA.Member.Service.Member;
 
 import com.JPA.Member.Repository.MemberRepository;
+import com.JPA.Member.Entity.Member.MemberEntity;
 import org.springframework.stereotype.Service;
-import com.JPA.Member.Entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import com.JPA.Member.DTO.MemberDTO;
 import java.util.ArrayList;

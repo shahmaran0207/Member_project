@@ -1,6 +1,6 @@
 package com.JPA.Member.Entity.Guide;
 
-import com.JPA.Member.Entity.MemberEntity;
+import com.JPA.Member.Entity.Member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

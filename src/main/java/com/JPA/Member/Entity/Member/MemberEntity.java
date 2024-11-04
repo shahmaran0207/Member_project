@@ -1,11 +1,15 @@
-package com.JPA.Member.Entity;
+package com.JPA.Member.Entity.Member;
 
 //Entity 클래스: 테이블 역할
 
 import com.JPA.Member.DTO.MemberDTO;
+import com.JPA.Member.Entity.Board.BoardFileEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -25,11 +29,18 @@ public class MemberEntity {
     @Column
     private String memberName;
 
+    @Column
+    private int fileAttached;
+
+    @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MemberProfileEntity> memberProfileEntityList = new ArrayList<>();
+
     public static MemberEntity toMemberEntity(MemberDTO memberDTO) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
     }
 
@@ -39,6 +50,7 @@ public class MemberEntity {
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
     }
 }

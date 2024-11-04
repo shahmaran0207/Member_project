@@ -1,20 +1,20 @@
 package com.JPA.Member.Service.Board;
 
-import org.springframework.web.multipart.MultipartFile;
 import com.JPA.Member.Repository.Board.BoardFileRepository;
+import com.JPA.Member.Repository.Board.BoardRepository;
+import org.springframework.web.multipart.MultipartFile;
+import com.JPA.Member.Entity.Board.BoardFileEntity;
 import org.springframework.data.domain.PageRequest;
 import com.JPA.Member.Repository.MemberRepository;
-import com.JPA.Member.Repository.Board.BoardRepository;
+import com.JPA.Member.Entity.Member.MemberEntity;
 import org.springframework.data.domain.Pageable;
+import com.JPA.Member.Entity.Board.BoardEntity;
 import org.springframework.stereotype.Service;
-import com.JPA.Member.Entity.Board.BoardFileEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import com.JPA.Member.Entity.MemberEntity;
-import com.JPA.Member.Entity.Board.BoardEntity;
+import com.JPA.Member.DTO.Board.BoardDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import com.JPA.Member.DTO.Board.BoardDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;

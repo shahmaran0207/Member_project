@@ -1,7 +1,7 @@
 package com.JPA.Member.Entity.Board;
 
+import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.DTO.Board.BoardDTO;
-import com.JPA.Member.Entity.MemberEntity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,6 @@ public class BoardEntity extends BaseEntity {
     @Column
     private int fileAttached;
 
-    // 좋아요 수를 나타내는 필드 추가
     @Column
     private int likesCount = 0;
 
@@ -43,7 +42,6 @@ public class BoardEntity extends BaseEntity {
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
-    // LikeEntity와의 연관 관계 설정
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LikeEntity> likeEntityList = new ArrayList<>();
 
@@ -51,12 +49,10 @@ public class BoardEntity extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
 
-    // 좋아요 수 증가 메서드
     public void increaseLikesCount() {
         this.likesCount++;
     }
 
-    // 좋아요 수 감소 메서드
     public void decreaseLikesCount() {
         if (this.likesCount > 0) {
             this.likesCount--;

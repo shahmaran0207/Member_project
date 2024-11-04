@@ -10,7 +10,6 @@
             crossorigin="anonymous"></script>
 
     <style>
-        /* Center form on page */
         body {
             display: flex;
             justify-content: center;
@@ -20,7 +19,6 @@
             background-color: #f5f5f5;
         }
 
-        /* Form styling */
         form {
             background-color: #fff;
             padding: 20px;
@@ -30,7 +28,6 @@
             width: 100%;
         }
 
-        /* Input fields and button styling */
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -40,7 +37,6 @@
             box-sizing: border-box;
         }
 
-        /* Submit button styling */
         input[type="submit"] {
             width: 100%;
             padding: 12px;
@@ -56,13 +52,11 @@
             background-color: #0056b3;
         }
 
-        /* Title styling */
         h2 {
             text-align: center;
             color: #333;
         }
 
-        /* Email check result styling */
         #check-result {
             font-size: 14px;
             margin-bottom: 10px;
@@ -81,6 +75,9 @@
 
     <label for="memberName">이름:</label>
     <input type="text" name="memberName" id="memberName" onkeyup="checkFormValidity()">
+
+    <label for="memberProfile">파일 첨부</label>
+    <input type="file" id="memberProfile" name="memberProfile">
 
     <input type="submit" value="회원가입" id="submit-btn" disabled>
 </form>
