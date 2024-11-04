@@ -1,7 +1,7 @@
 package com.JPA.Member.Service.Guide;
 
+import com.JPA.Member.Repository.Member.MemberRepository;
 import com.JPA.Member.Repository.Guide.GuideRepository;
-import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Guide.GuideEntity;
 import org.springframework.stereotype.Service;

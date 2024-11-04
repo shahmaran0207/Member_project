@@ -1,11 +1,11 @@
 package com.JPA.Member.Service.Board;
 
 import com.JPA.Member.Repository.Board.BoardFileRepository;
+import com.JPA.Member.Repository.Member.MemberRepository;
 import com.JPA.Member.Repository.Board.BoardRepository;
 import org.springframework.web.multipart.MultipartFile;
 import com.JPA.Member.Entity.Board.BoardFileEntity;
 import org.springframework.data.domain.PageRequest;
-import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import org.springframework.data.domain.Pageable;
 import com.JPA.Member.Entity.Board.BoardEntity;
@@ -37,11 +37,9 @@ public class BoardService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
 
         if (boardDTO.getBoardFile().isEmpty()) {
-            // 파일이 없는 경우
             BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO, memberEntity);
             boardRepository.save(boardEntity);
         } else {
-            // 파일이 있는 경우
             MultipartFile boardFile = boardDTO.getBoardFile();
             String originalFilename = boardFile.getOriginalFilename();
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename;

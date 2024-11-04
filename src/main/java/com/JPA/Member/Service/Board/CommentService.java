@@ -1,8 +1,8 @@
 package com.JPA.Member.Service.Board;
 
 import com.JPA.Member.Repository.Board.CommentRepository;
+import com.JPA.Member.Repository.Member.MemberRepository;
 import com.JPA.Member.Repository.Board.BoardRepository;
-import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Board.CommentEntity;
 import com.JPA.Member.Entity.Board.BoardEntity;

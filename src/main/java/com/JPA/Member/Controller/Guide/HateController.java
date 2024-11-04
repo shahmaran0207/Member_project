@@ -13,7 +13,6 @@ public class HateController {
 
     @PostMapping("/toggle")
     public String toggleHate(@RequestBody HateDTO hateDTO) {
-        System.out.println(hateDTO.getGuideId());
         return hateService.toggleHate(hateDTO);
     }
 

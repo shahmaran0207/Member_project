@@ -85,7 +85,7 @@
     </style>
 </head>
 <body>
-<form action="/member/save" method="post">
+<form action="/member/save" method="post" enctype="multipart/form-data">
     <h2>회원가입</h2>
     <label for="memberEmail">이메일:</label>
     <input type="text" name="memberEmail" id="memberEmail" onblur="emailCheck()" oninput="resetEmailCheckResult()">

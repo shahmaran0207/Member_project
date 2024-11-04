@@ -2,7 +2,9 @@ package com.JPA.Member.Entity.Member;
 
 //Entity 클래스: 테이블 역할
 
+import com.JPA.Member.DTO.Board.BoardDTO;
 import com.JPA.Member.DTO.MemberDTO;
+import com.JPA.Member.Entity.Board.BoardEntity;
 import com.JPA.Member.Entity.Board.BoardFileEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -51,6 +53,26 @@ public class MemberEntity {
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
+        return memberEntity;
+    }
+
+    public static MemberEntity toSaveEntity(MemberDTO memberDTO) {
+        MemberEntity member = new MemberEntity();
+        member.setMemberEmail(memberDTO.getMemberEmail());
+        member.setMemberPassword(memberDTO.getMemberPassword());
+        member.setMemberName(memberDTO.getMemberPassword());
+        member.setId(memberDTO.getId());
+        member.setFileAttached(0);
+        return member;
+    }
+
+    public static MemberEntity toSaveMemberFile(MemberDTO memberDTO) {
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setId(memberDTO.getId());
+        memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setMemberEmail(memberDTO.getMemberEmail());
+        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
+        memberEntity.setFileAttached(1);
         return memberEntity;
     }
 }

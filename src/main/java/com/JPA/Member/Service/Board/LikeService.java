@@ -1,10 +1,10 @@
 package com.JPA.Member.Service.Board;
 
 import org.springframework.transaction.annotation.Transactional;
+import com.JPA.Member.Repository.Member.MemberRepository;
 import com.JPA.Member.Repository.Board.BoardRepository;
 import com.JPA.Member.Repository.Board.LikeRepository;
 import jakarta.persistence.EntityNotFoundException;
-import com.JPA.Member.Repository.MemberRepository;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Board.BoardEntity;
 import com.JPA.Member.Entity.Board.LikeEntity;

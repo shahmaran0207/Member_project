@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name="board_file_table")
+@Table(name="member_file_table")
 public class MemberProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +23,13 @@ public class MemberProfileEntity {
     @JoinColumn(name = "member_id")
     private MemberEntity memberEntity;
 
-    public static MemberProfileEntity toBoardFileEntity(MemberEntity memberEntity, String originalFileName, String storedFileName) {
+    public static MemberProfileEntity toMemberProfileEntity(MemberEntity memberEntity, String originalFileName, String storedFileName) {
         MemberProfileEntity memberProfileEntity = new MemberProfileEntity();
         memberProfileEntity.setOriginalFileName(originalFileName);
         memberProfileEntity.setStoredFileName(storedFileName);
         memberProfileEntity.setMemberEntity(memberEntity);
         return memberProfileEntity;
     }
+
+
 }

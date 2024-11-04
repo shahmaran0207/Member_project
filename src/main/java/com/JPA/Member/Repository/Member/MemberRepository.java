@@ -1,4 +1,4 @@
-package com.JPA.Member.Repository;
+package com.JPA.Member.Repository.Member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.JPA.Member.Entity.Member.MemberEntity;

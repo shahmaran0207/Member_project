@@ -37,7 +37,7 @@ public class MemberController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute MemberDTO memberdto) {
+    public String save(@ModelAttribute MemberDTO memberdto) throws IOException {
         ms.save(memberdto);
         return "/home";
     }
@@ -62,7 +62,6 @@ public class MemberController {
         MemberDTO memberDTO = ms.findById(id);
 
         gs.save(memberDTO, id);
-
         return "redirect:/";
     }
 
@@ -80,15 +79,13 @@ public class MemberController {
         MemberDTO loginresult = ms.login(memberdto);
 
         if (loginresult != null) {
-            // 세션에 로그인한 사용자의 ID를 저장
-            session.setAttribute("loginId", loginresult.getId()); // Long으로 저장
+            session.setAttribute("loginId", loginresult.getId());
             session.setAttribute("loginEmail", loginresult.getMemberEmail());
-            session.setAttribute("loginName", loginresult.getMemberName()); // 사용자 이름 저장
+            session.setAttribute("loginName", loginresult.getMemberName());
 
             return "/home";
-        } else {
-            return "/home"; // 로그인 실패 처리 추가 필요
-        }
+
+        } else return "/home";
     }
 
     @GetMapping("/myPage")
@@ -98,9 +95,8 @@ public class MemberController {
         if (memberId != null) {
             model.addAttribute("member", ms.findById(memberId));
             return "/member/myPage";
-        } else {
-            return "/member/login";
-        }
+
+        } else return "/member/login";
     }
 
     @PostMapping("/update")
@@ -123,10 +119,7 @@ public class MemberController {
     @PostMapping("/email-check")
     public @ResponseBody String emailCheck(@RequestParam("memberEmail") String memberEmail) {
         String checkResult = ms.emailCheck(memberEmail);
-            if (checkResult != null) {
-                return "no";
-            } else {
-                return "ok";
-            }
+        if (checkResult != null) return "no";
+        else return "ok";
     }
 }

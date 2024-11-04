@@ -97,6 +97,12 @@
       <th>Name</th>
       <td th:text="${member.memberName}"></td>
     </tr>
+    <tr th:if="${member.fileAttached == 1}">
+      <th>Image</th>
+      <td th:each="fileName: ${member.storedFileName}">
+        <img th:src="@{|/profileupload/${fileName}|}" alt="Uploaded Image">
+      </td>
+    </tr>
   </table>
   <a class="update-button" th:href="@{/member/update/{id}(id=${member.id})}">정보 수정</a>
 </div>
