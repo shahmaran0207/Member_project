@@ -1,13 +1,12 @@
 package com.JPA.Member.Controller.Board;
 
+import com.JPA.Member.Service.Board.CommentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import com.JPA.Member.Service.Board.CommentService;
-import org.springframework.http.HttpStatus;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import com.JPA.Member.DTO.Board.CommentDTO;
+import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 //생성 순서: Controller-> Entity(테이블 생성) -> DTO(테이블을 서버에 전달) -> Repository(extends JPA)-> Service(Repository)
@@ -20,8 +19,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/save")
-    public ResponseEntity save(@ModelAttribute CommentDTO commentDTO, HttpSession session) {
+    public ResponseEntity save(@ModelAttribute CommentDTO commentDTO) {
+
         Long saveResult = commentService.save(commentDTO);
+
         if (saveResult != null) {
             List<CommentDTO> commentDTOList = commentService.findAll(commentDTO.getBoardId());
             return new ResponseEntity<>(commentDTOList, HttpStatus.OK);

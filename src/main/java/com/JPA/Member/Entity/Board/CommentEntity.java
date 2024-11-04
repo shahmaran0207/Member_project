@@ -1,6 +1,7 @@
 package com.JPA.Member.Entity.Board;
 
 import com.JPA.Member.DTO.Board.CommentDTO;
+import com.JPA.Member.Entity.MemberEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,17 +21,20 @@ public class CommentEntity extends BaseEntity {
     @Column
     private String commentContents;
 
-    /* Board:Comment = 1:N */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private BoardEntity boardEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private MemberEntity memberEntity;
 
-    public static CommentEntity toSaveEntity(CommentDTO commentDTO, BoardEntity boardEntity) {
+    public static CommentEntity toSaveEntity(CommentDTO commentDTO, BoardEntity boardEntity, MemberEntity memberEntity) {
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.setCommentWriter(commentDTO.getCommentWriter());
         commentEntity.setCommentContents(commentDTO.getCommentContents());
         commentEntity.setBoardEntity(boardEntity);
+        commentEntity.setMemberEntity(memberEntity);
         return commentEntity;
     }
 }

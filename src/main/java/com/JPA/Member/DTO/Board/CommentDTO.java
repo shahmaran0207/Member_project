@@ -11,9 +11,12 @@ import lombok.Setter;
 @ToString
 public class CommentDTO {
     private Long id;
+    private Long boardId;
+    private Long memberId;
+
     private String commentWriter;
     private String commentContents;
-    private Long boardId;
+
     private LocalDateTime commentCreatedTime;
 
     public static CommentDTO toCommentDTO(CommentEntity commentEntity, Long boardId) {
