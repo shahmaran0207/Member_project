@@ -4,10 +4,12 @@ import com.JPA.Member.Repository.Member.MemberProfileRepository;
 import com.JPA.Member.Repository.Member.MemberRepository;
 import com.JPA.Member.Entity.Member.MemberProfileEntity;
 import org.springframework.web.multipart.MultipartFile;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
-import com.JPA.Member.DTO.MemberDTO;
+import com.google.firebase.auth.FirebaseAuth;
+import com.JPA.Member.DTO.Member.MemberDTO;
+import com.google.firebase.auth.UserRecord;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -15,12 +17,25 @@ import java.util.List;
 import java.io.File;
 
 @Service
-@RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository mr;
     private final MemberProfileRepository memberProfileRepository;
 
-    public void save(MemberDTO memberDTO) throws IOException {
+    public MemberService(MemberRepository memberRepository, MemberProfileRepository memberProfileRepository) {
+        this.mr = memberRepository;
+        this.memberProfileRepository = memberProfileRepository;
+    }
+
+
+    public void save(MemberDTO memberDTO) throws IOException, FirebaseAuthException {
+
+        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+                .setEmail(memberDTO.getMemberEmail())
+                .setPassword(memberDTO.getMemberPassword());
+
+        UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
+
+
         if (memberDTO.getBoardFile().isEmpty()) {
             MemberEntity memberEntity = MemberEntity.toSaveEntity(memberDTO);
             mr.save(memberEntity);
@@ -38,22 +53,17 @@ public class MemberService {
 
             MemberProfileEntity memberProfileEntity = MemberProfileEntity.toMemberProfileEntity(savedBoardEntity, originalFilename, storedFileName);
             memberProfileRepository.save(memberProfileEntity);
+        }
     }
-}
 
+    public MemberDTO login(String email) {
+        Optional<MemberEntity> bymemberemail = mr.findByMemberEmail(email);
 
-    public MemberDTO login(MemberDTO memberdto) {
-        Optional<MemberEntity> bymemberemail = mr.findByMemberEmail(memberdto.getMemberEmail());
+        MemberEntity memberEntity = bymemberemail.get();
+        MemberDTO dto= MemberDTO.toMemberDTO(memberEntity);
 
-        if(bymemberemail.isPresent()) {
-            MemberEntity memberEntity = bymemberemail.get();
+        return dto;
 
-            if(memberEntity.getMemberPassword().equals(memberdto.getMemberPassword())) {
-                MemberDTO dto= MemberDTO.toMemberDTO(memberEntity);
-                return dto;
-
-            } else return null;
-        } else return null;
     }
 
     //Repository는 Entity로 주고받음
@@ -64,7 +74,6 @@ public class MemberService {
         for(MemberEntity memberEntity : memberEntityList) {
             dtoList.add(MemberDTO.toMemberDTO(memberEntity));
         }
-
         return dtoList;
     }
 
@@ -73,9 +82,7 @@ public class MemberService {
 
         if(optionalMemberEntity.isPresent()) {
             return MemberDTO.toMemberDTO(optionalMemberEntity.get());
-        } else{
-            return null;
-        }
+        } else return null;
     }
 
     public MemberDTO updateForm(String myEmail) {
@@ -83,9 +90,7 @@ public class MemberService {
 
         if(optionalMemberEntity.isPresent()) {
             return MemberDTO.toMemberDTO(optionalMemberEntity.get());
-        } else{
-            return null;
-        }
+        } else return null;
     }
 
     public void update(MemberDTO memberdto) {

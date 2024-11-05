@@ -17,18 +17,18 @@ public class BoardDTO {
     private String boardPass;
     private String boardTitle;
     private String boardContents;
-    private String originalFileName; // 원본 파일 이름
-    private String storedFileName; // 서버 저장용 파일 이름
+    private String originalFileName;
+    private String storedFileName;
     private String memberName;
 
     private int boardHits;
-    private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
+    private int fileAttached;
     private int likesCount;
 
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;
 
-    private MultipartFile boardFile; // save.html -> Controller 파일 담는 용도
+    private MultipartFile boardFile;
 
     public BoardDTO(Long id, String boardTitle, int boardHits, LocalDateTime boardCreatedTime, String memberName, int likesCount) {
         this.id = id;
@@ -53,9 +53,9 @@ public class BoardDTO {
         boardDTO.setMemberName(boardEntity.getMemberEntity().getMemberName());
 
         if (boardEntity.getFileAttached() == 0) {
-            boardDTO.setFileAttached(boardEntity.getFileAttached()); // 0
+            boardDTO.setFileAttached(boardEntity.getFileAttached());
         } else {
-            boardDTO.setFileAttached(boardEntity.getFileAttached()); // 1
+            boardDTO.setFileAttached(boardEntity.getFileAttached());
             boardDTO.setOriginalFileName(boardEntity.getBoardFileEntityList().get(0).getOriginalFileName());
             boardDTO.setStoredFileName(boardEntity.getBoardFileEntityList().get(0).getStoredFileName());
         }

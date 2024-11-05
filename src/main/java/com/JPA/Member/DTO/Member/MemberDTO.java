@@ -1,4 +1,4 @@
-package com.JPA.Member.DTO;
+package com.JPA.Member.DTO.Member;
 
 import org.springframework.web.multipart.MultipartFile;
 import com.JPA.Member.Entity.Member.MemberEntity;
@@ -22,10 +22,10 @@ public class MemberDTO {
     private MultipartFile boardFile; // save.html -> Controller 파일 담는 용도
 
     private String memberEmail;
-    private String memberPassword;
     private String memberName;
     private String originalFileName; // 원본 파일 이름
     private String storedFileName; // 서버 저장용 파일 이름
+    private String memberPassword;
 
     @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardEntity> boardEntities = new ArrayList<>();
@@ -34,7 +34,6 @@ public class MemberDTO {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(memberEntity.getId());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());
-        memberDTO.setMemberPassword(memberEntity.getMemberPassword());
         memberDTO.setMemberName(memberEntity.getMemberName());
 
         if (memberEntity.getFileAttached() == 0) {

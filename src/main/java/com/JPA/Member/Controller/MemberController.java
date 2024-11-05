@@ -1,15 +1,20 @@
 package com.JPA.Member.Controller;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.JPA.Member.Service.Member.MemberService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import com.JPA.Member.Service.Guide.GuideService;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
+import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.FirebaseAuth;
+import com.JPA.Member.DTO.Member.MemberDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import com.JPA.Member.DTO.MemberDTO;
 import org.springframework.ui.Model;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,7 +42,7 @@ public class MemberController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute MemberDTO memberdto) throws IOException {
+    public String save(@ModelAttribute MemberDTO memberdto) throws IOException, FirebaseAuthException {
         ms.save(memberdto);
         return "/home";
     }
@@ -75,17 +80,23 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute MemberDTO memberdto, HttpSession session) {
-        MemberDTO loginresult = ms.login(memberdto);
+    public ResponseEntity<String> login(@RequestBody Map<String, String> request, HttpSession session) {
+        String idToken = request.get("idToken");
+        try {
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+            String email = decodedToken.getEmail();
 
-        if (loginresult != null) {
-            session.setAttribute("loginId", loginresult.getId());
-            session.setAttribute("loginEmail", loginresult.getMemberEmail());
-            session.setAttribute("loginName", loginresult.getMemberName());
+            MemberDTO memberDTO = ms.login(email);
 
-            return "/home";
+            session.setAttribute("loginEmail", email);
+            session.setAttribute("loginId", memberDTO.getId());
+            session.setAttribute("loginEmail", memberDTO.getMemberEmail());
+            session.setAttribute("loginName", memberDTO.getMemberName());
 
-        } else return "/home";
+            return ResponseEntity.ok("/");
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("/member/login");
+        }
     }
 
     @GetMapping("/myPage")

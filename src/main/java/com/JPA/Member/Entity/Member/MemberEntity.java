@@ -2,16 +2,12 @@ package com.JPA.Member.Entity.Member;
 
 //Entity 클래스: 테이블 역할
 
-import com.JPA.Member.DTO.Board.BoardDTO;
-import com.JPA.Member.DTO.MemberDTO;
-import com.JPA.Member.Entity.Board.BoardEntity;
-import com.JPA.Member.Entity.Board.BoardFileEntity;
+import com.JPA.Member.DTO.Member.MemberDTO;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Setter
@@ -19,14 +15,11 @@ import java.util.List;
 @Table(name = "member_table")
 public class MemberEntity {
     @Id // pk 지정
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true) // unique 제약조건 추가
+    @Column(unique = true)
     private String memberEmail;
-
-    @Column
-    private String memberPassword;
 
     @Column
     private String memberName;
@@ -34,13 +27,14 @@ public class MemberEntity {
     @Column
     private int fileAttached;
 
+    private String memberPassword;
+
     @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MemberProfileEntity> memberProfileEntityList = new ArrayList<>();
 
     public static MemberEntity toMemberEntity(MemberDTO memberDTO) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
-        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
@@ -50,7 +44,6 @@ public class MemberEntity {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setId(memberDTO.getId());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
-        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
@@ -59,8 +52,7 @@ public class MemberEntity {
     public static MemberEntity toSaveEntity(MemberDTO memberDTO) {
         MemberEntity member = new MemberEntity();
         member.setMemberEmail(memberDTO.getMemberEmail());
-        member.setMemberPassword(memberDTO.getMemberPassword());
-        member.setMemberName(memberDTO.getMemberPassword());
+        member.setMemberName(memberDTO.getMemberName());
         member.setId(memberDTO.getId());
         member.setFileAttached(0);
         return member;
@@ -71,7 +63,6 @@ public class MemberEntity {
         memberEntity.setId(memberDTO.getId());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
-        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setFileAttached(1);
         return memberEntity;
     }
