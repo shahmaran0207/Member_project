@@ -17,14 +17,14 @@ import lombok.*;
 public class MemberDTO {
     private Long id;
 
-    private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
+    private int fileAttached;
 
-    private MultipartFile boardFile; // save.html -> Controller 파일 담는 용도
+    private MultipartFile boardFile;
 
     private String memberEmail;
     private String memberName;
-    private String originalFileName; // 원본 파일 이름
-    private String storedFileName; // 서버 저장용 파일 이름
+    private String originalFileName;
+    private String storedFileName;
     private String memberPassword;
 
     @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,9 +37,9 @@ public class MemberDTO {
         memberDTO.setMemberName(memberEntity.getMemberName());
 
         if (memberEntity.getFileAttached() == 0) {
-            memberDTO.setFileAttached(memberEntity.getFileAttached()); // 0
+            memberDTO.setFileAttached(memberEntity.getFileAttached());
         } else {
-            memberDTO.setFileAttached(memberEntity.getFileAttached()); // 1
+            memberDTO.setFileAttached(memberEntity.getFileAttached());
             memberDTO.setOriginalFileName(memberEntity.getMemberProfileEntityList().get(0).getOriginalFileName());
             memberDTO.setStoredFileName(memberEntity.getMemberProfileEntityList().get(0).getStoredFileName());
         }

@@ -5,7 +5,6 @@
   <title>Detail</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.3.min.js"
           integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
           crossorigin="anonymous"></script>
@@ -25,19 +24,15 @@
     #comment-write-button { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s, transform 0.1s; }
     #comment-write-button:hover { background-color: #218838; transform: scale(1.05); }
     #comment-list { width: 80%; margin: 20px auto; background: white; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
-    .comment-item { margin-bottom: 10px; padding: 10px; border-bottom: 1px solid #ddd; }
-    .comment-item:last-child { border-bottom: none; }
-    .comment-author { font-weight: bold; margin-bottom: 5px; }
-    .comment-content { color: #555; }
     .like-count {
-      display: inline-block; /* 버튼처럼 보이게 하기 위해 inline-block으로 설정 */
-      background-color: #007BFF; /* 버튼 색상 */
-      color: white; /* 글자 색상 */
-      border-radius: 5px; /* 모서리 둥글게 */
-      padding: 10px 15px; /* 패딩 설정 */
-      margin-left: 10px; /* 버튼과 간격 설정 */
-      cursor: default; /* 커서 기본 설정으로 변경 */
-      pointer-events: none; /* 클릭 이벤트 비활성화 */
+      display: inline-block;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      padding: 10px 15px;
+      margin-left: 10px;
+      cursor: default;
+      pointer-events: none;
     }
 
   </style>
@@ -84,7 +79,7 @@
   <button onclick="updateReq()">수정</button>
   <button onclick="deleteReq()">삭제</button>
   <button id="like-button" onclick="toggleLike()">좋아요</button>
-  <span id="like-count" class="like-count" th:text="${board.likesCount}">0</span> <!-- 수정된 부분 -->
+  <span id="like-count" class="like-count" th:text="${board.likesCount}">0</span>
 </div>
 
 
@@ -95,7 +90,6 @@
   <button id="comment-write-button" onclick="commentWrite()">댓글 작성</button>
 </div>
 
-<!-- 댓글 리스트 부분 -->
 <div id="comment-list">
 </div>
 
@@ -167,7 +161,6 @@
     document.getElementById('comment-list').innerHTML = output;
   };
 
-  // 댓글 작성 함수
   const commentWrite = () => {
     const memberId = document.getElementById('memberId').value;
     const writer = document.getElementById('commentWrite').value;
@@ -204,7 +197,6 @@
       contentType: "application/json",
       data: JSON.stringify({ "boardId": boardId, "memberId": memberId }),
       success: function (res) {
-        // Toggle the like state and update the like count and button text
         isLiked = res === "Like added";
         likeCount += isLiked ? 1 : -1;
         $('#like-count').text(likeCount);

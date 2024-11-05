@@ -89,7 +89,7 @@
     <h2>회원가입</h2>
     <label for="memberEmail">이메일:</label>
     <input type="text" name="memberEmail" id="memberEmail" onblur="emailCheck()" oninput="resetEmailCheckResult()">
-    <div id="check-result"></div> <!-- Email check result display -->
+    <div id="check-result"></div>
 
     <label for="memberPassword">비밀번호:</label>
     <input type="password" name="memberPassword" id="memberPassword" onkeyup="checkFormValidity()">
@@ -109,7 +109,6 @@
         const checkResult = document.getElementById("check-result");
         const submitBtn = document.getElementById("submit-btn");
 
-        // Reset the email check result before new check
         checkResult.innerHTML = "Checking email...";
         checkResult.style.color = "blue";
         submitBtn.disabled = true;
@@ -124,16 +123,16 @@
                 if (res === "ok") {
                     checkResult.style.color = "green";
                     checkResult.innerHTML = "사용 가능한 이메일 입니다.";
-                    checkFormValidity(); // Re-check form validity on success
+                    checkFormValidity();
                 } else {
                     checkResult.style.color = "red";
                     checkResult.innerHTML = "이미 사용중인 이메일 입니다.";
-                    submitBtn.disabled = true; // Disable button if email is already used
+                    submitBtn.disabled = true;
                 }
             },
             error: function(err) {
                 console.log("Error:", err);
-                submitBtn.disabled = true; // Disable button in case of error
+                submitBtn.disabled = true;
             }
         });
     };
@@ -142,7 +141,7 @@
         const checkResult = document.getElementById("check-result");
         checkResult.innerHTML = "";
         checkResult.style.color = "black";
-        document.getElementById("submit-btn").disabled = true; // Reset button state
+        document.getElementById("submit-btn").disabled = true;
     };
 
     const checkFormValidity = () => {
@@ -151,11 +150,9 @@
         const name = document.getElementById("memberName").value;
         const isEmailValid = document.getElementById("check-result").style.color === "green";
 
-        // Enable button only if all fields are filled and email check passes
         document.getElementById("submit-btn").disabled = !(email && password && name && isEmailValid);
     };
 
-    // Attach listeners
     document.getElementById("memberEmail").addEventListener("blur", emailCheck);
     document.getElementById("memberEmail").addEventListener("input", resetEmailCheckResult);
     document.getElementById("memberPassword").addEventListener("input", checkFormValidity);

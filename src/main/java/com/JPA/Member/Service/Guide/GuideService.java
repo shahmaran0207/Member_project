@@ -30,7 +30,7 @@ public class GuideService {
 
     public List<GuideDTO> findAll() {
         List<GuideEntity> guideEntityList = guideRepository.findAll();
-        List<GuideDTO> dtoList = new ArrayList<>();    //DTO 객체를 위한 리스트
+        List<GuideDTO> dtoList = new ArrayList<>();
 
         for(GuideEntity guideEntity : guideEntityList) {
             dtoList.add(GuideDTO.toGuideDTO(guideEntity));
@@ -44,8 +44,6 @@ public class GuideService {
 
         if(optionalGuideEntity.isPresent()) {
             return GuideDTO.toGuideDTO(optionalGuideEntity.get());
-        } else{
-            return null;
-        }
+        } else return null;
     }
 }

@@ -66,10 +66,9 @@ public class MemberService {
 
     }
 
-    //Repository는 Entity로 주고받음
     public List<MemberDTO> findAll() {
         List<MemberEntity> memberEntityList = mr.findAll();
-        List<MemberDTO> dtoList = new ArrayList<>();    //DTO 객체를 위한 리스트
+        List<MemberDTO> dtoList = new ArrayList<>();
 
         for(MemberEntity memberEntity : memberEntityList) {
             dtoList.add(MemberDTO.toMemberDTO(memberEntity));

@@ -62,8 +62,8 @@ public class BoardController {
 
     @PostMapping("/update")
     public String update(@ModelAttribute BoardDTO boardDTO, HttpSession session, Model model) {
-        Long memberId = (Long) session.getAttribute("loginId"); // 세션에서 로그인한 멤버의 ID 가져오기
-        BoardDTO board = boardService.update(boardDTO, memberId); // 서비스 호출 시 memberId 전달
+        Long memberId = (Long) session.getAttribute("loginId");
+        BoardDTO board = boardService.update(boardDTO, memberId);
         model.addAttribute("board", board);
         return "/board/detail";
     }
@@ -79,7 +79,7 @@ public class BoardController {
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
         Page<BoardDTO> boardList = boardService.paging(pageable);
         int blockLimit = 10;
-        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
         int endPage = ((startPage + blockLimit - 1) < boardList.getTotalPages()) ? startPage + blockLimit - 1 : boardList.getTotalPages();
 
         model.addAttribute("boardList", boardList);

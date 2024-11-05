@@ -11,11 +11,11 @@ import lombok.Setter;
 @Getter
 @Table(name = "guide_table")
 public class GuideEntity {
-    @Id // pk 지정
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true) // unique 제약조건 추가
+    @Column(unique = true)
     private String guideEmail;
 
     @Column

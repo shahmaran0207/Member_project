@@ -32,7 +32,6 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     public void save(BoardDTO boardDTO, Long id) throws IOException {
-        // MemberEntity 가져오기
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
 
@@ -95,7 +94,7 @@ public class BoardService {
 
     public Page<BoardDTO> paging(Pageable pageable) {
         int page = pageable.getPageNumber() - 1;
-        int pageLimit = 3; // 한 페이지에 보여줄 글 갯수
+        int pageLimit = 10;
 
         Page<BoardEntity> boardEntities =
                 boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));

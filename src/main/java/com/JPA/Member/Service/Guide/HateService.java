@@ -48,13 +48,11 @@ public class HateService {
         }
     }
 
-    // 특정 게시글에 대한 좋아요 수 반환
     public int getHateCount(Long guideId) {
         return hateRepository.countByGuideEntity(guideRepository.findById(guideId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Guide ID")));
     }
 
-    // 특정 게시글에 대한 좋아요 상태 반환
     public boolean isHatedByMember(Long guideId, Long memberId) {
         GuideEntity guideEntity = guideRepository.findById(guideId)
                 .orElseThrow(() -> new EntityNotFoundException("Guide not found with id: " + guideId));

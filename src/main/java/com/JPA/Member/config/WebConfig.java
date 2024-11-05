@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    private String resourcePath = "/upload/**"; // view 에서 접근할 경로
+    private String resourcePath = "/upload/**";
     private String savePath = "file:///C:/Users/wjaud/OneDrive/바탕 화면/MOST IMPORTANT/Member_project/file/";
 
     @Override
