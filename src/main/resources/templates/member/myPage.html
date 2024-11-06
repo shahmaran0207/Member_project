@@ -96,11 +96,17 @@
             <th>Name</th>
             <td th:text="${member.memberName}"></td>
         </tr>
+        <tr th:if="${member.fileAttached == 1}">
+            <th>Image</th>
+            <td th:each="fileName: ${member.storedFileName}">
+                <img th:src="@{|/profileupload/${fileName}|}" alt="Uploaded Image">
+            </td>
+        </tr>
     </table>
     <div class="button-container">
         <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
         <a th:href="@{/member/delete/{id}(id=${member.id})}" class="update-button">회원 탈퇴</a>
-        <a th:href="@{/member/guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>
+        <a th:href="@{/guide/save}" class="update-button">가이드 신청</a>
     </div>
 </div>
 </body>

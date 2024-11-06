@@ -61,30 +61,36 @@ public class MemberController {
         return "/member/update";
     }
 
-    @GetMapping("/guide/{id}")
-    public String guide(HttpSession session, Model model) throws IOException {
-        Long id = (Long) session.getAttribute("loginId");
-        MemberDTO memberDTO = ms.findById(id);
-
-        gs.save(memberDTO, id);
-        return "redirect:/";
-    }
-
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
+        String firebaseUid = (String) session.getAttribute("firebaseUid");
+
+        try {
+            if (firebaseUid != null) {
+                FirebaseAuth.getInstance().deleteUser(firebaseUid);
+            }
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+        }
+
         session.removeAttribute("loginId");
         session.removeAttribute("loginEmail");
         session.removeAttribute("loginName");
+        session.removeAttribute("firebaseUid");
         ms.deleteById(id);
+
         return "redirect:/";
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> request, HttpSession session) {
         String idToken = request.get("idToken");
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+
             String email = decodedToken.getEmail();
+            String firebaseUid = decodedToken.getUid();
 
             MemberDTO memberDTO = ms.login(email);
 
@@ -92,12 +98,14 @@ public class MemberController {
             session.setAttribute("loginId", memberDTO.getId());
             session.setAttribute("loginEmail", memberDTO.getMemberEmail());
             session.setAttribute("loginName", memberDTO.getMemberName());
+            session.setAttribute("firebaseUid", firebaseUid);
 
             return ResponseEntity.ok("/");
         } catch (Exception e) {
             return ResponseEntity.status(401).body("/member/login");
         }
     }
+
 
     @GetMapping("/myPage")
     public String myPage(HttpSession session, Model model) {
@@ -124,6 +132,7 @@ public class MemberController {
         session.removeAttribute("loginId");
         session.removeAttribute("loginEmail");
         session.removeAttribute("loginName");
+        session.removeAttribute("firebaseUid");
         return "redirect:/";
     }
 
