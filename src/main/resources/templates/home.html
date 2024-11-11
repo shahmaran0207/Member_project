@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<button onclick="saveReq()">글작성</button>
-<button onclick="Signup()">회원가입</button>
-<button onclick="login()">로그인</button>
-<button onclick="PagingReq()">페이징 목록</button>
-<button onclick="list()">멤버 목록 확인</button>
-<button onclick="myPage()">마이 페이지</button>
-<button onclick="guide()">가이드 목록</button>
-<a href="/member/logout">로그아웃</a>
-
-
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1">
+    </main>
+</div>
 </body>
+
 <script>
     const guide = () => {
         location.href="/guide/list"
