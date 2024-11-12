@@ -106,7 +106,13 @@
     <div class="button-container">
         <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
         <a th:href="@{/member/delete/{id}(id=${member.id})}" class="update-button">회원 탈퇴</a>
-        <a th:href="@{/guide/save}" class="update-button">가이드 신청</a>
+
+        <th:block th:if="${session.GuideID == null}">
+            <a th:href="@{/member/guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>
+        </th:block>
+
+        <th:block th:if="${session.GuideID != null}">
+        </th:block>
     </div>
 </div>
 </body>

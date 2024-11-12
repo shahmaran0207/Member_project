@@ -36,15 +36,6 @@ public class GuideController {
 
     }
 
-    @GetMapping("/save")
-    public String save(Model model, HttpSession session) {
-        Long id = (Long) session.getAttribute("loginId");
-        MemberDTO memberDTO = memberService.findById(id);
-
-        model.addAttribute("member", memberDTO);
-        return "/guide/save";
-    }
-
     @GetMapping("/guide/{id}")
     public String guide(HttpSession session, Model model) throws IOException {
         Long id = (Long) session.getAttribute("loginId");

@@ -42,10 +42,7 @@ public class GuideEntity {
         GuideEntity guideEntity = new GuideEntity();
         guideEntity.setGuideName(memberEntity.getMemberName());
         guideEntity.setGuideEmail(memberDTO.getMemberEmail());
-        guideEntity.setId(guideEntity.getId());
         guideEntity.setMemberEntity(memberEntity);
         return guideEntity;
     }
-
-
 }

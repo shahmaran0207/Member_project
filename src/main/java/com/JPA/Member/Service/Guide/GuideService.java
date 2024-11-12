@@ -46,4 +46,12 @@ public class GuideService {
             return GuideDTO.toGuideDTO(optionalGuideEntity.get());
         } else return null;
     }
+
+    public GuideDTO findByMemberId(Long id) {
+        Optional<GuideEntity> optionalGuideEntity = guideRepository.findByMemberEntity_Id(id);
+
+        if(optionalGuideEntity.isPresent()) {
+            return GuideDTO.toGuideDTO(optionalGuideEntity.get());
+        } else return null;
+    }
 }

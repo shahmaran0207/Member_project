@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.JPA.Member.DTO.Member.MemberDTO;
+import com.JPA.Member.DTO.Guide.GuideDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
@@ -23,6 +24,14 @@ public class MemberController {
 
     private final MemberService ms;
     private final GuideService gs;
+
+    @GetMapping("/guide/{id}")
+    public String guide(HttpSession session, Model model) throws IOException {
+        Long id = (Long) session.getAttribute("loginId");
+        MemberDTO memberDTO = ms.findById(id);
+        gs.save(memberDTO, id);
+        return "redirect:/guide/list";
+    }
 
     @GetMapping("/save")
     public String save() {
@@ -77,6 +86,7 @@ public class MemberController {
         session.removeAttribute("loginEmail");
         session.removeAttribute("loginName");
         session.removeAttribute("firebaseUid");
+        session.removeAttribute("GuideID");
         ms.deleteById(id);
 
         return "redirect:/";
@@ -93,6 +103,10 @@ public class MemberController {
             String firebaseUid = decodedToken.getUid();
 
             MemberDTO memberDTO = ms.login(email);
+
+            GuideDTO guideDTO = gs.findByMemberId(memberDTO.getId());
+
+            if(guideDTO != null) session.setAttribute("GuideID", guideDTO.getId());
 
             session.setAttribute("loginEmail", email);
             session.setAttribute("loginId", memberDTO.getId());
@@ -133,6 +147,7 @@ public class MemberController {
         session.removeAttribute("loginEmail");
         session.removeAttribute("loginName");
         session.removeAttribute("firebaseUid");
+        session.removeAttribute("GuideID");
         return "redirect:/";
     }
 

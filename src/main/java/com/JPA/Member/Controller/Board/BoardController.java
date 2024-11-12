@@ -22,6 +22,11 @@ public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
 
+    @GetMapping("/help")
+    public String help(Model model) {
+        return "/board/help";
+    }
+
     @GetMapping("/save")
     public String saveForm() {
         return "/board/save";
