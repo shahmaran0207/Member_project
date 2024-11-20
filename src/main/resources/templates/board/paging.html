@@ -1,38 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <title>Board List</title>
 
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        button {
+        .btn-primary {
+            display: block;
+            margin: 0 auto 20px auto;
             background-color: #007BFF;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            margin: 10px 0;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
             transition: background-color 0.3s, transform 0.1s;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        button:hover {
+        .btn-primary:hover {
             background-color: #0056b3;
             transform: scale(1.05);
         }
@@ -92,47 +87,61 @@
             padding: 8px 12px;
             font-weight: bold;
         }
+
+        h1{
+            text-align: center;
+            font-size: 2rem !important;
+            font-weight: bold !important;
+            margin-top: 10px !important;
+            margin-bottom: 30px !important;
+        }
     </style>
 </head>
 
 <body>
-<h1>게시판 목록</h1>
-<button onclick="saveReq()">글 작성</button>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Writer</th>
-        <th>Date</th>
-        <th>Hits</th>
-    </tr>
-    <tr th:each="board: ${boardList}">
-        <td th:text="${board.id}"></td>
-        <td>
-            <a th:href="@{|/board/${board.id}|(page=${boardList.number + 1})}"
-               th:text="${board.boardTitle}"></a>
-        </td>
-        <td th:text="${board.memberName}"></td>
-        <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-        <td th:text="${board.boardHits}"></td>
-    </tr>
-</table>
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1">
+        <h1>게시판 목록</h1>
+        <button class="btn-primary" onclick="saveReq()">글 작성</button>
 
-<div class="pagination">
-    <a th:href="@{/board/paging(page=1)}">First</a>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Writer</th>
+                <th>Date</th>
+                <th>Hits</th>
+            </tr>
+            <tr th:each="board: ${boardList}">
+                <td th:text="${board.id}"></td>
+                <td>
+                    <a th:href="@{|/board/${board.id}|(page=${boardList.number + 1})}"
+                       th:text="${board.boardTitle}"></a>
+                </td>
+                <td th:text="${board.memberName}"></td>
+                <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${board.boardHits}"></td>
+            </tr>
+        </table>
 
-    <a th:href="${boardList.first} ? '#' : @{/board/paging(page=${boardList.number})}">Prev</a>
+        <div class="pagination">
+            <a th:href="@{/board/paging(page=1)}">First</a>
 
-    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="${boardList.first} ? '#' : @{/board/paging(page=${boardList.number})}">Prev</a>
+
+            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
       <span th:if="${page == boardList.number + 1}" th:text="${page}"></span>
       <a th:unless="${page == boardList.number + 1}"
          th:href="@{/board/paging(page=${page})}" th:text="${page}"></a>
     </span>
 
-    <a th:href="${boardList.last} ? '#' : @{/board/paging(page=${boardList.number + 2})}">Next</a>
+            <a th:href="${boardList.last} ? '#' : @{/board/paging(page=${boardList.number + 2})}">Next</a>
 
-    <a th:href="@{/board/paging(page=${boardList.totalPages})}">Last</a>
+            <a th:href="@{/board/paging(page=${boardList.totalPages})}">Last</a>
+        </div>
+    </main>
 </div>
 
 <script>
