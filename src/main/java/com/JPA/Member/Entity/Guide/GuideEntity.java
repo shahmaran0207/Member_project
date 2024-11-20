@@ -24,6 +24,9 @@ public class GuideEntity {
     @Column
     private int hateCounts;
 
+    @Column
+    private int likeCounts;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
@@ -35,6 +38,16 @@ public class GuideEntity {
     public void decreaseHatesCount() {
         if (this.hateCounts > 0) {
             this.hateCounts--;
+        }
+    }
+
+    public void increaseLikesCount() {
+        this.likeCounts++;
+    }
+
+    public void decreaseLikesCount() {
+        if (this.likeCounts > 0) {
+            this.likeCounts--;
         }
     }
 

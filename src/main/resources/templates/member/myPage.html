@@ -3,34 +3,33 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>My Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
 
         table {
             width: 60%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin-top: 20px;
+            margin-left: 200px;
             background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             overflow: hidden;
+            align-content: center;
         }
+
 
         th, td {
             padding: 15px;
@@ -48,14 +47,15 @@
             color: #555;
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
         }
 
         .update-button {
             display: inline-block;
             width: 150px;
-            margin: 20px auto;
+            margin: 10px;
             padding: 10px;
             background-color: #28a745;
             color: white;
@@ -69,52 +69,46 @@
         .update-button:hover {
             background-color: #218838;
         }
-
-        .button-container {
-            text-align: center;
-        }
     </style>
 </head>
 
 <body>
-<div>
-    <h1>My Page</h1>
-    <table>
-        <tr>
-            <th>ID</th>
-            <td th:text="${member.id}"></td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td th:text="${member.memberEmail}"></td>
-        </tr>
-        <tr>
-            <th>Password</th>
-            <td th:text="${member.memberPassword}"></td>
-        </tr>
-        <tr>
-            <th>Name</th>
-            <td th:text="${member.memberName}"></td>
-        </tr>
-        <tr th:if="${member.fileAttached == 1}">
-            <th>Image</th>
-            <td th:each="fileName: ${member.storedFileName}">
-                <img th:src="@{|/profileupload/${fileName}|}" alt="Uploaded Image">
-            </td>
-        </tr>
-    </table>
-    <div class="button-container">
-        <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
-        <a th:href="@{/member/delete/{id}(id=${member.id})}" class="update-button">회원 탈퇴</a>
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1">
+        <div>
+            <table id="table">
+                <tr>
+                    <th>ID</th>
+                    <td th:text="${member.id}"></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td th:text="${member.memberEmail}"></td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td th:text="${member.memberName}"></td>
+                </tr>
+                <tr th:if="${member.fileAttached == 1}">
+                    <th>Image</th>
+                    <td th:each="fileName: ${member.storedFileName}">
+                        <img th:src="@{|/profileupload/${fileName}|}" alt="Uploaded Image">
+                    </td>
+                </tr>
+            </table>
+            <div class="button-container">
+                <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
+                <a th:href="@{/member/delete/{id}(id=${member.id})}" class="update-button">회원 탈퇴</a>
 
-        <th:block th:if="${session.GuideID == null}">
-            <a th:href="@{/member/guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>
-        </th:block>
-
-        <th:block th:if="${session.GuideID != null}">
-        </th:block>
-    </div>
+                <th:block th:if="${session.GuideID == null}">
+                    <a th:href="@{/member/guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>
+                </th:block>
+            </div>
+        </div>
+    </main>
 </div>
+
 </body>
 
 </html>

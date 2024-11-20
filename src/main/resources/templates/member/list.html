@@ -2,16 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>멤버 목록</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
+
 
         h1 {
             text-align: center;
@@ -50,7 +45,7 @@
             background-color: #e9f5ff;
         }
 
-        a {
+        .member-link {
             color: #007bff;
             text-decoration: none;
             padding: 8px 12px;
@@ -59,7 +54,7 @@
             transition: all 0.3s;
         }
 
-        a:hover {
+        .member-link:hover {
             background-color: #007bff;
             color: white;
         }
@@ -73,20 +68,23 @@
     </style>
 </head>
 <body>
-<h1 class="center">멤버 목록</h1>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>이메일</th>
-        <th>이름</th>
-        <th>상세조회</th>
-    </tr>
-    <tr th:each="member: ${memberDTOList}">
-        <td th:text="${member.id}"></td>
-        <td th:text="${member.memberEmail}"></td>
-        <td th:text="${member.memberName}"></td>
-        <td><a th:href="@{|/member/${member.id}|}">조회</a></td>
-    </tr>
-</table>
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+        <h1 class="center">멤버 목록</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>이메일</th>
+                <th>이름</th>
+                <th>상세조회</th>
+            </tr>
+            <tr th:each="member: ${memberDTOList}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.memberEmail}"></td>
+                <td th:text="${member.memberName}"></td>
+                <td><a th:href="@{|/member/${member.id}|}" class="member-link">조회</a></td>
+            </tr>
+        </table>
+</div>
 </body>
 </html>

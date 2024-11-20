@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "hate_table")
-public class HateEntity {
+public class GuideHateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +23,10 @@ public class HateEntity {
     @JoinColumn(name = "guide_id", nullable = false)
     private GuideEntity guideEntity;
 
-    public static HateEntity toSaveEntity(MemberEntity member, GuideEntity guide) {
-        HateEntity hateEntity = new HateEntity();
-        hateEntity.setMemberEntity(member);
-        hateEntity.setGuideEntity(guide);
-        return hateEntity;
+    public static GuideHateEntity toSaveEntity(MemberEntity member, GuideEntity guide) {
+        GuideHateEntity guideHateEntity = new GuideHateEntity();
+        guideHateEntity.setMemberEntity(member);
+        guideHateEntity.setGuideEntity(guide);
+        return guideHateEntity;
     }
 }

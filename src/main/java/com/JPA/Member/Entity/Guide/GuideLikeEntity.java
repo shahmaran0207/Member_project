@@ -1,4 +1,4 @@
-package com.JPA.Member.Entity.Board;
+package com.JPA.Member.Entity.Guide;
 
 import com.JPA.Member.Entity.Member.MemberEntity;
 import jakarta.persistence.*;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "like_table")
-public class LikeEntity {
+public class GuideLikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,13 +20,13 @@ public class LikeEntity {
     private MemberEntity memberEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private BoardEntity boardEntity;
+    @JoinColumn(name = "guide_id", nullable = false)
+    private GuideEntity guideEntity;
 
-    public static LikeEntity toSaveEntity(MemberEntity member, BoardEntity board) {
-        LikeEntity likeEntity = new LikeEntity();
-        likeEntity.setMemberEntity(member);
-        likeEntity.setBoardEntity(board);
-        return likeEntity;
+    public static GuideLikeEntity toSaveEntity(MemberEntity member, GuideEntity guide) {
+        GuideLikeEntity guideLikeEntity = new GuideLikeEntity();
+        guideLikeEntity.setMemberEntity(member);
+        guideLikeEntity.setGuideEntity(guide);
+        return guideLikeEntity;
     }
 }

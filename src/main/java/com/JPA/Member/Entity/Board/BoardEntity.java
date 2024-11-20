@@ -43,7 +43,7 @@ public class BoardEntity extends BaseEntity {
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<LikeEntity> likeEntityList = new ArrayList<>();
+    private List<BoardLikeEntity> boardLikeEntityList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

@@ -15,6 +15,7 @@ public class GuideDTO {
     private String guideName;
 
     private int hateCounts;
+    private int likeCounts;
 
     public static GuideDTO toGuideDTO(GuideEntity guideEntity) {
         GuideDTO guideDTO = new GuideDTO();
@@ -23,7 +24,7 @@ public class GuideDTO {
         guideDTO.setGuideEmail(guideEntity.getMemberEntity().getMemberEmail());
         guideDTO.setGuideName(guideEntity.getMemberEntity().getMemberName());
         guideDTO.setHateCounts(0);
+        guideDTO.setLikeCounts(0);
         return guideDTO;
     }
-
 }

@@ -1,30 +1,30 @@
 package com.JPA.Member.Controller.Board;
 
 import org.springframework.web.bind.annotation.*;
-import com.JPA.Member.Service.Board.LikeService;
-import com.JPA.Member.DTO.Board.LikeDTO;
+import com.JPA.Member.Service.Board.BoardLikeService;
+import com.JPA.Member.DTO.Board.BoardLikeDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/likes")
 @RequiredArgsConstructor
-public class LikeController {
+public class BoardLikeController {
 
-    private final LikeService likeService;
+    private final BoardLikeService boardLikeService;
 
     @PostMapping("/toggle")
-    public String toggleLike(@RequestBody LikeDTO likeDTO) {
-        return likeService.toggleLike(likeDTO);
+    public String toggleLike(@RequestBody BoardLikeDTO boardLikeDTO) {
+        return boardLikeService.toggleLike(boardLikeDTO);
     }
 
     @GetMapping("/count/{boardId}")
     public int getLikeCount(@PathVariable Long boardId) {
-        return likeService.getLikeCount(boardId);
+        return boardLikeService.getLikeCount(boardId);
     }
 
     @GetMapping("/status/{boardId}/{memberId}")
     public boolean checkLikeStatus(@PathVariable Long boardId, @PathVariable Long memberId) {
-        return likeService.isLikedByMember(boardId, memberId);
+        return boardLikeService.isLikedByMember(boardId, memberId);
     }
 
 }

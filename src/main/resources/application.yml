@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/member_JPA?serverTimeZone=UTC&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://database-1.cf0iyiiiafcc.ap-northeast-2.rds.amazonaws.com:3306/WIT?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: Since2018@
+    password: Since2018
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -15,6 +15,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 server:
   port: 8082
@@ -24,5 +27,5 @@ server:
       enabled: true
       force: true
 
-  application:
-    name: Membmer_project
+application:
+  name: Membmer_project

@@ -23,7 +23,15 @@ public class BoardController {
     private final CommentService commentService;
 
     @GetMapping("/help")
-    public String help(Model model) {
+    public String help(@PageableDefault(page = 1) Pageable pageable, Model model) {
+        Page<BoardDTO> hepList = boardService.paging(pageable);
+        int blockLimit = 10;
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = ((startPage + blockLimit - 1) < hepList.getTotalPages()) ? startPage + blockLimit - 1 : hepList.getTotalPages();
+
+        model.addAttribute("boardList", hepList);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         return "/board/help";
     }
 

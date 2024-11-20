@@ -3,16 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>가이드 목록</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-
     h1 {
       text-align: center;
       color: #333;
@@ -73,20 +68,26 @@
   </style>
 </head>
 <body>
-<h1 class="center">멤버 목록</h1>
-<table>
-  <tr>
-    <th>ID</th>
-    <th>이메일</th>
-    <th>이름</th>
-    <th>상세조회</th>
-  </tr>
-  <tr th:each="guide: ${GuideDTOLIST}">
-    <td th:text="${guide.id}"></td>
-    <td th:text="${guide.guideEmail}"></td>
-    <td th:text="${guide.guideName}"></td>
-    <td><a th:href="@{|/guide/${guide.id}|}">조회</a></td>
-  </tr>
-</table>
+
+<div class="min-h-screen flex flex-col">
+  <main class="flex-1">
+    <h1 class="center">가이드 목록</h1>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>이메일</th>
+        <th>이름</th>
+        <th>상세조회</th>
+      </tr>
+      <tr th:each="guide: ${GuideDTOLIST}">
+        <td th:text="${guide.id}"></td>
+        <td th:text="${guide.guideEmail}"></td>
+        <td th:text="${guide.guideName}"></td>
+        <td><a th:href="@{|/guide/${guide.id}|}">조회</a></td>
+      </tr>
+    </table>
+  </main>
+</div>
+
 </body>
 </html>
