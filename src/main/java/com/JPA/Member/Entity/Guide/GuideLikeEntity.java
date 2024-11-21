@@ -8,7 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "like_table")
+@Table(name = "guide_like_table")
 public class GuideLikeEntity {
 
     @Id

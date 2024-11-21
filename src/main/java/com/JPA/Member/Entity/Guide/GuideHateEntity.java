@@ -8,7 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "hate_table")
+@Table(name = "guide_hate_table")
 public class GuideHateEntity {
 
     @Id

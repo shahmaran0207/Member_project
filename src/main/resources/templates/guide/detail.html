@@ -57,19 +57,42 @@
       border-bottom: none;
     }
 
-    .button-container { text-align: center; margin-top: 20px; }
-    button { background-color: #007BFF; color: white; border: none; padding: 10px 15px; margin: 5px; cursor: pointer; border-radius: 5px; transition: background-color 0.3s, transform 0.1s; }
-    button:hover { background-color: #0056b3; transform: scale(1.05); }
+    .button-container {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
 
-    .hate-count {
-      display: inline-block;
+    button {
       background-color: #007BFF;
       color: white;
-      border-radius: 5px;
+      border: none;
       padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .count {
+      display: inline-block;
+      background-color: #f1f1f1;
+      color: #333;
+      padding: 10px 15px;
+      border-radius: 5px;
       margin-left: 10px;
-      cursor: default;
-      pointer-events: none;
+      font-weight: bold;
+    }
+
+    .rating-container {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #007bff;
     }
   </style>
 </head>
@@ -89,145 +112,40 @@
   </table>
 
   <div class="button-container">
-    <button id="hate-button" onclick="toggleHate()">싫어요</button>
-    <span id="hate-count" class="hate-count" th:text="${guide.hateCounts}">0</span>
+    <div>
+      <button id="like-button" onclick="toggleLike()">좋아요</button>
+      <span id="like-count" class="count" th:text="${guide.likeCounts}">0</span>
+    </div>
+    <div>
+      <button id="hate-button" onclick="toggleHate()">싫어요</button>
+      <span id="hate-count" class="count" th:text="${guide.hateCounts}">0</span>
+    </div>
   </div>
 
-  <div class="button-container">
-    <button id="like-button" onclick="toggleLike()">좋아요</button>
-    <span id="like-count" class="like-count" th:text="${guide.likesCount}">0</span>
+  <div class="rating-container">
+    <span id="rating">평점: 계산 중...</span>
   </div>
-
 </div>
-</body>
 
 <script>
-  let isHated = false;
-  let hateCount = 0;
-
-  document.addEventListener("DOMContentLoaded", function () {
-    loadHates();
-  });
-
-  const loadHates = () => {
-    const guideId = [[${guide.id}]];
-    const memberId =[[${session.loginId}]];
-
-    $.ajax({
-      type: "GET",
-      url: `/api/hates/count/${guideId}`,
-      success: function (count) {
-        hateCount = count;
-        $('#hate-count').text(hateCount);
-      },
-      error: function (err) {
-        console.log("싫어요 수 로드 실패", err);
-      }
-    });
-
-    $.ajax({
-      type: "GET",
-      url: `/api/hates/status/${guideId}/${memberId}`,
-      success: function (isHated) {
-        $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
-      },
-      error: function (err) {
-        console.log("싫어요 상태 로드 실패", err);
-      }
-    });
-  };
-
-  window.toggleHate = () => {
-    const guideId = [[${guide.id}]];
-    const memberId = [[${session.loginId}]];
-
-    $.ajax({
-      type: "POST",
-      url: "/api/hates/toggle",
-      contentType: "application/json",
-      data: JSON.stringify({ "guideId": guideId, "memberId": memberId }),
-      success: function (res) {
-        isHated = res === "Hate added";
-        hateCount += isHated ? 1 : -1;
-        $('#hate-count').text(hateCount);
-        $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
-      },
-      error: function (err) {
-        console.log("싫어요 처리 실패", err);
-      }
-    });
-  };
-
-  let isHated = false;
-  let hateCount = 0;
-
-  document.addEventListener("DOMContentLoaded", function () {
-    loadHates();
-  });
-
-  const loadHates = () => {
-    const guideId = [[${guide.id}]];
-    const memberId =[[${session.loginId}]];
-
-    $.ajax({
-      type: "GET",
-      url: `/api/hates/count/${guideId}`,
-      success: function (count) {
-        hateCount = count;
-        $('#hate-count').text(hateCount);
-      },
-      error: function (err) {
-        console.log("싫어요 수 로드 실패", err);
-      }
-    });
-
-    $.ajax({
-      type: "GET",
-      url: `/api/hates/status/${guideId}/${memberId}`,
-      success: function (isHated) {
-        $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
-      },
-      error: function (err) {
-        console.log("싫어요 상태 로드 실패", err);
-      }
-    });
-  };
-
-  window.toggleHate = () => {
-    const guideId = [[${guide.id}]];
-    const memberId = [[${session.loginId}]];
-
-    $.ajax({
-      type: "POST",
-      url: "/api/hates/toggle",
-      contentType: "application/json",
-      data: JSON.stringify({ "guideId": guideId, "memberId": memberId }),
-      success: function (res) {
-        isHated = res === "Hate added";
-        hateCount += isHated ? 1 : -1;
-        $('#hate-count').text(hateCount);
-        $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
-      },
-      error: function (err) {
-        console.log("싫어요 처리 실패", err);
-      }
-    });
-  };
-
-  let isLiked = false;
   let likeCount = 0;
+  let hateCount = 0;
+  const guideId = [[${guide.id}]];
+  const memberId = [[${session.loginId}]];
 
   document.addEventListener("DOMContentLoaded", function () {
     loadLikes();
+    loadHates();
   });
+
 
   const loadLikes = () => {
     const guideId = [[${guide.id}]];
-    const memberId =[[${session.loginId}]];
+    const memberId = [[${session.loginId}]];
 
     $.ajax({
       type: "GET",
-      url: `/api/guidelikes/count/${guideId}`,
+      url: `/guidelikes/count/${guideId}`,
       success: function (count) {
         likeCount = count;
         $('#like-count').text(likeCount);
@@ -249,9 +167,43 @@
     });
   };
 
-  window.toggleLike = () => {
+  const loadHates = () => {
     const guideId = [[${guide.id}]];
     const memberId = [[${session.loginId}]];
+
+    $.ajax({
+      type: "GET",
+      url: `/hates/count/${guideId}`,
+      success: function (count) {
+        likeCount = count;
+        $('#like-count').text(likeCount);
+      },
+      error: function (err) {
+        console.log("싫어요 수 로드 실패", err);
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: `/api/hates/status/${guideId}/${memberId}`,
+      success: function (isLiked) {
+        $('#like-button').text(isLiked ? "싫어요 취소" : "싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 상태 로드 실패", err);
+      }
+    });
+  };
+
+
+  const updateRating = () => {
+    const total = likeCount + hateCount;
+    const rating = total > 0 ? (likeCount / total).toFixed(2) : "N/A";
+    $('#rating').text(`평점: ${rating}`);
+  };
+
+  window.toggleLike = () => {
+    const guideId = [[${guide.id}]];
 
     $.ajax({
       type: "POST",
@@ -259,15 +211,36 @@
       contentType: "application/json",
       data: JSON.stringify({ "guideId": guideId, "memberId": memberId }),
       success: function (res) {
-        isLiked = res === "Like added";
-        likeCount += isLiked ? 1 : -1;
+        likeCount += res === "Like added" ? 1 : -1;
         $('#like-count').text(likeCount);
-        $('#like-button').text(isLiked ? "좋아요 취소" : "좋아요");
+        updateRating();
       },
       error: function (err) {
         console.log("좋아요 처리 실패", err);
       }
     });
   };
+
+  window.toggleHate = () => {
+    const guideId = [[${guide.id}]];
+    const memberId = [[${session.loginId}]];
+
+    $.ajax({
+      type: "POST",
+      url: "/api/hates/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "guideId": guideId, "memberId": memberId }),
+      success: function (res) {
+        hateCount += res === "Hate added" ? 1 : -1;
+        $('#hate-count').text(hateCount);
+        updateRating();
+      },
+      error: function (err) {
+        console.log("싫어요 처리 실패", err);
+      }
+    });
+  };
 </script>
+</body>
+
 </html>

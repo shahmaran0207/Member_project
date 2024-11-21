@@ -6,6 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WIT</title>
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     h1 {
@@ -45,7 +47,7 @@
       background-color: #e9f5ff;
     }
 
-    a {
+    #button {
       color: #007bff;
       text-decoration: none;
       padding: 8px 12px;
@@ -54,7 +56,7 @@
       transition: all 0.3s;
     }
 
-    a:hover {
+    #button:hover {
       background-color: #007bff;
       color: white;
     }
@@ -68,26 +70,29 @@
   </style>
 </head>
 <body>
-
 <div class="min-h-screen flex flex-col">
+  <div th:replace="~{header :: header}"></div>
   <main class="flex-1">
-    <h1 class="center">가이드 목록</h1>
-    <table>
-      <tr>
-        <th>ID</th>
-        <th>이메일</th>
-        <th>이름</th>
-        <th>상세조회</th>
-      </tr>
-      <tr th:each="guide: ${GuideDTOLIST}">
-        <td th:text="${guide.id}"></td>
-        <td th:text="${guide.guideEmail}"></td>
-        <td th:text="${guide.guideName}"></td>
-        <td><a th:href="@{|/guide/${guide.id}|}">조회</a></td>
-      </tr>
-    </table>
+    <div class="min-h-screen flex flex-col">
+      <main class="flex-1">
+        <h1 class="center">가이드 목록</h1>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>이메일</th>
+            <th>이름</th>
+            <th>상세조회</th>
+          </tr>
+          <tr th:each="guide: ${GuideDTOLIST}">
+            <td th:text="${guide.id}"></td>
+            <td th:text="${guide.guideEmail}"></td>
+            <td th:text="${guide.guideName}"></td>
+            <td><a id="button" th:href="@{|/guide/${guide.id}|}">조회</a></td>
+          </tr>
+        </table>
+      </main>
+    </div>
   </main>
 </div>
-
 </body>
 </html>
