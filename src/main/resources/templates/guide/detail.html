@@ -145,7 +145,7 @@
 
     $.ajax({
       type: "GET",
-      url: `/guidelikes/count/${guideId}`,
+      url: `/api/guidelikes/count/${guideId}`,
       success: function (count) {
         likeCount = count;
         $('#like-count').text(likeCount);
@@ -173,10 +173,10 @@
 
     $.ajax({
       type: "GET",
-      url: `/hates/count/${guideId}`,
+      url: `/api/hates/count/${guideId}`,
       success: function (count) {
-        likeCount = count;
-        $('#like-count').text(likeCount);
+        hateCount = count;
+        $('#like-count').text(hateCount);
       },
       error: function (err) {
         console.log("싫어요 수 로드 실패", err);
