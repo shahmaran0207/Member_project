@@ -138,15 +138,12 @@
     loadHates();
   });
 
-
   const loadLikes = () => {
-    const guideId = [[${guide.id}]];
-    const memberId = [[${session.loginId}]];
-
     $.ajax({
       type: "GET",
       url: `/api/guidelikes/count/${guideId}`,
       success: function (count) {
+        console.log("좋아요 수:", count); // 디버깅용 로그
         likeCount = count;
         $('#like-count').text(likeCount);
       },
@@ -168,15 +165,13 @@
   };
 
   const loadHates = () => {
-    const guideId = [[${guide.id}]];
-    const memberId = [[${session.loginId}]];
-
     $.ajax({
       type: "GET",
-      url: `/api/hates/count/${guideId}`,
+      url: `/api/guidehates/count/${guideId}`,
       success: function (count) {
+        console.log("싫어요 수:", count); // 디버깅용 로그
         hateCount = count;
-        $('#like-count').text(hateCount);
+        $('#hate-count').text(hateCount);
       },
       error: function (err) {
         console.log("싫어요 수 로드 실패", err);
@@ -185,16 +180,15 @@
 
     $.ajax({
       type: "GET",
-      url: `/api/hates/status/${guideId}/${memberId}`,
-      success: function (isLiked) {
-        $('#like-button').text(isLiked ? "싫어요 취소" : "싫어요");
+      url: `/api/guidehates/status/${guideId}/${memberId}`,
+      success: function (isHated) {
+        $('#hate-button').text(isHated ? "싫어요 취소" : "싫어요");
       },
       error: function (err) {
         console.log("싫어요 상태 로드 실패", err);
       }
     });
   };
-
 
   const updateRating = () => {
     const total = likeCount + hateCount;
@@ -203,8 +197,6 @@
   };
 
   window.toggleLike = () => {
-    const guideId = [[${guide.id}]];
-
     $.ajax({
       type: "POST",
       url: "/api/guidelikes/toggle",
@@ -213,6 +205,7 @@
       success: function (res) {
         likeCount += res === "Like added" ? 1 : -1;
         $('#like-count').text(likeCount);
+        $('#like-button').text(res === "Like added" ? "좋아요 취소" : "좋아요");
         updateRating();
       },
       error: function (err) {
@@ -222,17 +215,15 @@
   };
 
   window.toggleHate = () => {
-    const guideId = [[${guide.id}]];
-    const memberId = [[${session.loginId}]];
-
     $.ajax({
       type: "POST",
-      url: "/api/hates/toggle",
+      url: "/api/guidehates/toggle",
       contentType: "application/json",
       data: JSON.stringify({ "guideId": guideId, "memberId": memberId }),
       success: function (res) {
         hateCount += res === "Hate added" ? 1 : -1;
         $('#hate-count').text(hateCount);
+        $('#hate-button').text(res === "Hate added" ? "싫어요 취소" : "싫어요");
         updateRating();
       },
       error: function (err) {

@@ -6,7 +6,7 @@ import com.JPA.Member.DTO.Guide.GuideHateDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/hates")
+@RequestMapping("/api/guidehates")
 @RequiredArgsConstructor
 public class GuideHateController {
     private final GuideHateService guideHateService;

@@ -1,12 +1,12 @@
 package com.JPA.Member.Controller.Board;
 
-import org.springframework.web.bind.annotation.*;
 import com.JPA.Member.Service.Board.BoardLikeService;
+import org.springframework.web.bind.annotation.*;
 import com.JPA.Member.DTO.Board.BoardLikeDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/likes")
+@RequestMapping("/api/boardlikes")
 @RequiredArgsConstructor
 public class BoardLikeController {
 

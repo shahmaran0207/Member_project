@@ -8,7 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "like_table")
+@Table(name = "board_like_table")
 public class BoardLikeEntity {
 
     @Id

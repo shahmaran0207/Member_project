@@ -107,9 +107,13 @@
   let isLiked = false;
   let likeCount = 0;
 
+  let isHated = false;
+  let hateCount = 0;
+
   $(document).ready(function () {
     loadComments();
     loadLikes();
+    loadHates();
   });
 
   const loadComments = () => {
@@ -133,7 +137,7 @@
 
     $.ajax({
       type: "GET",
-      url: `/like/count/${boardId}`,
+      url: `/api/boardlikes/count/${boardId}`,
       success: function (count) {
         likeCount = count;
         $('#like-count').text(likeCount);
@@ -143,9 +147,10 @@
       }
     });
 
+
     $.ajax({
       type: "GET",
-      url: `/api/likes/status/${boardId}/${memberId}`,
+      url: `/api/boardlikes/status/${boardId}/${memberId}`,
       success: function (isLiked) {
         $('#like-button').text(isLiked ? "좋아요 취소" : "좋아요");
       },
@@ -203,7 +208,7 @@
 
     $.ajax({
       type: "POST",
-      url: "/api/likes/toggle",
+      url: "/api/boardlikes/toggle",
       contentType: "application/json",
       data: JSON.stringify({ "boardId": boardId, "memberId": memberId }),
       success: function (res) {
