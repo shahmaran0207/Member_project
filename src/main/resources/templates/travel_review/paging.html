@@ -104,7 +104,9 @@
     <div th:replace="~{header :: header}"></div>
     <main class="flex-1">
         <h1>여행 후기 목록</h1>
-        <button class="btn-primary" onclick="saveReq()">글 작성</button>
+        <button class="btn-primary">
+            <a th:href="@{/Travel_Review/save}">글작성</a>
+        </button>
 
         <table>
             <tr>
@@ -143,11 +145,5 @@
         </div>
     </main>
 </div>
-
-<script>
-    const saveReq = () => {
-        location.href = "/board/save";
-    }
-</script>
 </body>
 </html>

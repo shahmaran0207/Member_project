@@ -30,4 +30,10 @@ public class Travel_Review_Controller {
         model.addAttribute("endPage", endPage);
         return "/travel_review/paging";
     }
+
+    @GetMapping("/save")
+    public String save(Model model) {
+
+        return "/travel_review/save";
+    }
 }
