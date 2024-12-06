@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,14 +33,13 @@ public class ReviewDTO {
     private LocalDateTime Review_createdTime;
     private LocalDateTime Review_updatedTime;
 
-    private float latitude;
-    private float longitude;
-
     private MultipartFile reviewImage;
+
+    private List<Integer> zipcodeList;
 
     public ReviewDTO(Long id,int hatesCount, int likesCount,
                      Long member_id, String title, String content, String address,
-                     LocalDateTime Review_createdTime, String member_name,float latitude, float longitude, int review_hits)
+                     LocalDateTime Review_createdTime, String member_name, int review_hits)
     {
         this.id = id;
         this.likesCount = likesCount;
@@ -49,8 +49,6 @@ public class ReviewDTO {
         this.address = address;
         this.Review_createdTime = Review_createdTime;
         this.member_name = member_name;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.hatesCount = hatesCount;
         this.review_hits = review_hits;
     }
@@ -68,6 +66,7 @@ public class ReviewDTO {
         reviewDTO.setLikesCount(reviewDTO.getLikesCount());
         reviewDTO.setHatesCount(reviewDTO.getHatesCount());
         reviewDTO.setMember_name(reviewDTO.getMember_name());
+        reviewDTO.setZipcodeList(reviewDTO.getZipcodeList());
 
         if(reviewEntity.getFileAttached()==0){
             reviewDTO.setFileAttached(reviewEntity.getFileAttached());

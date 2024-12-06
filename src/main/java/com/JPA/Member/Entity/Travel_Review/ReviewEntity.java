@@ -43,10 +43,8 @@ public class ReviewEntity extends ReviewBaseEntity {
     private String address;
 
     @Column
-    private float latitude;
-
-    @Column
-    private float longitude;
+    @ElementCollection
+    private List<Integer> zipcodeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "reviewEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ReviewFileEntity> reviewFileEntityList = new ArrayList<>();
@@ -86,8 +84,7 @@ public class ReviewEntity extends ReviewBaseEntity {
         reviewEntity.setHatesCount(0);
         reviewEntity.setLikesCount(0);
         reviewEntity.setReview_hits(0);
-        reviewEntity.setLatitude(reviewDTO.getLatitude());
-        reviewEntity.setLongitude(reviewDTO.getLongitude());
+        reviewEntity.setZipcodeList(reviewDTO.getZipcodeList());
         return reviewEntity;
     }
 
@@ -97,13 +94,12 @@ public class ReviewEntity extends ReviewBaseEntity {
         reviewEntity.setHatesCount(reviewEntity.getHatesCount());
         reviewEntity.setLikesCount(reviewEntity.getLikesCount());
         reviewEntity.setReviewpass(reviewDTO.getReviewpass());
-        reviewEntity.setLongitude(reviewDTO.getLongitude());
-        reviewEntity.setLatitude(reviewDTO.getLatitude());
         reviewEntity.setContent(reviewDTO.getContent());
         reviewEntity.setAddress(reviewDTO.getAddress());
         reviewEntity.setTitle(reviewDTO.getTitle());
         reviewEntity.setMemberEntity(memberEntity);
         reviewEntity.setFileAttached(1);
+        reviewEntity.setZipcodeList(reviewDTO.getZipcodeList());
         return reviewEntity;
     }
 
@@ -111,13 +107,12 @@ public class ReviewEntity extends ReviewBaseEntity {
         ReviewEntity reviewEntity = new ReviewEntity();
         reviewEntity.setReview_hits(reviewEntity.getReview_hits());
         reviewEntity.setReviewpass(reviewDTO.getReviewpass());
-        reviewEntity.setLongitude(reviewDTO.getLongitude());
-        reviewEntity.setLatitude(reviewDTO.getLatitude());
         reviewEntity.setContent(reviewDTO.getContent());
         reviewEntity.setAddress(reviewDTO.getAddress());
         reviewEntity.setTitle(reviewDTO.getTitle());
         reviewEntity.setMemberEntity(memberEntity);
         reviewEntity.setId(reviewDTO.getId());
+        reviewEntity.setZipcodeList(reviewDTO.getZipcodeList());
         return reviewEntity;
     }
 }

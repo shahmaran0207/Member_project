@@ -2,15 +2,13 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>put</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bfb339379f57c062aa28eb2f80fc8291&libraries=services"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script>
+    <title>Travel Planner</title>
     <style>
         #map {
             width: 100%;
@@ -35,33 +33,39 @@
 </head>
 <body>
 <div id="page-container">
-    <div th:replace="~{header :: header}"></div>
-    <main id="main-content">
-        <section id="delivery-info">
-            <h2>여행 일정 선택</h2>
-            <label for="startDate">시작일:</label>
-            <input type="date" id="startDate" />
-            <br />
-            <label for="endDate">종료일:</label>
-            <input type="date" id="endDate" />
-            <br />
-            <button id="setDatesBtn">날짜 설정</button>
-        </section>
+    <form id="travelForm" action="/submit" method="post">
+        <div th:replace="~{header :: header}"></div>
+        <main id="main-content">
+            <section id="delivery-info">
+                <h2>여행 일정 선택</h2>
+                <label for="startDate">시작일:</label>
+                <input type="date" id="startDate" name="startDate" />
+                <br />
+                <label for="endDate">종료일:</label>
+                <input type="date" id="endDate" name="endDate" />
+                <br />
+                <button type="button" id="setDatesBtn">날짜 설정</button>
+            </section>
 
-        <section id="map-container" class="hidden">
-            <h2>지도와 마커</h2>
-            <div id="map"></div>
-            <div id="addresses"></div>
-        </section>
+            <section id="map-container" class="hidden">
+                <h2>지도와 마커</h2>
+                <div id="map"></div>
+                <div id="addresses"></div>
+            </section>
 
-        <section id="editor-container" class="hidden">
-            <h2>내용 작성</h2>
-            <textarea id="editor"></textarea>
-        </section>
-    </main>
+            <section id="editor-container" class="hidden">
+                <h2>내용 작성</h2>
+                <textarea id="editor" name="editorContent"></textarea>
+            </section>
+
+            <!-- Hidden inputs to store markers data -->
+            <input type="hidden" id="markerData" name="markerData" />
+            <input type="hidden" id="distanceData" name="distanceData" />
+        </main>
+
+        <button type="submit">제출</button>
+    </form>
 </div>
-
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
     const setDatesBtn = document.getElementById('setDatesBtn');
@@ -72,7 +76,6 @@
     const today = new Date().toISOString().split('T')[0];
     let map, markers = [], lines = [], overlays = [];
 
-    // 날짜 설정 버튼 클릭
     setDatesBtn.addEventListener('click', () => {
         if (startDate.value && endDate.value) {
             const totalDays = calculateDaysBetween(startDate.value, endDate.value);
@@ -86,7 +89,6 @@
         }
     });
 
-    // 날짜 제약 설정
     startDate.addEventListener('change', () => {
         if (startDate.value >= today) {
             alert('시작일은 오늘 이전만 가능합니다.');
@@ -104,15 +106,13 @@
         }
     });
 
-    // 날짜 차이 계산
     function calculateDaysBetween(start, end) {
         const startDateObj = new Date(start);
         const endDateObj = new Date(end);
         const diffInMs = endDateObj - startDateObj;
-        return Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1; // 종료일 포함
+        return Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1;
     }
 
-    // 지도 초기화
     function initMap() {
         map = new kakao.maps.Map(document.getElementById('map'), {
             center: new kakao.maps.LatLng(37.5665, 126.9780),
@@ -120,22 +120,21 @@
         });
     }
 
-    // 주소 입력 필드 동적 생성
     function addAddressInputs(totalDays) {
-        addresses.innerHTML = ''; // 기존 필드 초기화
+        addresses.innerHTML = '';
         for (let i = 1; i <= totalDays; i++) {
             addresses.innerHTML += `
-                    <div class="address-section">
-                        <h3>주소 입력 (일 ${i})</h3>
-                        <input type="text" id="address${i}" placeholder="주소를 입력해주세요." readonly />
-                        <button class="search" data-index="${i}">주소 검색</button>
-                        <button class="show-marker" data-index="${i}">마커 표시</button>
-                    </div>
-                `;
+                <div class="address-section">
+                    <h3>주소 입력 (일 ${i})</h3>
+                    <input type="text" id="address${i}" placeholder="주소를 입력해주세요." readonly />
+                    <input type="hidden" id="postcode${i}" name="postcode${i}" />
+                    <button class="search" data-index="${i}">주소 검색</button>
+                    <button class="show-marker" data-index="${i}">마커 표시</button>
+                </div>
+            `;
         }
     }
 
-    // 주소 검색
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('search')) {
             const index = event.target.getAttribute('data-index');
@@ -147,11 +146,11 @@
         new daum.Postcode({
             oncomplete: (data) => {
                 document.getElementById(`address${index}`).value = data.address;
+                document.getElementById(`postcode${index}`).value = data.zonecode;
             }
         }).open();
     }
 
-    // 마커 표시
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('show-marker')) {
             const index = event.target.getAttribute('data-index');
@@ -167,7 +166,6 @@
                 if (status === kakao.maps.services.Status.OK) {
                     const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                    // 마커 생성 및 지도에 추가
                     const marker = new kakao.maps.Marker({
                         map: map,
                         position: coords
@@ -181,7 +179,6 @@
 
                     markers.push(marker);
 
-                    // 이전 마커와 연결된 선 및 거리 표시
                     if (markers.length > 1) {
                         const prevMarker = markers[markers.length - 2];
                         const linePath = [prevMarker.getPosition(), marker.getPosition()];
@@ -195,7 +192,6 @@
                         });
                         lines.push(polyline);
 
-                        // 거리 계산
                         const distance = polyline.getLength();
                         const midPosition = new kakao.maps.LatLng(
                             (prevMarker.getPosition().getLat() + marker.getPosition().getLat()) / 2,
@@ -211,7 +207,6 @@
                         overlays.push(overlay);
                     }
 
-                    // 지도 중심 이동
                     map.setCenter(coords);
                 } else {
                     alert('주소를 찾을 수 없습니다.');
@@ -220,11 +215,20 @@
         }
     });
 
-    // CKEditor 초기화
     ClassicEditor.create(document.querySelector('#editor'))
         .catch(error => console.error(error));
 
-    // 페이지 로드 시 지도 초기화
+    document.getElementById('travelForm').addEventListener('submit', () => {
+        const markerData = markers.map(marker => ({
+            lat: marker.getPosition().getLat(),
+            lng: marker.getPosition().getLng()
+        }));
+        const distanceData = lines.map(line => line.getLength());
+
+        document.getElementById('markerData').value = JSON.stringify(markerData);
+        document.getElementById('distanceData').value = JSON.stringify(distanceData);
+    });
+
     window.onload = initMap;
 </script>
 </body>

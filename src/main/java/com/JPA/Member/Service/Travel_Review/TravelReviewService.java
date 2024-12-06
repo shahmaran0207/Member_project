@@ -38,8 +38,7 @@ public class TravelReviewService {
         Page<ReviewDTO> reviewDTOS = reviewEntities.map(review ->
                 new ReviewDTO(review.getId(), review.getHatesCount(),review.getLikesCount(),review.getMemberEntity().getId(),
                         review.getTitle(),review.getContent(),review.getAddress(),review.getCreatedTime(),
-                        review.getMemberEntity().getMemberName(),review.getLatitude(), review.getLongitude(),
-                          review.getReview_hits()
+                        review.getMemberEntity().getMemberName(), review.getReview_hits()
                         ));
         return reviewDTOS;
     }
