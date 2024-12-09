@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bfb339379f57c062aa28eb2f80fc8291&libraries=services"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bfb339379f57c062aa28eb2f80fc8291&libraries=services,clusterer,drawing,places"></script>
+    <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script>
     <title>Travel Planner</title>
     <style>
@@ -21,28 +21,26 @@
         #editor-container {
             margin-top: 20px;
         }
-        .distance-overlay {
-            background-color: white;
-            border: 1px solid black;
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 12px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
 <div id="page-container">
-    <form id="travelForm" action="/submit" method="post">
+    <form id="travelForm" action="/reviews/save" method="post">
         <div th:replace="~{header :: header}"></div>
         <main id="main-content">
             <section id="delivery-info">
                 <h2>여행 일정 선택</h2>
                 <label for="startDate">시작일:</label>
-                <input type="date" id="startDate" name="startDate" />
+                <input type="date" id="startDate" name="startDate" required />
                 <br />
                 <label for="endDate">종료일:</label>
-                <input type="date" id="endDate" name="endDate" />
+                <input type="date" id="endDate" name="endDate" required />
+                <br />
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title" required />
+                <br />
+                <label for="reviewpass">비밀번호:</label>
+                <input type="password" id="reviewpass" name="reviewpass" required />
                 <br />
                 <button type="button" id="setDatesBtn">날짜 설정</button>
             </section>
@@ -55,10 +53,11 @@
 
             <section id="editor-container" class="hidden">
                 <h2>내용 작성</h2>
-                <textarea id="editor" name="editorContent"></textarea>
+                <textarea id="content" name="content" required></textarea>
             </section>
 
-            <!-- Hidden inputs to store markers data -->
+            <input type="hidden" id="addressData" name="address" />
+            <input type="hidden" id="zipcodeList" name="zipcodeList" />
             <input type="hidden" id="markerData" name="markerData" />
             <input type="hidden" id="distanceData" name="distanceData" />
         </main>
@@ -74,7 +73,7 @@
     const mapContainer = document.getElementById('map-container');
     const addresses = document.getElementById('addresses');
     const today = new Date().toISOString().split('T')[0];
-    let map, markers = [], lines = [], overlays = [];
+    let map, markers = [], lines = [], distances = [];
 
     setDatesBtn.addEventListener('click', () => {
         if (startDate.value && endDate.value) {
@@ -86,23 +85,6 @@
             addAddressInputs(totalDays);
         } else {
             alert('시작일과 종료일을 모두 선택해주세요.');
-        }
-    });
-
-    startDate.addEventListener('change', () => {
-        if (startDate.value >= today) {
-            alert('시작일은 오늘 이전만 가능합니다.');
-            startDate.value = '';
-        } else {
-            endDate.min = startDate.value;
-            endDate.max = today;
-        }
-    });
-
-    endDate.addEventListener('change', () => {
-        if (endDate.value < startDate.value || endDate.value > today) {
-            alert('종료일은 시작일 이후, 오늘까지 가능합니다.');
-            endDate.value = '';
         }
     });
 
@@ -124,15 +106,87 @@
         addresses.innerHTML = '';
         for (let i = 1; i <= totalDays; i++) {
             addresses.innerHTML += `
-                <div class="address-section">
-                    <h3>주소 입력 (일 ${i})</h3>
-                    <input type="text" id="address${i}" placeholder="주소를 입력해주세요." readonly />
-                    <input type="hidden" id="postcode${i}" name="postcode${i}" />
-                    <button class="search" data-index="${i}">주소 검색</button>
-                    <button class="show-marker" data-index="${i}">마커 표시</button>
-                </div>
-            `;
+        <div class="address-section">
+            <h3>주소 입력 (일 ${i})</h3>
+            <input type="text" id="address${i}" placeholder="주소를 입력해주세요." />
+            <input type="hidden" id="postcode${i}" />
+            <button class="search" data-index="${i}">주소 검색</button>
+            <button class="show-marker" data-index="${i}">마커 표시</button>
+        </div>
+        `;
         }
+
+        document.querySelectorAll('.show-marker').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const index = event.target.getAttribute('data-index');
+                showMarker(index);
+            });
+        });
+    }
+
+    function showMarker(index) {
+        const address = document.getElementById(`address${index}`).value;
+
+        if (!address) {
+            alert('주소를 먼저 입력해주세요.');
+            return;
+        }
+
+        const geocoder = new kakao.maps.services.Geocoder();
+        geocoder.addressSearch(address, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                const marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                markers.push(marker);
+
+                const infowindow = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:5px;">${markers.length}번 마커</div>`
+                });
+                infowindow.open(map, marker);
+
+                if (markers.length > 1) {
+                    const prevMarker = markers[markers.length - 2];
+                    const prevCoords = prevMarker.getPosition();
+                    const currentCoords = coords;
+                    const line = new kakao.maps.Polyline({
+                        path: [prevCoords, currentCoords],
+                        strokeWeight: 2,
+                        strokeColor: '#0000FF',
+                        strokeOpacity: 1,
+                        strokeStyle: 'solid'
+                    });
+                    line.setMap(map);
+                    lines.push(line);
+
+                    const distance = kakao.maps.services.LatLng.getDistance(prevCoords, currentCoords);
+                    const midPoint = new kakao.maps.LatLng(
+                        (prevCoords.getLat() + currentCoords.getLat()) / 2,
+                        (prevCoords.getLng() + currentCoords.getLng()) / 2
+                    );
+
+                    const distanceMarker = new kakao.maps.Marker({
+                        map: map,
+                        position: midPoint
+                    });
+
+                    const distanceLabel = new kakao.maps.InfoWindow({
+                        content: `<div style="padding:5px;">${distance.toFixed(2)} m</div>`
+                    });
+
+                    distanceLabel.open(map, distanceMarker);
+                    distances.push(distance);
+                }
+
+                map.setCenter(coords);
+            } else {
+                alert('해당 주소를 찾을 수 없습니다.');
+            }
+        });
     }
 
     document.addEventListener('click', (event) => {
@@ -145,91 +199,32 @@
     function openAddressSearch(index) {
         new daum.Postcode({
             oncomplete: (data) => {
-                document.getElementById(`address${index}`).value = data.address;
-                document.getElementById(`postcode${index}`).value = data.zonecode;
+                const addressInput = document.getElementById(`address${index}`);
+                const postcodeInput = document.getElementById(`postcode${index}`);
+
+                if (addressInput && postcodeInput) {
+                    addressInput.value = data.address;
+                    postcodeInput.value = data.zonecode;
+                }
             }
         }).open();
     }
-
-    document.addEventListener('click', (event) => {
-        if (event.target.classList.contains('show-marker')) {
-            const index = event.target.getAttribute('data-index');
-            const address = document.getElementById(`address${index}`).value;
-
-            if (!address) {
-                alert('주소를 먼저 검색해주세요.');
-                return;
-            }
-
-            const geocoder = new kakao.maps.services.Geocoder();
-            geocoder.addressSearch(address, (result, status) => {
-                if (status === kakao.maps.services.Status.OK) {
-                    const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                    const marker = new kakao.maps.Marker({
-                        map: map,
-                        position: coords
-                    });
-                    const label = new kakao.maps.CustomOverlay({
-                        map: map,
-                        position: coords,
-                        content: `<div style="background-color: yellow; padding: 2px 5px; border-radius: 3px;">${index}</div>`,
-                        yAnchor: 1
-                    });
-
-                    markers.push(marker);
-
-                    if (markers.length > 1) {
-                        const prevMarker = markers[markers.length - 2];
-                        const linePath = [prevMarker.getPosition(), marker.getPosition()];
-
-                        const polyline = new kakao.maps.Polyline({
-                            map: map,
-                            path: linePath,
-                            strokeWeight: 5,
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 0.7
-                        });
-                        lines.push(polyline);
-
-                        const distance = polyline.getLength();
-                        const midPosition = new kakao.maps.LatLng(
-                            (prevMarker.getPosition().getLat() + marker.getPosition().getLat()) / 2,
-                            (prevMarker.getPosition().getLng() + marker.getPosition().getLng()) / 2
-                        );
-
-                        const overlay = new kakao.maps.CustomOverlay({
-                            map: map,
-                            position: midPosition,
-                            content: `<div class="distance-overlay">${(distance / 1000).toFixed(2)} km</div>`,
-                            yAnchor: 0.5
-                        });
-                        overlays.push(overlay);
-                    }
-
-                    map.setCenter(coords);
-                } else {
-                    alert('주소를 찾을 수 없습니다.');
-                }
-            });
-        }
-    });
-
-    ClassicEditor.create(document.querySelector('#editor'))
-        .catch(error => console.error(error));
 
     document.getElementById('travelForm').addEventListener('submit', () => {
         const markerData = markers.map(marker => ({
             lat: marker.getPosition().getLat(),
             lng: marker.getPosition().getLng()
         }));
-        const distanceData = lines.map(line => line.getLength());
+        const addresses = Array.from(document.querySelectorAll('[id^="address"]')).map(input => input.value);
+        const zipcodes = Array.from(document.querySelectorAll('[id^="postcode"]')).map(input => input.value);
 
         document.getElementById('markerData').value = JSON.stringify(markerData);
-        document.getElementById('distanceData').value = JSON.stringify(distanceData);
+        document.getElementById('addressData').value = addresses.join(', ');
+        document.getElementById('zipcodeList').value = JSON.stringify(zipcodes);
     });
 
-    window.onload = initMap;
+    ClassicEditor.create(document.querySelector('#content'))
+        .catch(error => console.error(error));
 </script>
 </body>
 </html>
