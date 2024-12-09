@@ -2,6 +2,7 @@ package com.JPA.Member.Entity.Travel_Review;
 
 import com.JPA.Member.DTO.Travel_Review.ReviewDTO;
 import com.JPA.Member.Entity.Member.MemberEntity;
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,12 @@ public class ReviewEntity extends ReviewBaseEntity {
 
     @Column
     private String address;
+
+    @Column
+    private LocalDateTime startDate;
+
+    @Column
+    private LocalDateTime endDate;
 
     @Column
     @ElementCollection
@@ -85,6 +92,8 @@ public class ReviewEntity extends ReviewBaseEntity {
         reviewEntity.setLikesCount(0);
         reviewEntity.setReview_hits(0);
         reviewEntity.setZipcodeList(reviewDTO.getZipcodeList());
+        reviewEntity.setStartDate(reviewDTO.getStartDate());
+        reviewEntity.setEndDate(reviewDTO.getEndDate());
         return reviewEntity;
     }
 
@@ -100,6 +109,8 @@ public class ReviewEntity extends ReviewBaseEntity {
         reviewEntity.setMemberEntity(memberEntity);
         reviewEntity.setFileAttached(1);
         reviewEntity.setZipcodeList(reviewDTO.getZipcodeList());
+        reviewEntity.setStartDate(reviewDTO.getStartDate());
+        reviewEntity.setEndDate(reviewDTO.getEndDate());
         return reviewEntity;
     }
 
@@ -113,6 +124,8 @@ public class ReviewEntity extends ReviewBaseEntity {
         reviewEntity.setMemberEntity(memberEntity);
         reviewEntity.setId(reviewDTO.getId());
         reviewEntity.setZipcodeList(reviewDTO.getZipcodeList());
+        reviewEntity.setStartDate(reviewDTO.getStartDate());
+        reviewEntity.setEndDate(reviewDTO.getEndDate());
         return reviewEntity;
     }
 }

@@ -16,9 +16,7 @@ import com.JPA.Member.DTO.Board.BoardDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
-import java.util.List;
 import java.io.File;
 
 //DTO -> Entity (Service)
@@ -52,16 +50,6 @@ public class BoardService {
             BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(savedBoardEntity, originalFilename, storedFileName);
             boardFileRepository.save(boardFileEntity);
         }
-    }
-
-    @Transactional
-    public List<BoardDTO> findAll() {
-        List<BoardEntity> boardEntityList = boardRepository.findAll();
-        List<BoardDTO> boardDTOList = new ArrayList<>();
-        for (BoardEntity boardEntity : boardEntityList) {
-            boardDTOList.add(BoardDTO.toBoardDTO(boardEntity));
-        }
-        return boardDTOList;
     }
 
     @Transactional

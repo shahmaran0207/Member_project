@@ -47,13 +47,6 @@ public class BoardController {
         return "home";
     }
 
-    @GetMapping("/")
-    public String findAll(Model model) {
-        List<BoardDTO> boardDTOList = boardService.findAll();
-        model.addAttribute("boardList", boardDTOList);
-        return "/board/list";
-    }
-
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model,
                            @PageableDefault(page=1) Pageable pageable) {

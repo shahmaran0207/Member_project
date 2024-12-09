@@ -2,14 +2,18 @@ package com.JPA.Member.Controller.Travel_Review;
 
 import com.JPA.Member.Service.Travel_Review.TravelReviewService;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.data.web.PageableDefault;
 import com.JPA.Member.DTO.Travel_Review.ReviewDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,5 +39,12 @@ public class Travel_Review_Controller {
     public String save(Model model) {
 
         return "/travel_review/save";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute ReviewDTO reviewDTO, HttpSession session) throws IOException {
+        Long id=(Long)session.getAttribute("id");
+        travelReviewService.save(reviewDTO, id);
+        return "home";
     }
 }

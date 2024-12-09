@@ -32,6 +32,8 @@ public class ReviewDTO {
 
     private LocalDateTime Review_createdTime;
     private LocalDateTime Review_updatedTime;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     private MultipartFile reviewImage;
 
@@ -39,7 +41,7 @@ public class ReviewDTO {
 
     public ReviewDTO(Long id,int hatesCount, int likesCount,
                      Long member_id, String title, String content, String address,
-                     LocalDateTime Review_createdTime, String member_name, int review_hits)
+                     LocalDateTime Review_createdTime, String member_name, int review_hits, List<Integer> zipcodeList, LocalDateTime startDate, LocalDateTime endDate)
     {
         this.id = id;
         this.likesCount = likesCount;
@@ -51,6 +53,9 @@ public class ReviewDTO {
         this.member_name = member_name;
         this.hatesCount = hatesCount;
         this.review_hits = review_hits;
+        this.zipcodeList = zipcodeList;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
 
@@ -67,6 +72,8 @@ public class ReviewDTO {
         reviewDTO.setHatesCount(reviewDTO.getHatesCount());
         reviewDTO.setMember_name(reviewDTO.getMember_name());
         reviewDTO.setZipcodeList(reviewDTO.getZipcodeList());
+        reviewDTO.setStartDate(reviewDTO.getStartDate());
+        reviewDTO.setEndDate(reviewDTO.getEndDate());
 
         if(reviewEntity.getFileAttached()==0){
             reviewDTO.setFileAttached(reviewEntity.getFileAttached());
