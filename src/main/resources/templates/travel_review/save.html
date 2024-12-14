@@ -21,14 +21,12 @@
         #editor-container {
             margin-top: 20px;
         }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
 <div id="page-container">
-    <form id="travelForm" action="/reviews/save" method="post">
+    <form id="travelForm" action="/Travel_Review/save" method="post">
+        <div th:replace="~{header :: header}"></div>
         <main id="main-content">
             <section id="delivery-info">
                 <h2>여행 일정 선택</h2>
@@ -53,7 +51,7 @@
                 <div id="addresses"></div>
             </section>
 
-            <section id="editor-container" class="hidden">
+            <section id="editor-container">
                 <h2>내용 작성</h2>
                 <textarea id="content" name="content"></textarea>
             </section>
@@ -73,7 +71,6 @@
     const startDate = document.getElementById('startDate');
     const endDate = document.getElementById('endDate');
     const mapContainer = document.getElementById('map-container');
-    const editorContainer = document.getElementById('editor-container');
     const contentField = document.getElementById('content');
     const addresses = document.getElementById('addresses');
     const today = new Date().toISOString().split('T')[0];
@@ -95,8 +92,6 @@
             const totalDays = calculateDaysBetween(startDate.value, endDate.value);
 
             mapContainer.classList.remove('hidden');
-            editorContainer.classList.remove('hidden');
-            contentField.setAttribute('required', 'true'); // 필드가 보이면 required 추가
             initMap();
             addAddressInputs(totalDays);
         } else {
@@ -107,11 +102,11 @@
     document.getElementById('travelForm').addEventListener('submit', (event) => {
         const editorData = contentEditor.getData(); // CKEditor 데이터 가져오기
 
-        if (editorContainer.classList.contains('hidden')) {
-            contentField.removeAttribute('required');
-        } else if (!editorData.trim()) {
+        if (!editorData.trim()) {
             event.preventDefault(); // 폼 제출 중단
             alert('내용을 입력해주세요.');
+        } else {
+            contentField.value = editorData; // CKEditor 데이터를 textarea에 설정
         }
     });
 

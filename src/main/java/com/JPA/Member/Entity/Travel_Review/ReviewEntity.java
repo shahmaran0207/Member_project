@@ -2,9 +2,9 @@ package com.JPA.Member.Entity.Travel_Review;
 
 import com.JPA.Member.DTO.Travel_Review.ReviewDTO;
 import com.JPA.Member.Entity.Member.MemberEntity;
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,10 +44,10 @@ public class ReviewEntity extends ReviewBaseEntity {
     private String address;
 
     @Column
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @Column
     @ElementCollection

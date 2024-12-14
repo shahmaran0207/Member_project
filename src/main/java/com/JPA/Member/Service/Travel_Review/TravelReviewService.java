@@ -13,11 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.io.File;
 
 @RequiredArgsConstructor
@@ -26,16 +23,6 @@ public class TravelReviewService {
     private final TravelReviewRepository travelReviewRepository;
     private final MemberRepository memberRepository;
     private final TravelReviewFileRepository travelReviewFileRepository;
-
-    @Transactional
-    public List<ReviewDTO> findAll() {
-        List<ReviewEntity> reviewEntityList = travelReviewRepository.findAll();
-        List<ReviewDTO> reviewDTOList = new ArrayList<>();
-        for (ReviewEntity reviewEntity : reviewEntityList) {
-            reviewDTOList.add(ReviewDTO.toReviewDTO(reviewEntity));
-        }
-        return reviewDTOList;
-    }
 
     public Page<ReviewDTO> paging(Pageable pageable) {
         int page = pageable.getPageNumber() - 1;
@@ -56,6 +43,7 @@ public class TravelReviewService {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
 
+        System.out.println(memberEntity.getId());
         if (reviewDTO.getReviewImage().isEmpty()) {
             ReviewEntity reviewEntity = ReviewEntity.toSaveEntity(reviewDTO, memberEntity);
             travelReviewRepository.save(reviewEntity);

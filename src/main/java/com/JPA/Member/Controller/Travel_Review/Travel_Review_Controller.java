@@ -37,7 +37,6 @@ public class Travel_Review_Controller {
 
     @GetMapping("/save")
     public String save(Model model) {
-
         return "/travel_review/save";
     }
 

@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,8 +33,8 @@ public class ReviewDTO {
 
     private LocalDateTime Review_createdTime;
     private LocalDateTime Review_updatedTime;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     private MultipartFile reviewImage;
 
@@ -41,7 +42,7 @@ public class ReviewDTO {
 
     public ReviewDTO(Long id,int hatesCount, int likesCount,
                      Long member_id, String title, String content, String address,
-                     LocalDateTime Review_createdTime, String member_name, int review_hits, List<Integer> zipcodeList, LocalDateTime startDate, LocalDateTime endDate)
+                     LocalDateTime Review_createdTime, String member_name, int review_hits, List<Integer> zipcodeList, LocalDate startDate, LocalDate endDate)
     {
         this.id = id;
         this.likesCount = likesCount;
