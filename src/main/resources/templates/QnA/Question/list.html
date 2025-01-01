@@ -13,20 +13,18 @@
             <tr>
                 <th>글 번호</th>
                 <th>제목</th>
-                <th>내용</th>
                 <th>작성자</th>
-                <th>작성시간</th>
+                <th>작성 시간</th>
             </tr>
         </thead>
 
         <tbody>
             <tr th:each="q: ${questionEntityList}">
-                <td th:text="${q.title}"></td>
+                <td th:text="${q.id}"></td>
                 <td>
                     <a th:href="@{|/QnA/Question/detail/${q.id}|}" th:text="${q.title}"></a>
                 </td>
 
-                <td th:text="${q.content}"></td>
                 <td th:text="${q.memberEntity.getMemberName()}"></td>
                 <td th:text="${q.createDate}"></td>
             </tr>
