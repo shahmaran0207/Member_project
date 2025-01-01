@@ -1,5 +1,6 @@
 package com.JPA.Member.Entity.QnA;
 
+import com.JPA.Member.Entity.Member.MemberEntity;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -18,15 +19,19 @@ public class QuestionEntity {
     private int id;
 
     @Column
-    private String subject;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
     private LocalDateTime createDate;
 
-    @OneToMany(mappedBy = "questionEntity", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "questionEntity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<AnswerEntity> answersList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private MemberEntity memberEntity;
 
     public void addAnswer(AnswerEntity answer) {
         answer.setQuestionEntity(this);

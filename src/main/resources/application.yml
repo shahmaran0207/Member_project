@@ -27,5 +27,9 @@ server:
       enabled: true
       force: true
 
+logging:
+  level:
+    root: TRACE
+
 application:
   name: Membmer_project

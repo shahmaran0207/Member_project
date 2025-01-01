@@ -1,4 +1,4 @@
-package com.JPA.Member.Controller;
+package com.JPA.Member.Controller.Member;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.JPA.Member.Service.Member.MemberService;
