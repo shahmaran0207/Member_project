@@ -16,13 +16,17 @@ public class QuestionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    private int questionhits;
+
+    private String answerStatus;
 
     private LocalDateTime createDate;
 

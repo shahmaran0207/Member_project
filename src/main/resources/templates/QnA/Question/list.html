@@ -123,12 +123,14 @@
             <tr th:each="q: ${questionEntityList}">
                 <td th:text="${q.id}"></td>
                 <td>
-                    <a th:href="@{|/QnA/Question/detail/${q.id}|}" th:text="${q.title}"></a>
+                    <a th:href="@{|/QnA/Question/${q.id}|(page=${questionEntityList.number + 1})}"
+                       th:text="${q.title}"></a>
                 </td>
                 <td th:text="${q.memberName}"></td>
                 <td th:text="*{#temporals.format(q.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
-                    <span style="color: green; font-weight: bold;">답변 완료</span>
+                    <span th:if="${q.answerStatus == 'answered'}" style="color: green; font-weight: bold;">답변 완료</span>
+                    <span th:if="${q.answerStatus != 'answered'}" style="color: red; font-weight: bold;">미답변</span>
                 </td>
             </tr>
             </tbody>

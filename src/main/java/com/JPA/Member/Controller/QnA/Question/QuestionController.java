@@ -1,4 +1,4 @@
-package com.JPA.Member.Controller.QnA;
+package com.JPA.Member.Controller.QnA.Question;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +19,13 @@ public class QuestionController {
     private final QuestionService questionService;
 
 
-    @GetMapping("/detail")
-    public String QuestionDetail(Model model, @PathVariable("id") Integer id) {
+    @GetMapping("/{id}")
+    public String QuestionDetail(@PathVariable Long id, Model model,
+                                 @PageableDefault(page=1) Pageable pageable) {
+        questionService.updateHits(id);
+        QuestionDTO questionDTO = questionService.findById(id);
+        model.addAttribute("question", questionDTO);
+        model.addAttribute("page", pageable.getPageNumber());
         return "/QnA/Question/detail";
     }
 
@@ -34,7 +39,12 @@ public class QuestionController {
         model.addAttribute("questionEntityList", questionDTOLists);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        return "/QnA/Question/list"; // 앞뒤 슬래시 제거
+        return "/QnA/Question/list";
     }
 
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        questionService.delete(id);
+        return "redirect:/Question/QnA/list";
+    }
 }
