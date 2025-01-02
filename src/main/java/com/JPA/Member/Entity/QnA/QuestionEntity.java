@@ -33,6 +33,10 @@ public class QuestionEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id", nullable = false)
+    private AnswerEntity answerEntity;
+
     public void addAnswer(AnswerEntity answer) {
         answer.setQuestionEntity(this);
         answersList.add(answer);

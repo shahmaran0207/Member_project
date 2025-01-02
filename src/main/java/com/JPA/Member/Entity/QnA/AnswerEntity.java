@@ -3,7 +3,6 @@ package com.JPA.Member.Entity.QnA;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
-import lombok.ToString;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,8 +22,9 @@ public class AnswerEntity {
     private LocalDateTime createDate;
 
     @ManyToOne
-    @ToString.Exclude
     private QuestionEntity questionEntity;
+
+    private String answerStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

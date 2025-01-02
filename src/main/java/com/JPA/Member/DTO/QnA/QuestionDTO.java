@@ -20,8 +20,17 @@ public class QuestionDTO {
     private String title;
     private String content;
     private String memberName;
+    private String answerStatus;
 
     private LocalDateTime createDate;
 
     private List<AnswerEntity> answersList = new ArrayList<>();
+
+    public QuestionDTO(int id, String title, String memberName, LocalDateTime createDate, String answerStatus) {
+        this.id = id;
+        this.title = title;
+        this.memberName = memberName;
+        this.createDate = createDate;
+        this.answerStatus = answerStatus;
+    }
 }
