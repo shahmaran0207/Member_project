@@ -101,6 +101,25 @@
             </table>
         </div>
 
+        <div th:if="${question.answerStatus == 'answered'}">
+            <h2 class="text-center text-lg font-bold mt-5">답변 목록</h2>
+            <table style="width: 80%; margin: 0 auto; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <thead>
+                <tr>
+                    <th style="background-color: #4CAF50; color: white; padding: 10px;">답변 작성자</th>
+                    <th style="background-color: #4CAF50; color: white; padding: 10px;">작성일</th>
+                    <th style="background-color: #4CAF50; color: white; padding: 10px;">답변 내용</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;" th:text="${answer.memberName}"></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;" th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;" th:text="${answer.content}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
 
     </main>

@@ -1,11 +1,13 @@
 package com.JPA.Member.Controller.QnA.Question;
 
 import com.JPA.Member.Service.QnA.Question.QuestionService;
+import com.JPA.Member.Service.QnA.Answer.AnswerService;
 import org.springframework.data.web.PageableDefault;
 import com.JPA.Member.DTO.QnA.Question.QuestionDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.data.domain.Pageable;
+import com.JPA.Member.DTO.QnA.Answer.AnswerDTO;
 import org.springframework.data.domain.Page;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +19,16 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
-
+    private final AnswerService answerService;
 
     @GetMapping("/{id}")
     public String QuestionDetail(@PathVariable Long id, Model model,
                                  @PageableDefault(page=1) Pageable pageable) {
         questionService.updateHits(id);
         QuestionDTO questionDTO = questionService.findById(id);
+        AnswerDTO answerDTO = answerService.findByQuestionId(id);
+        System.out.println(answerDTO.getMemberName());
+        model.addAttribute("answer", answerDTO);
         model.addAttribute("question", questionDTO);
         model.addAttribute("page", pageable.getPageNumber());
         return "/QnA/Question/detail";

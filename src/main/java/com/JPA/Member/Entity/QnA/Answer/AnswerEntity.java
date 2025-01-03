@@ -1,9 +1,8 @@
 package com.JPA.Member.Entity.QnA.Answer;
 
+import com.JPA.Member.Entity.QnA.Question.QuestionEntity;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import java.time.LocalDateTime;
-
-import com.JPA.Member.Entity.QnA.Question.QuestionEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,4 +31,14 @@ public class AnswerEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
+
+    public static AnswerEntity toSaveEntity(MemberEntity memberEntity, String content, QuestionEntity question) {
+        AnswerEntity answerEntity = new AnswerEntity();
+        answerEntity.setAnswerStatus("answered");
+        answerEntity.setContent(content);
+        answerEntity.setQuestionEntity(question);
+        answerEntity.setCreateDate(LocalDateTime.now());
+        answerEntity.setMemberEntity(memberEntity);
+        return answerEntity;
+    }
 }

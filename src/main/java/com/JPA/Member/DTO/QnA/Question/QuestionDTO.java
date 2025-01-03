@@ -66,4 +66,12 @@ public class QuestionDTO {
 
         return questionDTO;
     }
+
+    public static QuestionEntity toEntity(QuestionDTO questionDTO) {
+        QuestionEntity questionEntity = new QuestionEntity();
+        questionEntity.setId(questionDTO.getId());
+
+
+        return questionEntity;
+    }
 }
