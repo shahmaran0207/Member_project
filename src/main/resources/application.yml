@@ -20,16 +20,12 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
 server:
-  port: 8082
+  port: 8083
   servlet:
     encoding:
       charset: UTF-8
       enabled: true
       force: true
-
-logging:
-  level:
-    root: TRACE
 
 application:
   name: Membmer_project

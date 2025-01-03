@@ -1,6 +1,6 @@
-package com.JPA.Member.DTO.QnA;
+package com.JPA.Member.DTO.QnA.Answer;
 
-import com.JPA.Member.Entity.QnA.QuestionEntity;
+import com.JPA.Member.Entity.QnA.Question.QuestionEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;

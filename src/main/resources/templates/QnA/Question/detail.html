@@ -121,9 +121,13 @@
         const memberId = [[${session.loginId}]];
         const contents = document.getElementById('answer-content').value;
         const id = [[${question.id}]];
-        const content = document.getElementById('answer-content').value;
 
-        if (!content.trim()) {
+        console.log(memberId);
+        console.log(contents);
+        console.log(id);
+
+
+        if (!contents.trim()) {
             alert('답변 내용을 입력해주세요.');
             return;
         }
@@ -132,11 +136,12 @@
             url: `/QnA/Answer/write/${id}`,
             type: 'POST',
             contentType: 'application/json',
-            data: {
-                "memberId": memberId,
-                "commentContents": contents,
-                "Question": id
-            },
+            data: JSON.stringify({
+                memberId: memberId,
+                commentContents: contents,
+                Question: id,
+                answerStatus: "answered"
+            }),
             success: () => {
                 alert('답변이 등록되었습니다.');
                 location.reload();
@@ -145,6 +150,7 @@
                 alert('답변 등록에 실패했습니다. 다시 시도해주세요.');
             }
         });
+
     };
 </script>
 </body>

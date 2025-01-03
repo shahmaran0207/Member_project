@@ -1,10 +1,10 @@
-package com.JPA.Member.Repository.QnA;
+package com.JPA.Member.Repository.QnA.Question;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import com.JPA.Member.Entity.QnA.Question.QuestionEntity;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Query;
-import com.JPA.Member.Entity.QnA.QuestionEntity;
 import jakarta.transaction.Transactional;
 import java.util.List;
 

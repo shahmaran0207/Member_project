@@ -1,9 +1,9 @@
-package com.JPA.Member.Repository.QnA;
+package com.JPA.Member.Repository.QnA.Answer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import com.JPA.Member.Entity.QnA.AnswerEntity;
+import com.JPA.Member.Entity.QnA.Answer.AnswerEntity;
 import jakarta.transaction.Transactional;
 
 public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {

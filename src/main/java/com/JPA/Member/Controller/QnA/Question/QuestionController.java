@@ -1,16 +1,16 @@
 package com.JPA.Member.Controller.QnA.Question;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import com.JPA.Member.Service.QnA.Question.QuestionService;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.data.web.PageableDefault;
+import com.JPA.Member.DTO.QnA.Question.QuestionDTO;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
-import com.JPA.Member.DTO.QnA.QuestionDTO;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/QnA/Question")
@@ -46,5 +46,17 @@ public class QuestionController {
     public String delete(@PathVariable Long id) {
         questionService.delete(id);
         return "redirect:/Question/QnA/list";
+    }
+
+    @GetMapping("/write")
+    public String saveForm() {
+        return "/QnA/Question/write";
+    }
+
+    @PostMapping("/write")
+    public String save(@ModelAttribute QuestionDTO questionDTO, HttpSession session) throws IOException {
+        Long id = (Long) session.getAttribute("loginId");
+        questionService.save(questionDTO, id);
+        return "home";
     }
 }
