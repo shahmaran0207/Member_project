@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=af44dc4fb8ca5f1da00446135050eeed&libraries=services,clusterer,drawing,places"></script>
+  <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://code.jquery.com/jquery-3.6.3.min.js"
           integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
           crossorigin="anonymous"></script>
@@ -82,18 +84,12 @@
       </tr>
     </table>
 
+    <div id="map" style="width: 80%; height: 400px; margin: 20px auto;"></div>
+
     <div class="button-container">
       <button onclick="listReq()">목록</button>
       <button onclick="updateReq()">수정</button>
       <button onclick="deleteReq()">삭제</button>
-    </div>
-
-
-    <div id="comment-write">
-      <input type="hidden" id="memberId" th:value="${session.loginId}">
-      <input type="text" id="commentWrite" th:value="${session.loginName}" th:readonly="true" placeholder="작성자">
-      <input type="text" id="commentContents" placeholder="내용">
-      <button id="comment-write-button" onclick="commentWrite()">댓글 작성</button>
     </div>
 
   </main>
@@ -104,7 +100,53 @@
     const page = [[${page}]];
     location.href = "/Travel_Review/paging?page=" + page;
   };
+
+  const zipcodeList = /*[[${review.zipcodeList}]]*/ [];
+  console.log("Received zipcodeList:", zipcodeList);
+
+  const mapContainer = document.getElementById('map'); // 지도를 표시할 div
+  const mapOption = {
+    center: new kakao.maps.LatLng(37.5665, 126.9780), // 초기 중심 좌표 (서울)
+    level: 5 // 초기 확대 레벨
+  };
+  const map = new kakao.maps.Map(mapContainer, mapOption); // 지도 객체 생성
+  const geocoder = new kakao.maps.services.Geocoder(); // 주소-좌표 변환 객체 생성
+
+  zipcodeList.forEach((zipcode, index) => {
+    console.log(`Processing zipcode: ${zipcode} (index ${index})`);
+
+    geocoder.addressSearch(zipcode, (result, status) => {
+      if (status === kakao.maps.services.Status.OK && result.length > 0) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        console.log(`Coordinates for ${zipcode}:`, coords);
+
+        const marker = new kakao.maps.Marker({
+          map: map,
+          position: coords,
+          title: `${index + 1}` // 마커에 순번 표시
+        });
+
+        if (index === 0) {
+          map.setCenter(coords);
+        }
+
+        const infowindow = new kakao.maps.InfoWindow({
+          content: `<div style="padding:5px;">${index + 1}번 위치</div>`
+        });
+
+        kakao.maps.event.addListener(marker, 'mouseover', () => infowindow.open(map, marker));
+        kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
+      } else {
+        console.error(
+                `Failed to get coordinates for zipcode: ${zipcode}, status: ${status}, result:`,
+                result
+        );
+      }
+    });
+  });
 </script>
+
+
 
 </body>
 </html>
