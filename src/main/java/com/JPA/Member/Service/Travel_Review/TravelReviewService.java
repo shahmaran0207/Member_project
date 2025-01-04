@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
+import java.util.Optional;
 import java.io.File;
 
 @RequiredArgsConstructor
@@ -44,7 +45,6 @@ public class TravelReviewService {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
 
-        // null 체크 추가
         MultipartFile reviewImage = reviewDTO.getReviewImage();
         if (reviewImage == null || reviewImage.isEmpty()) {
             ReviewEntity reviewEntity = ReviewEntity.toSaveEntity(reviewDTO, memberEntity);
@@ -68,6 +68,17 @@ public class TravelReviewService {
     @Transactional
     public void updateHits(Long id) {
         travelReviewRepository.updateHits(id);
+    }
+
+    @Transactional
+    public ReviewDTO findById(Long id) {
+        Optional<ReviewEntity> optionalReviewEntity = travelReviewRepository.findById(id);
+        if (optionalReviewEntity.isPresent()) {
+            ReviewEntity reviewEntity = optionalReviewEntity.get();
+            return ReviewDTO.toReviewDTO(reviewEntity);
+        } else {
+            return null;
+        }
     }
 
 }

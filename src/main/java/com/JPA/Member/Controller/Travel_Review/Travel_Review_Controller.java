@@ -1,11 +1,9 @@
 package com.JPA.Member.Controller.Travel_Review;
 
-import com.JPA.Member.DTO.Board.BoardDTO;
-import com.JPA.Member.DTO.Board.CommentDTO;
 import com.JPA.Member.Service.Travel_Review.TravelReviewService;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.data.web.PageableDefault;
 import com.JPA.Member.DTO.Travel_Review.ReviewDTO;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -13,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,12 +29,12 @@ public class Travel_Review_Controller {
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        return "/travel_review/paging";
+        return "/Travel_Review/paging";
     }
 
     @GetMapping("/save")
     public String save(Model model) {
-        return "/travel_review/save";
+        return "/Travel_Review/save";
     }
 
     @PostMapping("/save")
@@ -51,13 +48,11 @@ public class Travel_Review_Controller {
     public String findById(@PathVariable Long id, Model model,
                            @PageableDefault(page=1) Pageable pageable) {
         travelReviewService.updateHits(id);
-        
 
-        BoardDTO boardDTO = boardService.findById(id);
-        List<CommentDTO> commentDTOList = commentService.findAll(id);
-        model.addAttribute("commentList", commentDTOList);
-        model.addAttribute("board", boardDTO);
+        ReviewDTO reviewDTO = travelReviewService.findById(id);
+
+        model.addAttribute("review", reviewDTO);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/board/detail";
+        return "/Travel_Review/detail";
     }
 }

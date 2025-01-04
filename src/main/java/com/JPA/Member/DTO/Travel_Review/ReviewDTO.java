@@ -68,12 +68,12 @@ public class ReviewDTO {
         reviewDTO.setReview_hits(reviewEntity.getReview_hits());
         reviewDTO.setReview_createdTime(reviewEntity.getCreatedTime());
         reviewDTO.setReview_updatedTime(reviewEntity.getUpdatedTime());
-        reviewDTO.setLikesCount(reviewDTO.getLikesCount());
-        reviewDTO.setHatesCount(reviewDTO.getHatesCount());
-        reviewDTO.setMember_name(reviewDTO.getMember_name());
-        reviewDTO.setZipcodeList(reviewDTO.getZipcodeList());
-        reviewDTO.setStartDate(reviewDTO.getStartDate());
-        reviewDTO.setEndDate(reviewDTO.getEndDate());
+        reviewDTO.setLikesCount(reviewEntity.getLikesCount());
+        reviewDTO.setHatesCount(reviewEntity.getHatesCount());
+        reviewDTO.setZipcodeList(reviewEntity.getZipcodeList());
+        reviewDTO.setStartDate(reviewEntity.getStartDate());
+        reviewDTO.setEndDate(reviewEntity.getEndDate());
+        reviewDTO.setMember_name(reviewEntity.getMemberEntity().getMemberName());
 
         if(reviewEntity.getFileAttached()==0){
             reviewDTO.setFileAttached(reviewEntity.getFileAttached());
