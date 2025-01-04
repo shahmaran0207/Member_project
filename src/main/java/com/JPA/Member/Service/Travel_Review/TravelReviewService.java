@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.io.File;
@@ -43,12 +44,12 @@ public class TravelReviewService {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
 
-        System.out.println(memberEntity.getId());
-        if (reviewDTO.getReviewImage().isEmpty()) {
+        // null 체크 추가
+        MultipartFile reviewImage = reviewDTO.getReviewImage();
+        if (reviewImage == null || reviewImage.isEmpty()) {
             ReviewEntity reviewEntity = ReviewEntity.toSaveEntity(reviewDTO, memberEntity);
             travelReviewRepository.save(reviewEntity);
         } else {
-            MultipartFile reviewImage = reviewDTO.getReviewImage();
             String originalFilename = reviewImage.getOriginalFilename();
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
             String savePath = "C:/Users/wjaud/OneDrive/바탕 화면/MOST IMPORTANT/Member_project/file/" + storedFileName;
@@ -63,4 +64,10 @@ public class TravelReviewService {
             travelReviewFileRepository.save(reviewFileEntity);
         }
     }
+
+    @Transactional
+    public void updateHits(Long id) {
+        travelReviewRepository.updateHits(id);
+    }
+
 }

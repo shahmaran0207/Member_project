@@ -1,10 +1,9 @@
 package com.JPA.Member.Controller.Travel_Review;
 
+import com.JPA.Member.DTO.Board.BoardDTO;
+import com.JPA.Member.DTO.Board.CommentDTO;
 import com.JPA.Member.Service.Travel_Review.TravelReviewService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.data.web.PageableDefault;
 import com.JPA.Member.DTO.Travel_Review.ReviewDTO;
 import org.springframework.stereotype.Controller;
@@ -14,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,18 +42,22 @@ public class Travel_Review_Controller {
 
     @PostMapping("/save")
     public String save(@ModelAttribute ReviewDTO reviewDTO, HttpSession session) throws IOException {
-        Long id = (Long) session.getAttribute("id");
-
-        // 1. DTO 데이터 로깅
-        System.out.println("ReviewDTO: " + reviewDTO);
-
-        // 2. 세션 데이터 로깅
-        System.out.println("Session ID: " + id);
-
-        // 서비스 호출
-   //     travelReviewService.save(reviewDTO, id);
-
+        Long memberId = (Long) session.getAttribute("loginId");
+        travelReviewService.save(reviewDTO, memberId);
         return "home";
     }
 
+    @GetMapping("/{id}")
+    public String findById(@PathVariable Long id, Model model,
+                           @PageableDefault(page=1) Pageable pageable) {
+        travelReviewService.updateHits(id);
+        
+
+        BoardDTO boardDTO = boardService.findById(id);
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("commentList", commentDTOList);
+        model.addAttribute("board", boardDTO);
+        model.addAttribute("page", pageable.getPageNumber());
+        return "/board/detail";
+    }
 }
