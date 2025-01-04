@@ -2,22 +2,21 @@ package com.JPA.Member.DTO.Travel_Review;
 
 import com.JPA.Member.Entity.Travel_Review.ReviewEntity;
 import org.springframework.web.multipart.MultipartFile;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Data
 public class ReviewDTO {
 
     private Long id;
     private Long member_id;
+
     private int likesCount;
     private int hatesCount;
     private int review_hits;

@@ -42,8 +42,18 @@ public class Travel_Review_Controller {
 
     @PostMapping("/save")
     public String save(@ModelAttribute ReviewDTO reviewDTO, HttpSession session) throws IOException {
-        Long id=(Long)session.getAttribute("id");
-        travelReviewService.save(reviewDTO, id);
+        Long id = (Long) session.getAttribute("id");
+
+        // 1. DTO 데이터 로깅
+        System.out.println("ReviewDTO: " + reviewDTO);
+
+        // 2. 세션 데이터 로깅
+        System.out.println("Session ID: " + id);
+
+        // 서비스 호출
+   //     travelReviewService.save(reviewDTO, id);
+
         return "home";
     }
+
 }

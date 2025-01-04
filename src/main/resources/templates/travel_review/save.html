@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=af44dc4fb8ca5f1da00446135050eeed&libraries=services,clusterer,drawing,places"></script>
+    <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bfb339379f57c062aa28eb2f80fc8291&libraries=services,clusterer,drawing,places"></script>
-    <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script>
     <title>Travel Planner</title>
     <style>
@@ -91,13 +92,19 @@
         if (startDate.value && endDate.value) {
             const totalDays = calculateDaysBetween(startDate.value, endDate.value);
 
-            mapContainer.classList.remove('hidden');
-            initMap();
-            addAddressInputs(totalDays);
+            mapContainer.classList.remove('hidden'); // hidden 클래스 제거
+
+            // 지도 초기화 전에 DOM이 업데이트되도록 대기
+            setTimeout(() => {
+                initMap(); // 지도 초기화
+                addAddressInputs(totalDays); // 주소 입력 필드 추가
+            }, 100);
         } else {
             alert('시작일과 종료일을 모두 선택해주세요.');
         }
     });
+
+
 
     document.getElementById('travelForm').addEventListener('submit', (event) => {
         const editorData = contentEditor.getData(); // CKEditor 데이터 가져오기
@@ -122,6 +129,11 @@
             center: new kakao.maps.LatLng(37.5665, 126.9780),
             level: 5
         });
+
+        console.log('지도 객체 생성:', map);
+
+        // DOM 업데이트 이후 지도 크기 재조정
+        setTimeout(() => map.relayout(), 300);
     }
 
     function addAddressInputs(totalDays) {
@@ -205,6 +217,7 @@
             contentEditor = editor;
         })
         .catch(error => console.error(error));
+
 </script>
 </body>
 </html>

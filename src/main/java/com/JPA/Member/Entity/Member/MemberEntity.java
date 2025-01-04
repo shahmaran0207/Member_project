@@ -25,6 +25,9 @@ public class MemberEntity {
     private String memberName;
 
     @Column
+    private int role;
+
+    @Column
     private int fileAttached;
 
     private String memberPassword;
@@ -35,6 +38,7 @@ public class MemberEntity {
     public static MemberEntity toMemberEntity(MemberDTO memberDTO) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
+        memberEntity.setRole(memberDTO.getRole());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
@@ -44,6 +48,7 @@ public class MemberEntity {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setId(memberDTO.getId());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
+        memberEntity.setRole(memberDTO.getRole());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
@@ -53,6 +58,7 @@ public class MemberEntity {
         MemberEntity member = new MemberEntity();
         member.setMemberEmail(memberDTO.getMemberEmail());
         member.setMemberName(memberDTO.getMemberName());
+        member.setRole(1);
         member.setId(memberDTO.getId());
         member.setFileAttached(0);
         return member;
@@ -61,6 +67,7 @@ public class MemberEntity {
     public static MemberEntity toSaveMemberFile(MemberDTO memberDTO) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setId(memberDTO.getId());
+        memberEntity.setRole(memberDTO.getRole());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setFileAttached(1);

@@ -18,6 +18,7 @@ public class MemberDTO {
     private Long id;
 
     private int fileAttached;
+    private int role;
 
     private MultipartFile boardFile;
 
@@ -33,6 +34,7 @@ public class MemberDTO {
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(memberEntity.getId());
+        memberDTO.setRole(memberEntity.getRole());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());
         memberDTO.setMemberName(memberEntity.getMemberName());
 

@@ -74,9 +74,9 @@
 
         <div class="button-container">
             <button onclick="listReq()">목록</button>
-            <button th:if="${question.memberId == session.loginId}" onclick="deleteReq()">삭제</button>
+            <button th:if="${question.memberId == session.loginId} or ${session.memberRole== 0}" onclick="deleteReq()">삭제</button>
         </div>
-        <div th:if="${question.answerStatus != 'answered'}" id="comment-write">
+        <div th:if="${question.answerStatus != 'answered'} and ${session.memberRole== 0}" id="comment-write">
             <h2 class="text-center text-lg font-bold mt-5">답변 작성</h2>
             <table style="width: 80%; margin: 0 auto; border: none; border-collapse: collapse;">
                 <tr>
