@@ -23,15 +23,12 @@ public class AnswerService {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
 
-        // AnswerEntity 생성 및 저장
         AnswerEntity answerEntity = AnswerEntity.toSaveEntity(memberEntity, contents, question);
         answerRepository.save(answerEntity);
 
-        // 기존 QuestionEntity 가져오기
         QuestionEntity existingQuestion = questionRepository.findById(question.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid question ID: " + question.getId()));
 
-        // 기존 데이터를 유지하고 answerStatus만 업데이트
         existingQuestion.setAnswerStatus("answered");
         questionRepository.save(existingQuestion); // 변경된 데이터만 저장
     }

@@ -27,7 +27,7 @@ public class AnswerController {
             Long questionid = Long.valueOf(requestData.get("Question").toString());
             QuestionDTO questionDTO = questionService.findById(questionid);
             QuestionEntity question = questionDTO.toEntity(questionDTO);
-            Long member = memberId.longValue(); // Integer를 Long으로 변환
+            Long member = memberId.longValue();
             answerService.save(member, commentContents, question);
 
             return "/home";

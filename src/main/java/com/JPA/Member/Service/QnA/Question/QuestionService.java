@@ -50,7 +50,7 @@ public class QuestionService {
                 questionRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
 
         Page<QuestionDTO> questionDTOS = questionEntities.map(question ->
-                new QuestionDTO(question.getId(), question.getTitle(), question.getMemberEntity().getMemberName(), question.getCreateDate(), question.getQuestionhits(), question.getAnswerStatus()));
+                new QuestionDTO(question.getId(), question.getMemberEntity().getId(),question.getTitle(), question.getMemberEntity().getMemberName(), question.getCreateDate(), question.getQuestionhits(), question.getAnswerStatus()));
         return questionDTOS;
     }
 
@@ -67,13 +67,10 @@ public class QuestionService {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
 
-        // 파일이 null인지 먼저 확인
         if (questionDTO.getQuestionFile() == null || questionDTO.getQuestionFile().isEmpty()) {
-            // 파일이 없을 때 처리 로직
             QuestionEntity questionEntity = QuestionEntity.toSaveEntity(questionDTO, memberEntity);
             questionRepository.save(questionEntity);
         } else {
-            // 파일이 존재할 때 처리 로직
             MultipartFile questionFile = questionDTO.getQuestionFile();
             String originalFilename = questionFile.getOriginalFilename();
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename;

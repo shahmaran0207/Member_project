@@ -18,6 +18,7 @@ import lombok.Setter;
 public class QuestionDTO {
 
     private Long id;
+    private Long memberId;
 
     private int questionhits;
     private int fileAttached;
@@ -36,9 +37,10 @@ public class QuestionDTO {
 
     private List<AnswerEntity> answersList = new ArrayList<>();
 
-    public QuestionDTO(Long id, String title, String memberName, LocalDateTime createDate, int questionhits, String answerStatus) {
+    public QuestionDTO(Long id, Long memberId, String title, String memberName, LocalDateTime createDate, int questionhits, String answerStatus) {
         this.id = id;
         this.title = title;
+        this.memberId = memberId;
         this.memberName = memberName;
         this.createDate = createDate;
         this.questionhits = questionhits;
@@ -51,6 +53,7 @@ public class QuestionDTO {
         questionDTO.setTitle(questionEntity.getTitle());
         questionDTO.setQuestionPass(questionEntity.getQuestionPass());
         questionDTO.setContent(questionEntity.getContent());
+        questionDTO.setMemberId(questionEntity.getMemberEntity().getId());
         questionDTO.setMemberName(questionEntity.getMemberEntity().getMemberName());
         questionDTO.setCreateDate(questionEntity.getCreateDate());
         questionDTO.setQuestionhits(questionEntity.getQuestionhits());
@@ -70,8 +73,6 @@ public class QuestionDTO {
     public static QuestionEntity toEntity(QuestionDTO questionDTO) {
         QuestionEntity questionEntity = new QuestionEntity();
         questionEntity.setId(questionDTO.getId());
-
-
         return questionEntity;
     }
 }

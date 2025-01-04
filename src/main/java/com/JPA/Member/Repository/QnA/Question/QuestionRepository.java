@@ -8,15 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.JPA.Member.Entity.QnA.Answer.AnswerEntity;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
-import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<QuestionEntity, Long> {
-
-    QuestionEntity findByTitle(String title);
-
-    QuestionEntity findByTitleAndContent(String title, String content);
-
-    List<QuestionEntity> findByTitleLike(String Title);
 
     @Modifying
     @Transactional

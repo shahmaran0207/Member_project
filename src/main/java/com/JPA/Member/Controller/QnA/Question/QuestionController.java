@@ -27,7 +27,6 @@ public class QuestionController {
         questionService.updateHits(id);
         QuestionDTO questionDTO = questionService.findById(id);
         AnswerDTO answerDTO = answerService.findByQuestionId(id);
-        System.out.println(answerDTO.getMemberName());
         model.addAttribute("answer", answerDTO);
         model.addAttribute("question", questionDTO);
         model.addAttribute("page", pageable.getPageNumber());
