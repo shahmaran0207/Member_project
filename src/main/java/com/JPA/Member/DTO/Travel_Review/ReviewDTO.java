@@ -68,8 +68,8 @@ public class ReviewDTO {
         reviewDTO.setReview_hits(reviewEntity.getReview_hits());
         reviewDTO.setReview_createdTime(reviewEntity.getCreatedTime());
         reviewDTO.setReview_updatedTime(reviewEntity.getUpdatedTime());
-        reviewDTO.setLikesCount(reviewEntity.getLikesCount());
-        reviewDTO.setHatesCount(reviewEntity.getHatesCount());
+        reviewDTO.setLikesCount(0);
+        reviewDTO.setHatesCount(0);
         reviewDTO.setZipcodeList(reviewEntity.getZipcodeList());
         reviewDTO.setStartDate(reviewEntity.getStartDate());
         reviewDTO.setEndDate(reviewEntity.getEndDate());

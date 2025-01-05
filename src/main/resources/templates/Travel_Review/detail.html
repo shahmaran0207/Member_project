@@ -95,12 +95,25 @@
       <button onclick="updateReq()">수정</button>
       <button onclick="deleteReq()">삭제</button>
     </div>
+    <div class="button-container">
+    <button style="background-color: #38bdf8 !important; color: white !important;" id="like-button" onclick="toggleLike()">👍 좋아요</button>
+    <span id="like-count" class="like-count"  style="background-color: #38bdf8 !important; color: white !important;">0</span>
 
+    <button style="background-color: #f87171 !important; color: white !important;" id="hate-button" onclick="toggleHate()">👎 싫어요</button>
+    <span id="hate-count" th:text="${review.hatesCount}" class="like-count"  style="background-color: #f87171 !important; color: white !important;">0</span>
+    </div>
   </main>
 </div>
 
 <script th:inline="javascript">
   const addresses = /*[[${review.zipcodeList}]]*/ [];
+  const travelReviewId = /*[[${review.id}]]*/ 0; // travelReviewId 값 할당
+  const memberId = /*[[${session.loginId}]]*/ ''; // memberId 값 할당
+
+  document.addEventListener("DOMContentLoaded", function () {
+    loadHates();
+  });
+
 
   // 지도 설정
   const geocoder = new kakao.maps.services.Geocoder();
@@ -167,6 +180,49 @@
       }
     });
   });
+
+
+  window.toggleHate = () => {
+    $.ajax({
+      type: "POST",
+      url: "/api/travel_review_hate/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "reviewId": travelReviewId, "memberId": memberId }),
+      success: function (res) {
+        hateCount += res === "Hate added" ? 1 : -1;
+        $('#hate-count').text(hateCount);
+        $('#hate-button').text(res === "Hate added" ? "👎 싫어요 취소" : "👎 싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 처리 실패", err);
+      }
+    });
+  };
+
+  const loadHates = () => {
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_hate/count/${travelReviewId}`,
+      success: function (count) {
+        hateCount = count;
+        $('#hate-count').text(hateCount);
+      },
+      error: function (err) {
+        console.log("싫어요 수 로드 실패", err);
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_hate/status/${travelReviewId}/${memberId}`,
+      success: function (isHated) {
+        $('#hate-button').text(isHated ? "👎 싫어요 취소" : "👎 싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 상태 로드 실패", err);
+      }
+    });
+  };
 </script>
 
 </body>

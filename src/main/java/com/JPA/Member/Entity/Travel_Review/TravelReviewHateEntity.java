@@ -24,9 +24,9 @@ public class TravelReviewHateEntity {
     private ReviewEntity reviewEntity;
 
     public static TravelReviewHateEntity toSaveEntity(MemberEntity member, ReviewEntity review) {
-        TravelReviewHateEntity reviewLikeEntity = new TravelReviewHateEntity();
-        reviewLikeEntity.setMemberEntity(member);
-        reviewLikeEntity.setReviewEntity(review);
-        return reviewLikeEntity;
+        TravelReviewHateEntity reviewHateEntity = new TravelReviewHateEntity();
+        reviewHateEntity.setMemberEntity(member);
+        reviewHateEntity.setReviewEntity(review);
+        return reviewHateEntity;
     }
 }

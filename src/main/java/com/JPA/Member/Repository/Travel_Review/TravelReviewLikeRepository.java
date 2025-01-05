@@ -6,7 +6,7 @@ import com.JPA.Member.Entity.Travel_Review.ReviewEntity;
 import com.JPA.Member.Entity.Member.MemberEntity;
 
 public interface TravelReviewLikeRepository extends JpaRepository<TravelReviewLikeEntity, Long> {
-    boolean existsByMemberEntityAndReviewEntity(MemberEntity member, TravelReviewLikeEntity review);
+    boolean existsByMemberEntityAndReviewEntity(MemberEntity member, ReviewEntity review);
     int countByReviewEntity(ReviewEntity review);
     void deleteByMemberEntityAndReviewEntity(MemberEntity member, ReviewEntity review);
 }

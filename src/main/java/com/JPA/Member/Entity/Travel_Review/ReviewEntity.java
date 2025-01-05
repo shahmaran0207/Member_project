@@ -88,8 +88,6 @@ public class ReviewEntity extends ReviewBaseEntity {
         reviewEntity.setMemberEntity(memberEntity);
         reviewEntity.setAddress(reviewDTO.getAddress());
         reviewEntity.setFileAttached(0);
-        reviewEntity.setHatesCount(0);
-        reviewEntity.setLikesCount(0);
         reviewEntity.setReview_hits(0);
         reviewEntity.setZipcodeList(reviewDTO.getZipcodeList());
         reviewEntity.setStartDate(reviewDTO.getStartDate());
