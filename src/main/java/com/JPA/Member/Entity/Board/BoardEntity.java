@@ -36,6 +36,9 @@ public class BoardEntity extends BaseEntity {
     @Column
     private int likesCount = 0;
 
+    @Column
+    private int hatesCount = 0;
+
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardFileEntity> boardFileEntityList = new ArrayList<>();
 
@@ -56,6 +59,16 @@ public class BoardEntity extends BaseEntity {
     public void decreaseLikesCount() {
         if (this.likesCount > 0) {
             this.likesCount--;
+        }
+    }
+
+    public void increaseHatesCount() {
+        this.hatesCount++;
+    }
+
+    public void decreaseHatesCount() {
+        if (this.hatesCount > 0) {
+            this.hatesCount--;
         }
     }
 
@@ -87,6 +100,7 @@ public class BoardEntity extends BaseEntity {
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setLikesCount(boardDTO.getLikesCount());
+        boardEntity.setHatesCount(boardDTO.getHatesCount());
         boardEntity.setBoardHits(0);
         boardEntity.setFileAttached(1);
         boardEntity.setMemberEntity(memberEntity);

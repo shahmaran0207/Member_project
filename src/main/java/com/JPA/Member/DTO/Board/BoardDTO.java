@@ -24,6 +24,7 @@ public class BoardDTO {
     private int boardHits;
     private int fileAttached;
     private int likesCount;
+    private int hatesCount;
 
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;
@@ -49,6 +50,7 @@ public class BoardDTO {
         boardDTO.setBoardCreatedTime(boardEntity.getCreatedTime());
         boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
         boardDTO.setLikesCount((boardEntity.getLikesCount()));
+        boardDTO.setHatesCount(boardEntity.getHatesCount());
 
         boardDTO.setMemberName(boardEntity.getMemberEntity().getMemberName());
 
