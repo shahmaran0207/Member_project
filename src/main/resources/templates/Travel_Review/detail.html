@@ -49,7 +49,7 @@
   <div th:replace="~{header :: header}"></div>
   <main class="flex-1">
 
-    <h1>게시판 상세 정보</h1>
+    <h1>여행 후기 상세 정보</h1>
 
     <table>
       <tr>
@@ -65,8 +65,12 @@
         <td th:text="${review.member_name}"></td>
       </tr>
       <tr>
-        <th>Date</th>
-        <td th:text="${#temporals.format(review.review_createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <th>시작일</th>
+        <td th:text="${#temporals.format(review.startDate, 'yyyy-MM-dd')}"></td>
+      </tr>
+      <tr>
+        <th>종료일</th>
+        <td th:text="${#temporals.format(review.endDate, 'yyyy-MM-dd')}"></td>
       </tr>
       <tr>
         <th>Hits</th>
@@ -84,7 +88,7 @@
       </tr>
     </table>
 
-    <div id="map" style="width: 80%; height: 400px; margin: 20px auto;"></div>
+    <div id="map" style="width: 80%; height: 400px; margin: 20px auto; border: 1px solid #ddd;"></div> <!-- 지도 추가 -->
 
     <div class="button-container">
       <button onclick="listReq()">목록</button>
@@ -96,57 +100,74 @@
 </div>
 
 <script th:inline="javascript">
-  const listReq = () => {
-    const page = [[${page}]];
-    location.href = "/Travel_Review/paging?page=" + page;
-  };
+  const addresses = /*[[${review.zipcodeList}]]*/ [];
 
-  const zipcodeList = /*[[${review.zipcodeList}]]*/ [];
-  console.log("Received zipcodeList:", zipcodeList);
-
-  const mapContainer = document.getElementById('map'); // 지도를 표시할 div
+  // 지도 설정
+  const geocoder = new kakao.maps.services.Geocoder();
+  const mapContainer = document.getElementById('map');
   const mapOption = {
-    center: new kakao.maps.LatLng(37.5665, 126.9780), // 초기 중심 좌표 (서울)
-    level: 5 // 초기 확대 레벨
+    center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심 좌표
+    level: 5, // 확대 레벨
   };
-  const map = new kakao.maps.Map(mapContainer, mapOption); // 지도 객체 생성
-  const geocoder = new kakao.maps.services.Geocoder(); // 주소-좌표 변환 객체 생성
+  const map = new kakao.maps.Map(mapContainer, mapOption);
 
-  zipcodeList.forEach((zipcode, index) => {
-    console.log(`Processing zipcode: ${zipcode} (index ${index})`);
+  // 마커 배열과 경로 배열
+  const markers = [];
+  const path = [];
 
-    geocoder.addressSearch(zipcode, (result, status) => {
-      if (status === kakao.maps.services.Status.OK && result.length > 0) {
+  // 각 주소에 대해 마커 표시 및 직선 경로 연결
+  addresses.forEach((address, index) => {
+    geocoder.addressSearch(address, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        console.log(`Coordinates for ${zipcode}:`, coords);
 
-        const marker = new kakao.maps.Marker({
-          map: map,
-          position: coords,
-          title: `${index + 1}` // 마커에 순번 표시
-        });
-
+        // 지도 중심 이동
         if (index === 0) {
           map.setCenter(coords);
         }
 
-        const infowindow = new kakao.maps.InfoWindow({
-          content: `<div style="padding:5px;">${index + 1}번 위치</div>`
+        // 마커 생성 (label에 순서 추가)
+        const marker = new kakao.maps.Marker({
+          map: map,
+          position: coords,
+          label: {
+            text: String(index + 1),
+            color: '#ffffff',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            backgroundColor: '#007BFF',
+            padding: '5px',
+          },
         });
 
-        kakao.maps.event.addListener(marker, 'mouseover', () => infowindow.open(map, marker));
-        kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
+        markers.push(marker);
+
+        path.push(coords);
+
+        const content = `<div style="background-color: #007BFF; color: white; font-size: 14px; padding: 5px 10px; border-radius: 5px;">${index + 1}</div>`;
+        const overlay = new kakao.maps.CustomOverlay({
+          map: map,
+          position: coords,
+          content: content,
+          yAnchor: 1,
+        });
+
+        if (path.length > 1) {
+          const polyline = new kakao.maps.Polyline({
+            map: map,
+            path: path,
+            strokeWeight: 3,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeStyle: 'solid',
+          });
+        }
       } else {
-        console.error(
-                `Failed to get coordinates for zipcode: ${zipcode}, status: ${status}, result:`,
-                result
-        );
+        console.error(`주소 검색 실패: ${address}, 상태 코드: ${status}`);
       }
     });
   });
 </script>
-
-
 
 </body>
 </html>

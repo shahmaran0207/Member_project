@@ -37,11 +37,11 @@ public class ReviewDTO {
 
     private MultipartFile reviewImage;
 
-    private List<Integer> zipcodeList;
+    private List<String> zipcodeList;
 
     public ReviewDTO(Long id,int hatesCount, int likesCount,
                      Long member_id, String title, String content, String address,
-                     LocalDateTime Review_createdTime, String member_name, int review_hits, List<Integer> zipcodeList, LocalDate startDate, LocalDate endDate)
+                     LocalDateTime Review_createdTime, String member_name, int review_hits, List<String> zipcodeList, LocalDate startDate, LocalDate endDate)
     {
         this.id = id;
         this.likesCount = likesCount;

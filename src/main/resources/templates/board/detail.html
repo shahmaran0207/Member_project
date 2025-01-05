@@ -38,7 +38,6 @@
       cursor: default;
       pointer-events: none;
     }
-
   </style>
 </head>
 
@@ -86,10 +85,14 @@
       <button onclick="listReq()">목록</button>
       <button onclick="updateReq()">수정</button>
       <button onclick="deleteReq()">삭제</button>
-      <button id="like-button" onclick="toggleLike()">좋아요</button>
-      <span id="like-count" class="like-count" th:text="${board.likesCount}">0</span>
-    </div>
+      <button style="background-color: #38bdf8 !important; color: white !important;" id="like-button" onclick="toggleLike()">👍 좋아요</button>
+      <span id="like-count" class="like-count" th:text="${board.likesCount}" style="background-color: #38bdf8 !important; color: white !important;">0</span>
 
+      <button style="background-color: #f87171 !important; color: white !important;" id="hate-button" onclick="toggleHate()">👎 싫어요</button>
+      <span id="hate-count" class="like-count" style="background-color: #f87171 !important; color: white !important;">0</span>
+
+
+    </div>
 
     <div id="comment-write">
       <input type="hidden" id="memberId" th:value="${session.loginId}">
@@ -147,12 +150,53 @@
       }
     });
 
+    const loadHates = () => {
+      $.ajax({
+        type: "GET",
+        url: `/api/boardhates/count/${boardId}`,
+        success: function (count) {
+          hateCount = count;
+          $('#hate-count').text(hateCount);
+        },
+        error: function (err) {
+          console.log("싫어요 수 로드 실패", err);
+        }
+      });
+
+      $.ajax({
+        type: "GET",
+        url: `/api/boardhates/status/${boardId}/${memberId}`,
+        success: function (isHated) {
+          $('#hate-button').text(isHated ? "👎 싫어요 취소" : "👎 싫어요");
+        },
+        error: function (err) {
+          console.log("싫어요 상태 로드 실패", err);
+        }
+      });
+    };
+
+    window.toggleHate = () => {
+      $.ajax({
+        type: "POST",
+        url: "/api/boardhates/toggle",
+        contentType: "application/json",
+        data: JSON.stringify({ "boardId": boardId, "memberId": memberId }),
+        success: function (res) {
+          hateCount += res === "Hate added" ? 1 : -1;
+          $('#hate-count').text(hateCount);
+          $('#hate-button').text(res === "Hate added" ? "👎 싫어요 취소" : "👎 싫어요");
+        },
+        error: function (err) {
+          console.log("싫어요 처리 실패", err);
+        }
+      });
+    };
 
     $.ajax({
       type: "GET",
       url: `/api/boardlikes/status/${boardId}/${memberId}`,
       success: function (isLiked) {
-        $('#like-button').text(isLiked ? "좋아요 취소" : "좋아요");
+        $('#like-button').text(isLiked ? "👍 좋아요 취소" : "👍 좋아요");
       },
       error: function (err) {
         console.log("좋아요 상태 로드 실패", err);

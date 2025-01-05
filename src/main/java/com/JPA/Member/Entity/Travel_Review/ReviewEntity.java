@@ -51,7 +51,7 @@ public class ReviewEntity extends ReviewBaseEntity {
 
     @Column
     @ElementCollection
-    private List<Integer> zipcodeList = new ArrayList<>();
+    private List<String> zipcodeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "reviewEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ReviewFileEntity> reviewFileEntityList = new ArrayList<>();
