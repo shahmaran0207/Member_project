@@ -1,64 +1,64 @@
 package com.JPA.Member.Service.Travel_Review;
 
-import com.JPA.Member.DTO.Board.BoardLikeDTO;
-import com.JPA.Member.Entity.Board.BoardEntity;
-import com.JPA.Member.Entity.Board.BoardLikeEntity;
-import com.JPA.Member.Entity.Member.MemberEntity;
-import com.JPA.Member.Repository.Board.BoardLikeRepository;
-import com.JPA.Member.Repository.Board.BoardRepository;
-import com.JPA.Member.Repository.Member.MemberRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.JPA.Member.Repository.Travel_Review.TravelReviewLikeRepository;
+import com.JPA.Member.Repository.Travel_Review.TravelReviewRepository;
+import com.JPA.Member.Entity.Travel_Review.TravelReviewLikeEntity;
 import org.springframework.transaction.annotation.Transactional;
+import com.JPA.Member.DTO.Travel_Review.TravelReviewLikeDTO;
+import com.JPA.Member.Repository.Member.MemberRepository;
+import com.JPA.Member.Entity.Travel_Review.ReviewEntity;
+import jakarta.persistence.EntityNotFoundException;
+import com.JPA.Member.Entity.Member.MemberEntity;
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class TravelReviewLikeService {
 
-    private final BoardLikeRepository boardLikeRepository;
+    private final TravelReviewLikeRepository travelReviewLikeRepository;
     private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
+    private final TravelReviewRepository reviewRepository;
 
     @Transactional
-    public String toggleLike(BoardLikeDTO boardLikeDTO) {
-        Long boardId = boardLikeDTO.getBoardId();
-        Long memberId = boardLikeDTO.getMemberId();
+    public String toggleLike(TravelReviewLikeDTO reviewLikeDTO) {
+        Long reviewId = reviewLikeDTO.getReviewId();
+        Long memberId = reviewLikeDTO.getMemberId();
 
-        if (boardId == null || memberId == null) {
-            throw new IllegalArgumentException("Board ID and Member ID must not be null");
+        if (reviewId == null || memberId == null) {
+            throw new IllegalArgumentException("review ID and Member ID must not be null");
         }
 
-        BoardEntity boardEntity = boardRepository.findById(boardId)
-                .orElseThrow(() -> new EntityNotFoundException("Board not found with id: " + boardId));
+        ReviewEntity reviewEntity = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException("review not found with id: " + reviewId));
         MemberEntity memberEntity = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + memberId));
 
-        if (boardLikeRepository.existsByMemberEntityAndBoardEntity(memberEntity, boardEntity)) {
-            boardLikeRepository.deleteByMemberEntityAndBoardEntity(memberEntity, boardEntity);
-            boardEntity.decreaseLikesCount();
-            boardRepository.save(boardEntity);
+        if (travelReviewLikeRepository.existsByMemberEntityAndReviewEntity(memberEntity, reviewEntity)) {
+            travelReviewLikeRepository.deleteByMemberEntityAndReviewEntity(memberEntity, reviewEntity);
+            reviewEntity.decreaseLikesCount();
+            reviewRepository.save(reviewEntity);
             return "Like removed";
         } else {
-            BoardLikeEntity like = BoardLikeEntity.toSaveEntity(memberEntity, boardEntity);
-            boardLikeRepository.save(like);
-            boardEntity.increaseLikesCount();
-            boardRepository.save(boardEntity);
+            TravelReviewLikeEntity like = TravelReviewLikeEntity.toSaveEntity(memberEntity, reviewEntity);
+            travelReviewLikeRepository.save(like);
+            reviewEntity.increaseLikesCount();
+            reviewRepository.save(reviewEntity);
             return "Like added";
         }
     }
 
-    public int getLikeCount(Long boardId) {
-        return boardLikeRepository.countByBoardEntity(boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid board ID")));
+    public int getLikeCount(Long reviewId) {
+        return travelReviewLikeRepository.countByReviewEntity(reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid review ID")));
     }
 
-    public boolean isLikedByMember(Long boardId, Long memberId) {
-        BoardEntity boardEntity = boardRepository.findById(boardId)
-                .orElseThrow(() -> new EntityNotFoundException("Board not found with id: " + boardId));
+    public boolean isLikedByMember(Long reviewId, Long memberId) {
+        ReviewEntity reviewEntity = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found with id: " + reviewId));
         MemberEntity memberEntity = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + memberId));
 
-        return boardLikeRepository.existsByMemberEntityAndBoardEntity(memberEntity, boardEntity);
+        return travelReviewLikeRepository.existsByMemberEntityAndReviewEntity(memberEntity, reviewEntity);
     }
 }

@@ -109,13 +109,15 @@
   const addresses = /*[[${review.zipcodeList}]]*/ [];
   const travelReviewId = /*[[${review.id}]]*/ 0; // travelReviewId 값 할당
   const memberId = /*[[${session.loginId}]]*/ ''; // memberId 값 할당
+  let likeCount = 0;
+  let hateCount = 0;
 
   document.addEventListener("DOMContentLoaded", function () {
     loadHates();
+    loadLikes();
   });
 
 
-  // 지도 설정
   const geocoder = new kakao.maps.services.Geocoder();
   const mapContainer = document.getElementById('map');
   const mapOption = {
@@ -124,22 +126,18 @@
   };
   const map = new kakao.maps.Map(mapContainer, mapOption);
 
-  // 마커 배열과 경로 배열
   const markers = [];
   const path = [];
 
-  // 각 주소에 대해 마커 표시 및 직선 경로 연결
   addresses.forEach((address, index) => {
     geocoder.addressSearch(address, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-        // 지도 중심 이동
         if (index === 0) {
           map.setCenter(coords);
         }
 
-        // 마커 생성 (label에 순서 추가)
         const marker = new kakao.maps.Marker({
           map: map,
           position: coords,
@@ -220,6 +218,48 @@
       },
       error: function (err) {
         console.log("싫어요 상태 로드 실패", err);
+      }
+    });
+  };
+
+  const loadLikes = () => {
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_like/count/${travelReviewId}`,
+      success: function (count) {
+        likeCount = count;
+        $('#like-count').text(likeCount);
+      },
+      error: function (err) {
+        console.log("좋아요 수 로드 실패", err);
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_like/status/${travelReviewId}/${memberId}`,
+      success: function (isLiked) {
+        $('#like-button').text(isLiked ? "👍 좋아요 취소" : "👍 좋아요");
+      },
+      error: function (err) {
+        console.log("좋아요 상태 로드 실패", err);
+      }
+    });
+  };
+
+  window.toggleLike = () => {
+    $.ajax({
+      type: "POST",
+      url: "/api/travel_review_like/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "reviewId": travelReviewId, "memberId": memberId }),
+      success: function (res) {
+        likeCount += res === "Like added" ? 1 : -1;
+        $('#like-count').text(likeCount);
+        $('#like-button').text(res === "Like added" ? "👍 좋아요 취소" : "👍 좋아요");
+      },
+      error: function (err) {
+        console.log("좋아요 처리 실패", err);
       }
     });
   };
