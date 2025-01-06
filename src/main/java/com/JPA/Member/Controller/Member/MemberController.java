@@ -1,15 +1,15 @@
 package com.JPA.Member.Controller.Member;
 
+import com.JPA.Member.Service.Guide.Guide.GuideService;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.JPA.Member.Service.Member.MemberService;
-import com.JPA.Member.Service.Guide.GuideService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import com.JPA.Member.DTO.Guide.guide.GuideDTO;
 import org.springframework.http.ResponseEntity;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.JPA.Member.DTO.Member.MemberDTO;
-import com.JPA.Member.DTO.Guide.GuideDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;

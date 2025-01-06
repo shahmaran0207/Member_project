@@ -1,8 +1,8 @@
 package com.JPA.Member.Controller.Guide;
 
-import com.JPA.Member.Service.Guide.GuideHateService;
+import com.JPA.Member.Service.Guide.Guide.GuideHateService;
+import com.JPA.Member.DTO.Guide.guide.GuideHateDTO;
 import org.springframework.web.bind.annotation.*;
-import com.JPA.Member.DTO.Guide.GuideHateDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController

@@ -1,6 +1,6 @@
-package com.JPA.Member.DTO.Guide;
+package com.JPA.Member.DTO.Guide.guide;
 
-import com.JPA.Member.Entity.Guide.GuideEntity;
+import com.JPA.Member.Entity.Guide.Guide.GuideEntity;
 import lombok.*;
 
 @Getter

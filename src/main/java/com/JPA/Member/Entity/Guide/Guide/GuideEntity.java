@@ -1,4 +1,4 @@
-package com.JPA.Member.Entity.Guide;
+package com.JPA.Member.Entity.Guide.Guide;
 
 import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.DTO.Member.MemberDTO;

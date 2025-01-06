@@ -8,8 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import com.JPA.Member.Entity.Board.BoardHateEntity;
 import com.JPA.Member.Entity.Member.MemberEntity;
 import com.JPA.Member.Entity.Board.BoardEntity;
-import com.JPA.Member.DTO.Board.BoardHateDTO;
 import org.springframework.stereotype.Service;
+import com.JPA.Member.DTO.Board.BoardHateDTO;
 import lombok.RequiredArgsConstructor;
 
 @Service

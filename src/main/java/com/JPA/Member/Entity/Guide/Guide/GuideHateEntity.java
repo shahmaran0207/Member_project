@@ -1,4 +1,4 @@
-package com.JPA.Member.Entity.Guide;
+package com.JPA.Member.Entity.Guide.Guide;
 
 import com.JPA.Member.Entity.Member.MemberEntity;
 import jakarta.persistence.*;
@@ -8,8 +8,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "guide_like_table")
-public class GuideLikeEntity {
+@Table(name = "guide_hate_table")
+public class GuideHateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +23,10 @@ public class GuideLikeEntity {
     @JoinColumn(name = "guide_id", nullable = false)
     private GuideEntity guideEntity;
 
-    public static GuideLikeEntity toSaveEntity(MemberEntity member, GuideEntity guide) {
-        GuideLikeEntity guideLikeEntity = new GuideLikeEntity();
-        guideLikeEntity.setMemberEntity(member);
-        guideLikeEntity.setGuideEntity(guide);
-        return guideLikeEntity;
+    public static GuideHateEntity toSaveEntity(MemberEntity member, GuideEntity guide) {
+        GuideHateEntity guideHateEntity = new GuideHateEntity();
+        guideHateEntity.setMemberEntity(member);
+        guideHateEntity.setGuideEntity(guide);
+        return guideHateEntity;
     }
 }

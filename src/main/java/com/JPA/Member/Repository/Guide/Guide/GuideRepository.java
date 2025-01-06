@@ -1,7 +1,7 @@
-package com.JPA.Member.Repository.Guide;
+package com.JPA.Member.Repository.Guide.Guide;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.JPA.Member.Entity.Guide.GuideEntity;
+import com.JPA.Member.Entity.Guide.Guide.GuideEntity;
 import java.util.Optional;
 
 public interface GuideRepository extends JpaRepository<GuideEntity, Long> {
