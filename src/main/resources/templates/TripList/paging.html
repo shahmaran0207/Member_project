@@ -125,6 +125,7 @@
                     <a th:href="@{|/TripList/${trip.id}|(page=${triplist.number + 1})}"
                        th:text="${trip.title}"></a>
                 </td>
+
                 <td th:text="${trip.guide_name}"></td>
                 <td th:text="*{#temporals.format(trip.trip_list_createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td th:text="${trip.trip_list_hits}"></td>

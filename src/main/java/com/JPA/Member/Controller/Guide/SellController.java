@@ -1,16 +1,16 @@
 package com.JPA.Member.Controller.Guide;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import com.JPA.Member.Service.Guide.TripList.TripListService;
-import org.springframework.web.bind.annotation.GetMapping;
 import com.JPA.Member.DTO.Guide.TripList.TripListDTO;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class SellController {
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model, @PathVariable Long id) {
         Page<TripListDTO> tripListDTOS = tripListService.paging(pageable, id);
 
-        int blockLimit = 10; // 페이지네이션 블록 단위
+        int blockLimit = 10;
         int currentPage = pageable.getPageNumber() + 1; // 현재 페이지 (1부터 시작)
         int totalPages = Math.max(tripListDTOS.getTotalPages(), 1); // 최소 1페이지 보장
         int startPage = Math.max(((currentPage - 1) / blockLimit) * blockLimit + 1, 1); // 최소 1부터 시작
@@ -36,5 +36,27 @@ public class SellController {
         return "/TripList/paging";
     }
 
+    @GetMapping("/save")
+    public String save(Model model) {
+        return "/TripList/save";
+    }
 
+    @PostMapping("/save")
+    public String save(@ModelAttribute TripListDTO tripListDTO, HttpSession session) throws IOException {
+        Long GuideID = (Long) session.getAttribute("GuideID");
+        tripListService.save(tripListDTO, GuideID);
+        return "home";
+    }
+
+    @GetMapping("/{id}")
+    public String findById(@PathVariable Long id, Model model,
+                           @PageableDefault(page=1) Pageable pageable) {
+        tripListService.updateHits(id);
+
+        TripListDTO tripListDTO = tripListService.findById(id);
+
+        model.addAttribute("triplist", tripListDTO);
+        model.addAttribute("page", pageable.getPageNumber());
+        return "/TripList/detail";
+    }
 }
