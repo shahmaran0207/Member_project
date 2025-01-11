@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/TripList/")
+@RequestMapping("/TripList")
 public class SellController {
     private final TripListService tripListService;
 
@@ -58,5 +58,18 @@ public class SellController {
         model.addAttribute("triplist", tripListDTO);
         model.addAttribute("page", pageable.getPageNumber());
         return "/TripList/detail";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        tripListService.delete(id);
+        return "redirect:/TripList/paging";
+    }
+
+    //결제 성공 시 배송정보 업데이트
+    @PostMapping("/payment")
+    public String updateDeliveryInfo(HttpSession session) {
+
+        return "redirect:/member/myPage";
     }
 }

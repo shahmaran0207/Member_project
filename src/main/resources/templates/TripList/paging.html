@@ -117,6 +117,7 @@
                 <th>Title</th>
                 <th>Writer</th>
                 <th>Date</th>
+                <th>price</th>
                 <th>Hits</th>
             </tr>
             <tr th:each="trip: ${triplist}">
@@ -127,7 +128,9 @@
                 </td>
 
                 <td th:text="${trip.guide_name}"></td>
-                <td th:text="*{#temporals.format(trip.trip_list_createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="*{trip.date}"></td>
+                <td class="price" th:text="${trip.price}"></td>
+
                 <td th:text="${trip.trip_list_hits}"></td>
             </tr>
         </table>
@@ -150,4 +153,12 @@
     </main>
 </div>
 </body>
+
+<script>
+    const priceElements = document.querySelectorAll(".price");
+    priceElements.forEach((priceElement) => {
+        const price = parseInt(priceElement.textContent, 10); // 정수로 변환
+        priceElement.textContent = price.toLocaleString("ko-KR") + " 원"; // 한국 원 스타일로 포맷
+    });
+</script>
 </html>

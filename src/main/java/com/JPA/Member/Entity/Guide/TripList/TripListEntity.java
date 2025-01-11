@@ -34,6 +34,9 @@ public class TripListEntity {
     private int date;
 
     @Column
+    private int price;
+
+    @Column
     private int trip_list_hits;
 
     @Column
@@ -75,6 +78,7 @@ public class TripListEntity {
         TripListEntity tripListEntity = new TripListEntity();
         tripListEntity.setId(tripListDTO.getId());
         tripListEntity.setTitle(tripListDTO.getTitle());
+        tripListEntity.setPrice(tripListDTO.getPrice());
         tripListEntity.setSeason(tripListDTO.getSeason());
         tripListEntity.setZipcodeList(tripListDTO.getZipcodeList());
         tripListEntity.setTrip_list_hits(0);

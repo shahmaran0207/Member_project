@@ -18,6 +18,7 @@ public class TripListDTO {
     private Long guide_id;
 
     private int likesCount;
+    private int price;
     private int hatesCount;
     private int date;
     private int trip_list_hits;
@@ -33,7 +34,7 @@ public class TripListDTO {
     private List<String> trip_list;
 
     public TripListDTO(Long id, List<String> tripList, String guideName, List<String> zipcodeList,
-                       int likesCount, int hatesCount, String title, int tripListHits, String season, String content, int date) {
+                       int likesCount, int hatesCount, String title, int tripListHits, String season, String content, int date, int price) {
         this.id = id;
         this.season = season;
         this.trip_list = tripList;
@@ -45,6 +46,7 @@ public class TripListDTO {
         this.trip_list_hits = tripListHits;
         this.title = title;
         this.date = date;
+        this.price = price;
     }
 
     public static TripListDTO toTripListDTO(TripListEntity tripListEntity) {
@@ -60,6 +62,7 @@ public class TripListDTO {
         tripListDTO.setZipcodeList(tripListEntity.getZipcodeList());
         tripListDTO.setSeason(tripListEntity.getSeason());
         tripListDTO.setDate(tripListEntity.getDate());
+        tripListDTO.setPrice(tripListEntity.getPrice());
         tripListDTO.setGuide_id(tripListEntity.getGuideEntity().getId());
         tripListDTO.setGuide_name(tripListEntity.getGuideEntity().getGuideName());
 

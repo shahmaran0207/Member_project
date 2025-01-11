@@ -31,7 +31,7 @@ public class TripListService {
         Page<TripListDTO> tripListDTOS = tripListEntities.map(triplist ->
                 new TripListDTO(triplist.getId(), triplist.getTrip_list(), triplist.getGuideEntity().getGuideName(), triplist.getZipcodeList(),
                         triplist.getLikesCount(), triplist.getHatesCount(), triplist.getTitle(), triplist.getTrip_list_hits(), triplist.getSeason(),
-                        triplist.getContent(), triplist.getDate()));
+                        triplist.getContent(), triplist.getDate(), triplist.getPrice()));
         return tripListDTOS;
     }
 
@@ -57,5 +57,9 @@ public class TripListService {
         } else {
             return null;
         }
+    }
+
+    public void delete(Long id) {
+        tripListRepository.deleteById(id);
     }
 }

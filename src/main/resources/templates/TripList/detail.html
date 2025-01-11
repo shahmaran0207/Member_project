@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Detail</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=af44dc4fb8ca5f1da00446135050eeed&libraries=services,clusterer,drawing,places"></script>
   <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -73,6 +74,11 @@
         <td th:text="${triplist.season}"></td>
       </tr>
       <tr>
+        <th>price</th>
+        <td class="price" th:text="${triplist.price}"></td>
+
+      </tr>
+      <tr>
         <th>Hits</th>
         <td th:text="${triplist.trip_list_hits}"></td>
       </tr>
@@ -88,8 +94,10 @@
     <div class="button-container">
       <button onclick="listReq()">목록</button>
       <th:block th:if="${session.GuideID == triplist.guide_id}">
-        <button class="btn-primary" onclick="updateReq()">수정</button>
         <button class="btn-primary" onclick="deleteReq()">삭제</button>
+      </th:block>
+      <th:block th:if="${session.GuideID != triplist.guide_id}">
+        <button id="checkoutBtn" onclick="requestPay()" class="btn-primary">결제하기</button>
       </th:block>
     </div>
 
@@ -272,6 +280,60 @@
     const id = guideId
     location.href = "/TripList/delete/" + id;
   };
+
+  const priceElements = document.querySelectorAll(".price");
+  priceElements.forEach((priceElement) => {
+    const price = parseInt(priceElement.textContent, 10); // 정수로 변환
+    priceElement.textContent = price.toLocaleString("ko-KR") + " 원"; // 한국 원 스타일로 포맷
+  });
+
+  const price = /*[[${triplist.price}]]*/ '';
+  var uniqueMerchantUid = 'merchant_' + new Date().getTime(); // Create a unique merchant UID
+
+  const email= /*[[${session.loginEmail}]]*/ '';
+  const memberName= /*[[${session.memberName}]]*/ '';
+
+  var IMP = window.IMP;
+  IMP.init("imp01786831"); // Replace with your actual merchant code
+
+
+  //여기부터 재수정
+  function requestPay() {
+    var uid = '';
+
+    IMP.request_pay({ // param
+      pg: 'kakaopay',
+      pay_method: "card",
+      merchant_uid: uniqueMerchantUid,
+      name: memberName,
+      amount: price,
+      buyer_name : memberName,
+    },  function (rsp) {
+      if (rsp.success) {
+
+        localStorage.setItem('totalOrderPrice', price);
+
+        // If payment is successful, send data to the server
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/TripList/payment", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            alert("결제가 완료 되었습니다.");
+          }
+        };
+        var data = { order_id: rsp.merchant_uid };
+        xhr.send(JSON.stringify(data));
+      } else {
+        alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+      }
+    });
+  }
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('checkoutBtn').addEventListener('click', requestPay);
+  });
 </script>
 
 </body>
