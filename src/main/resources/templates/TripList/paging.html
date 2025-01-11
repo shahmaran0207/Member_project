@@ -103,10 +103,13 @@
 <div class="min-h-screen flex flex-col">
     <div th:replace="~{header :: header}"></div>
     <main class="flex-1">
-        <h1>여행 후기 목록</h1>
-        <button class="btn-primary">
-            <a th:href="@{/TripList/save}">글작성</a>
-        </button>
+        <h1>여행일정 목록</h1>
+
+        <th:block th:if="${session.GuideID == id}">
+            <button class="btn-primary">
+                <a th:href="@{/TripList/save}">글작성</a>
+            </button>
+        </th:block>
 
         <table>
             <tr>
@@ -134,10 +137,10 @@
             <a th:href="${triplist.first} ? '#' : @{/TripList/paging(page=${triplist.number})}">Prev</a>
 
             <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-      <span th:if="${page == triplist.number + 1}" th:text="${page}"></span>
-      <a th:unless="${page == triplist.number + 1}"
-         th:href="@{/Travel_Review/paging(page=${page})}" th:text="${page}"></a>
-    </span>
+    <span th:if="${page == triplist.number + 1}" th:text="${page}"></span>
+    <a th:unless="${page == triplist.number + 1}" th:href="@{/TripList/paging(page=${page})}" th:text="${page}"></a>
+</span>
+
 
             <a th:href="${triplist.last} ? '#' : @{/TripList/paging(page=${triplist.number + 2})}">Next</a>
 

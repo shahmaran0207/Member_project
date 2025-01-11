@@ -47,6 +47,10 @@
             color: #555;
         }
 
+        .update-button {
+            white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        }
+
         .button-container {
             margin-top: 20px;
             text-align: center;
@@ -97,12 +101,15 @@
                     </td>
                 </tr>
             </table>
-            <div class="button-container">
+            <div class="button-container" style="margin-left: 150px">
                 <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
                 <a th:href="@{/member/delete/{id}(id=${member.id})}" class="update-button">회원 탈퇴</a>
 
                 <th:block th:if="${session.GuideID == null}">
                     <a th:href="@{/member/guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>
+                </th:block>
+                <th:block th:if="${session.GuideID != null}">
+                    <a th:href="@{|/TripList/paging/${session.GuideID}|}" class="update-button">판매중인 일정 관리</a>
                 </th:block>
             </div>
         </div>

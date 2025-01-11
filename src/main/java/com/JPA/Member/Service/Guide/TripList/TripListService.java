@@ -15,16 +15,18 @@ import lombok.RequiredArgsConstructor;
 public class TripListService {
     private final TripListRepository tripListRepository;
 
-    public Page<TripListDTO> paging(Pageable pageable, Long GuideId) {
+    public Page<TripListDTO> paging(Pageable pageable, Long guideId) {
         int page = pageable.getPageNumber() - 1;
         int pageLimit = 10;
 
+        // GuideId와 일치하는 TripListEntity만 가져오기
         Page<TripListEntity> tripListEntities =
-                tripListRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+                tripListRepository.findByGuideEntityId(guideId, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
 
+        // TripListEntity를 TripListDTO로 변환
         Page<TripListDTO> tripListDTOS = tripListEntities.map(triplist ->
                 new TripListDTO(triplist.getId(), triplist.getTrip_list(), triplist.getEndDate(), triplist.getStartDate(),
-                        triplist.getGuideEntity().getGuideName(),triplist.getZipcodeList(), triplist.getLikesCount(),
+                        triplist.getGuideEntity().getGuideName(), triplist.getZipcodeList(), triplist.getLikesCount(),
                         triplist.getHatesCount(), triplist.getTitle(), triplist.getTrip_list_hits()));
         return tripListDTOS;
     }

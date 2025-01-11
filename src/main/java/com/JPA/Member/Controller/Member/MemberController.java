@@ -85,6 +85,7 @@ public class MemberController {
         session.removeAttribute("loginId");
         session.removeAttribute("memberRole");
         session.removeAttribute("loginEmail");
+        session.removeAttribute("loginEmail");
         session.removeAttribute("loginName");
         session.removeAttribute("firebaseUid");
         session.removeAttribute("GuideID");
@@ -109,7 +110,6 @@ public class MemberController {
 
             if(guideDTO != null) session.setAttribute("GuideID", guideDTO.getId());
 
-            session.setAttribute("loginEmail", email);
             session.setAttribute("loginId", memberDTO.getId());
             session.setAttribute("memberRole", memberDTO.getRole());
             session.setAttribute("loginEmail", memberDTO.getMemberEmail());
@@ -145,7 +145,9 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
+
         session.removeAttribute("loginId");
+        session.removeAttribute("loginEmail");
         session.removeAttribute("loginEmail");
         session.removeAttribute("memberRole");
         session.removeAttribute("loginName");

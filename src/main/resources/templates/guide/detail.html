@@ -125,6 +125,14 @@
           <div id="hate-count" class="count" th:text="${guide.hateCounts}">0</div>
         </div>
       </div>
+
+      <div class="button-container">
+        <a th:href="@{|/TripList/paging/${guide.id}|}" class="text-center">
+          <button class="btn btn-primary">가이드의 여행 리스트 보기</button>
+        </a>
+      </div>
+
+
     </div>
   </main>
 </div>

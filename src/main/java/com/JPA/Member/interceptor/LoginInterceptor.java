@@ -12,10 +12,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session == null || session.getAttribute("firebaseUid") == null) {
             response.sendRedirect("/member/login");
             return false;
         }
         return true;
     }
+
 }
