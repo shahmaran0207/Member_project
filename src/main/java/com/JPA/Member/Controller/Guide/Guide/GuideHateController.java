@@ -1,4 +1,4 @@
-package com.JPA.Member.Controller.Guide;
+package com.JPA.Member.Controller.Guide.Guide;
 
 import com.JPA.Member.Service.Guide.Guide.GuideHateService;
 import com.JPA.Member.DTO.Guide.guide.GuideHateDTO;

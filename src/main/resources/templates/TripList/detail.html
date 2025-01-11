@@ -106,8 +106,8 @@
 
 <script th:inline="javascript">
   const addresses = /*[[${triplist.zipcodeList}]]*/ [];
-  const travelReviewId = /*[[${triplist.id}]]*/ 0; // travelReviewId 값 할당
-  const memberId = /*[[${session.loginId}]]*/ ''; // memberId 값 할당
+  const TripListId = /*[[${triplist.id}]]*/ 0;
+  const memberId = /*[[${session.loginId}]]*/ '';
   let likeCount = 0;
   let hateCount = 0;
   const guideId = [[${session.GuideID}]];
@@ -179,13 +179,13 @@
     });
   });
 
-
   window.toggleHate = () => {
+    console.log(TripListId);
     $.ajax({
       type: "POST",
-      url: "/api/travel_review_hate/toggle",
+      url: "/api/trip_list_hate/toggle",
       contentType: "application/json",
-      data: JSON.stringify({ "reviewId": travelReviewId, "memberId": memberId }),
+      data: JSON.stringify({ "tripListId": TripListId, "memberId": memberId }),
       success: function (res) {
         hateCount += res === "Hate added" ? 1 : -1;
         $('#hate-count').text(hateCount);
@@ -200,7 +200,7 @@
   const loadHates = () => {
     $.ajax({
       type: "GET",
-      url: `/api/travel_review_hate/count/${travelReviewId}`,
+      url: `/api/trip_list_hate/count/${TripListId}`,
       success: function (count) {
         hateCount = count;
         $('#hate-count').text(hateCount);
@@ -212,7 +212,7 @@
 
     $.ajax({
       type: "GET",
-      url: `/api/travel_review_hate/status/${travelReviewId}/${memberId}`,
+      url: `/api/trip_list_hate/status/${TripListId}/${memberId}`,
       success: function (isHated) {
         $('#hate-button').text(isHated ? "👎 싫어요 취소" : "👎 싫어요");
       },
@@ -225,7 +225,7 @@
   const loadLikes = () => {
     $.ajax({
       type: "GET",
-      url: `/api/travel_review_like/count/${travelReviewId}`,
+      url: `/api/trip_list_like/count/${TripListId}`,
       success: function (count) {
         likeCount = count;
         $('#like-count').text(likeCount);
@@ -237,7 +237,7 @@
 
     $.ajax({
       type: "GET",
-      url: `/api/travel_review_like/status/${travelReviewId}/${memberId}`,
+      url: `/api/trip_list_like/status/${TripListId}/${memberId}`,
       success: function (isLiked) {
         $('#like-button').text(isLiked ? "👍 좋아요 취소" : "👍 좋아요");
       },
@@ -250,9 +250,9 @@
   window.toggleLike = () => {
     $.ajax({
       type: "POST",
-      url: "/api/travel_review_like/toggle",
+      url: "/api/trip_list_like/toggle",
       contentType: "application/json",
-      data: JSON.stringify({ "reviewId": travelReviewId, "memberId": memberId }),
+      data: JSON.stringify({ "tripListId": TripListId, "memberId": memberId }),
       success: function (res) {
         likeCount += res === "Like added" ? 1 : -1;
         $('#like-count').text(likeCount);

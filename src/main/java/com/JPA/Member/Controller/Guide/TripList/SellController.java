@@ -1,4 +1,4 @@
-package com.JPA.Member.Controller.Guide;
+package com.JPA.Member.Controller.Guide.TripList;
 
 import com.JPA.Member.Service.Guide.TripList.TripListService;
 import com.JPA.Member.DTO.Guide.TripList.TripListDTO;

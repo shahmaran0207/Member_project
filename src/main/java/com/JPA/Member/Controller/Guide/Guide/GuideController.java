@@ -1,4 +1,4 @@
-package com.JPA.Member.Controller.Guide;
+package com.JPA.Member.Controller.Guide.Guide;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
