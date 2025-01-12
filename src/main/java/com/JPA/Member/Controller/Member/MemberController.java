@@ -1,18 +1,19 @@
 package com.JPA.Member.Controller.Member;
 
-import com.JPA.Member.DTO.Guide.TripList.TripListDTO;
 import com.JPA.Member.Service.Guide.Guide.GuideService;
+import com.JPA.Member.Service.Member.MemberTripListService;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.JPA.Member.Service.Member.MemberService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import com.JPA.Member.Service.Member.MemberService;
+import com.JPA.Member.DTO.Member.MemberTripListDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Pageable;
 import com.JPA.Member.DTO.Guide.guide.GuideDTO;
 import org.springframework.http.ResponseEntity;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuth;
+import org.springframework.data.domain.Page;
 import com.JPA.Member.DTO.Member.MemberDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class MemberController {
 
     private final MemberService ms;
     private final GuideService gs;
+    private final MemberTripListService memberTripListService;
 
     @GetMapping("/guide/{id}")
     public String guide(HttpSession session, Model model) throws IOException {
@@ -169,19 +171,18 @@ public class MemberController {
 
     @GetMapping("/buylist/{id}")
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model, HttpSession session) {
-    //    Long MemberId = (Long) session.getAttribute("loginId");
-        //  Page<TripListDTO> tripListDTOS = tripListService.paging(pageable, id);
+        Long MemberId = (Long) session.getAttribute("loginId");
+        Page<MemberTripListDTO> tripListDTOS = memberTripListService.paging(pageable, MemberId);
 
-//        int blockLimit = 10;
-        //      int currentPage = pageable.getPageNumber() + 1; // 현재 페이지 (1부터 시작)
-        //int totalPages = Math.max(tripListDTOS.getTotalPages(), 1); // 최소 1페이지 보장
-        // int startPage = Math.max(((currentPage - 1) / blockLimit) * blockLimit + 1, 1); // 최소 1부터 시작
-        //int endPage = Math.min(startPage + blockLimit - 1, totalPages); // 최대 페이지 초과 방지
+        int blockLimit = 10;
+        int currentPage = pageable.getPageNumber() + 1; // 현재 페이지 (1부터 시작)
+        int totalPages = Math.max(tripListDTOS.getTotalPages(), 1); // 최소 1페이지 보장
+         int startPage = Math.max(((currentPage - 1) / blockLimit) * blockLimit + 1, 1); // 최소 1부터 시작
+        int endPage = Math.min(startPage + blockLimit - 1, totalPages); // 최대 페이지 초과 방지
 
-        //       model.addAttribute("triplist", tripListDTOS);
-        //model.addAttribute("guideId", id);
-        //model.addAttribute("startPage", startPage);
-        //model.addAttribute("endPage", endPage);
+        model.addAttribute("triplist", tripListDTOS);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "/member/buylist";
     }

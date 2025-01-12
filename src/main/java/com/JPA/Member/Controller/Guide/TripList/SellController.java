@@ -4,7 +4,6 @@ import com.JPA.Member.Service.Guide.TripList.TripListService;
 import com.JPA.Member.Service.Member.MemberTripListService;
 import com.JPA.Member.DTO.Guide.TripList.TripListDTO;
 import org.springframework.data.web.PageableDefault;
-import com.JPA.Member.DTO.Member.MemberTripListDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -72,11 +71,8 @@ public class SellController {
     @PostMapping("/payment")
     public String updateDeliveryInfo(@RequestBody TripListDTO tripListDTO, HttpSession session) throws IOException {
         Long MemberId = (Long) session.getAttribute("loginId");
-        Long GuideID = (Long) session.getAttribute("GuideID");
 
-        System.out.println(tripListDTO);
-
-        memberTripListService.save(tripListDTO, MemberId, GuideID);
+        memberTripListService.save(tripListDTO, MemberId);
 
         return "redirect:/member/myPage";
     }

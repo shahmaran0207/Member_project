@@ -104,6 +104,7 @@
             <div class="button-container" style="margin-left: 150px">
                 <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
                 <a th:href="@{/member/delete/{id}(id=${member.id})}" class="update-button">회원 탈퇴</a>
+                <a th:href="@{/member/buylist/{id}(id=${member.id})}" class="update-button">구매한 일정</a>
 
                 <th:block th:if="${session.GuideID == null}">
                     <a th:href="@{/member/guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>

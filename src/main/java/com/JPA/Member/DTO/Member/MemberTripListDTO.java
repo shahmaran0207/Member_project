@@ -22,18 +22,16 @@ public class MemberTripListDTO {
 
     private String title;
     private String content;
-    private String guide_name;
     private String season;
 
     private List<String> zipcodeList;
     private List<String> trip_list;
 
-    public MemberTripListDTO(Long id, List<String> tripList, String guideName, List<String> zipcodeList,
+    public MemberTripListDTO(Long id, List<String> tripList, List<String> zipcodeList,
                               String title , String season, String content, int date, int price, Long member_id) {
         this.id = id;
         this.season = season;
         this.trip_list = tripList;
-        this.guide_name = guideName;
         this.zipcodeList = zipcodeList;
         this.content = content;
         this.title = title;
@@ -54,7 +52,6 @@ public class MemberTripListDTO {
         tripListDTO.setDate(tripListEntity.getDate());
         tripListDTO.setPrice(tripListEntity.getPrice());
         tripListDTO.setGuide_id(tripListEntity.getGuideEntity().getId());
-        tripListDTO.setGuide_name(tripListEntity.getGuideEntity().getGuideName());
 
         return tripListDTO;
     }

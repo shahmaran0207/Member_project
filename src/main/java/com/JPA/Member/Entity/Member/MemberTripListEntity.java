@@ -45,14 +45,10 @@ public class MemberTripListEntity {
     private List<String> trip_list = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guide_id", nullable = false)
-    private GuideEntity guideEntity;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
 
-    public static MemberTripListEntity toSaveEntity(TripListDTO tripListDTO, GuideEntity guideEntity, MemberEntity memberEntity) {
+    public static MemberTripListEntity toSaveEntity(TripListDTO tripListDTO, MemberEntity memberEntity) {
 
         MemberTripListEntity memberTripListEntity = new MemberTripListEntity();
         memberTripListEntity.setId(tripListDTO.getId());
@@ -62,7 +58,6 @@ public class MemberTripListEntity {
         memberTripListEntity.setZipcodeList(tripListDTO.getZipcodeList());
         memberTripListEntity.setDate(tripListDTO.getDate());
         memberTripListEntity.setContent(tripListDTO.getContent());
-        memberTripListEntity.setGuideEntity(guideEntity);
         memberTripListEntity.setMemberEntity(memberEntity);
         return memberTripListEntity;
     }

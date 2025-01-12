@@ -114,8 +114,10 @@
 
 <script th:inline="javascript">
   const addresses = /*[[${triplist.zipcodeList}]]*/ [];
+  const triplist = /*[[${triplist.trip_list}]]*/ [];
   const TripListId = /*[[${triplist.id}]]*/ 0;
   const memberId = /*[[${session.loginId}]]*/ '';
+  const content = /*[[${triplist.content}]]*/ '';
   let likeCount = 0;
   let hateCount = 0;
   const guideId = [[${session.GuideID}]];
@@ -296,9 +298,20 @@
   var IMP = window.IMP;
   IMP.init("imp01786831"); // Replace with your actual merchant code
 
-
-
+  //여기부터 재수정
   function requestPay() {
+    var tripInfo = {
+      id: TripListId,
+      title: /*[[${triplist.title}]]*/,
+      guideName: /*[[${triplist.guide_name}]]*/,
+      date: /*[[${triplist.date}]]*/,
+      season: /*[[${triplist.season}]]*/,
+      price: /*[[${triplist.price}]]*/,
+      zipcodeList: addresses,
+      trip_list: triplist,
+      content: content
+    };
+
     var uid = '';
 
     IMP.request_pay({ // param
@@ -312,6 +325,20 @@
       if (rsp.success) {
         localStorage.setItem('totalOrderPrice', price);
 
+        var paymentData = {
+          id: tripInfo.id,
+          title: tripInfo.title,
+          guideName: tripInfo.guideName,
+          date: tripInfo.date,
+          season: tripInfo.season,
+          price: tripInfo.price,
+          memberId: memberId,
+          zipcodeList: tripInfo.zipcodeList,
+          trip_list: tripInfo.trip_list,
+          content: tripInfo.content
+        };
+
+        // If payment is successful, send data to the server
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/TripList/payment", true);
         xhr.setRequestHeader("Content-Type", "application/json");
@@ -320,23 +347,8 @@
             alert("결제가 완료 되었습니다.");
             window.location.href = "/member/myPage";
           }
-
-          // Send all necessary data for TripListDTO
-          var data = {
-            id: TripListId,
-            title: document.querySelector("[th\\:text='${triplist.title}']").textContent,
-            guide_name: document.querySelector("[th\\:text='${triplist.guide_name}']").textContent,
-            date: document.querySelector("[th\\:text='${triplist.date}']").textContent,
-            season: document.querySelector("[th\\:text='${triplist.season}']").textContent,
-            price: price,
-            trip_list_hits: document.querySelector("[th\\:text='${triplist.trip_list_hits}']").textContent,
-            content: document.querySelector("[th\\:text='${triplist.content}']").textContent,
-          };
-          xhr.send(JSON.stringify(data));
-
         };
-        var data = { order_id: rsp.merchant_uid };
-        xhr.send(JSON.stringify(data));
+        xhr.send(JSON.stringify(paymentData));
       } else {
         alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
       }
