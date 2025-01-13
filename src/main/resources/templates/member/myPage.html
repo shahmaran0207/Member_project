@@ -97,9 +97,8 @@
                 <tr th:if="${member.fileAttached == 1}">
                     <th>Image</th>
                     <td th:each="fileName: ${member.storedFileName}">
-                        <img th:src="@{|/profileupload/${fileName}|}" alt="Uploaded Image">
+                        <img th:src="${fileName}" alt="Uploaded Image" style="max-width: 200px; max-height: 200px;">
                     </td>
-                </tr>
             </table>
             <div class="button-container" style="margin-left: 150px">
                 <a th:href="@{/member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
