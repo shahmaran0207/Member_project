@@ -103,52 +103,43 @@
 <div class="min-h-screen flex flex-col">
     <div th:replace="~{header :: header}"></div>
     <main class="flex-1">
-        <h1>여행일정 목록</h1>
-
-        <th:block th:if="${session.GuideID == id}">
-            <button class="btn-primary">
-                <a th:href="@{/TripList/save}">글작성</a>
-            </button>
-        </th:block>
+        <h1>구매 일정 목록</h1>
 
         <table>
             <tr>
                 <th>ID</th>
                 <th>Title</th>
-                <th>Writer</th>
+                <th>Season</th>
                 <th>Date</th>
                 <th>price</th>
-                <th>Hits</th>
             </tr>
             <tr th:each="trip: ${triplist}">
                 <td th:text="${trip.id}"></td>
                 <td>
-                    <a th:href="@{|/TripList/${trip.id}|(page=${triplist.number + 1})}"
+                    <a th:href="@{|/member/buydetail/${trip.id}|(page=${triplist.number + 1})}"
                        th:text="${trip.title}"></a>
                 </td>
 
-                <td th:text="${trip.guide_name}"></td>
-                <td th:text="*{trip.date}"></td>
+                <td th:text="${trip.season}"></td>
+                <td th:text="${trip.date}"></td>
                 <td class="price" th:text="${trip.price}"></td>
-
-                <td th:text="${trip.trip_list_hits}"></td>
             </tr>
         </table>
 
         <div class="pagination">
-            <a th:href="@{/TripList/paging(page=1)}">First</a>
+            <a th:href="@{/buylist/paging(page=1)}">First</a>
 
-            <a th:href="${triplist.first} ? '#' : @{/TripList/paging(page=${triplist.number})}">Prev</a>
+            <a th:href="${triplist.first} ? '#' : @{/member/buylist/paging(page=${triplist.number})}">Prev</a>
 
             <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
     <span th:if="${page == triplist.number + 1}" th:text="${page}"></span>
-    <a th:unless="${page == triplist.number + 1}" th:href="@{/TripList/paging(page=${page})}" th:text="${page}"></a>
+    <a th:unless="${page == triplist.number + 1}" th:href="@{/member/buylist/paging(page=${page})}" th:text="${page}"></a>
 </span>
 
 
-            <a th:href="${triplist.last} ? '#' : @{/TripList/paging(page=${triplist.number + 2})}">Next</a>
+            <a th:href="${triplist.last} ? '#' : @{/member/buylist/paging(page=${triplist.number + 2})}">Next</a>
 
-            <a th:href="@{/TripList/paging(page=${triplist.totalPages})}">Last</a>
+            <a th:href="@{/member/buylist/paging(page=${triplist.totalPages})}">Last</a>
         </div>
     </main>
 </div>

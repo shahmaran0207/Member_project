@@ -1,6 +1,6 @@
 package com.JPA.Member.DTO.Member;
 
-import com.JPA.Member.Entity.Guide.TripList.TripListEntity;
+import com.JPA.Member.Entity.Member.MemberTripListEntity;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import java.util.List;
@@ -40,7 +40,7 @@ public class MemberTripListDTO {
         this.member_id = member_id;
     }
 
-    public static MemberTripListDTO toTripListDTO(TripListEntity tripListEntity) {
+    public static MemberTripListDTO toTripListDTO(MemberTripListEntity tripListEntity) {
 
         MemberTripListDTO tripListDTO = new MemberTripListDTO();
         tripListDTO.setId(tripListEntity.getId());
@@ -51,7 +51,6 @@ public class MemberTripListDTO {
         tripListDTO.setSeason(tripListEntity.getSeason());
         tripListDTO.setDate(tripListEntity.getDate());
         tripListDTO.setPrice(tripListEntity.getPrice());
-        tripListDTO.setGuide_id(tripListEntity.getGuideEntity().getId());
 
         return tripListDTO;
     }

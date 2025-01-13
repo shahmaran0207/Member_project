@@ -11,8 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +42,16 @@ public class MemberTripListService {
                         triplist.getTitle(), triplist.getSeason(),triplist.getContent(), triplist.getDate(),triplist.getPrice(),triplist.getMemberEntity().getId()));
 
                 return tripListDTOS;
+    }
+
+    @Transactional
+    public MemberTripListDTO findById(Long id) {
+        Optional<MemberTripListEntity> optionalMemberTripListEntity = memberTripListRepository.findById(id);
+        if (optionalMemberTripListEntity.isPresent()) {
+            MemberTripListEntity memberTripListEntity = optionalMemberTripListEntity.get();
+            return MemberTripListDTO.toTripListDTO(memberTripListEntity);
+        } else {
+            return null;
+        }
     }
 }
