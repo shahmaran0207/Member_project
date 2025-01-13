@@ -1,6 +1,8 @@
 package com.JPA.Member.Service.Member;
 
+import com.JPA.Member.Repository.Guide.TripList.TripListRepository;
 import com.JPA.Member.Repository.Member.MemberTripListRepository;
+import com.JPA.Member.Entity.Guide.TripList.TripListEntity;
 import com.JPA.Member.Repository.Member.MemberRepository;
 import com.JPA.Member.Entity.Member.MemberTripListEntity;
 import com.JPA.Member.DTO.Guide.TripList.TripListDTO;
@@ -21,12 +23,16 @@ import java.util.Optional;
 public class MemberTripListService {
     private final MemberRepository memberRepository;
     private final MemberTripListRepository memberTripListRepository;
+    private final TripListRepository tripListRepository;
 
-    public void save(TripListDTO tripListDTO, Long MemberId) throws IOException {
+    public void save(TripListDTO tripListDTO, Long MemberId, Long TripListId) throws IOException {
         MemberEntity memberEntity = memberRepository.findById(MemberId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + MemberId));
 
-        MemberTripListEntity memberTripListEntity = MemberTripListEntity.toSaveEntity(tripListDTO, memberEntity);
+        TripListEntity tripListEntity = tripListRepository.findById(TripListId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid TripList ID: " + TripListId));
+
+        MemberTripListEntity memberTripListEntity = MemberTripListEntity.toSaveEntity(tripListDTO, memberEntity, tripListEntity);
         memberTripListRepository.save(memberTripListEntity);
     }
 
@@ -39,7 +45,8 @@ public class MemberTripListService {
 
         Page<MemberTripListDTO> tripListDTOS = memberTripListEntities.map(triplist ->
                 new MemberTripListDTO(triplist.getId(), triplist.getTrip_list(), triplist.getZipcodeList(),
-                        triplist.getTitle(), triplist.getSeason(),triplist.getContent(), triplist.getDate(),triplist.getPrice(),triplist.getMemberEntity().getId()));
+                        triplist.getTitle(), triplist.getSeason(),triplist.getContent(), triplist.getDate(),triplist.getPrice(),triplist.getMemberEntity().getId(),
+                        triplist.getTripListEntity().getId()));
 
                 return tripListDTOS;
     }
@@ -47,6 +54,17 @@ public class MemberTripListService {
     @Transactional
     public MemberTripListDTO findById(Long id) {
         Optional<MemberTripListEntity> optionalMemberTripListEntity = memberTripListRepository.findById(id);
+        if (optionalMemberTripListEntity.isPresent()) {
+            MemberTripListEntity memberTripListEntity = optionalMemberTripListEntity.get();
+            return MemberTripListDTO.toTripListDTO(memberTripListEntity);
+        } else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public MemberTripListDTO findByMemberId(Long MemberId) {
+        Optional<MemberTripListEntity> optionalMemberTripListEntity = memberTripListRepository.findByMemberEntityId(MemberId);
         if (optionalMemberTripListEntity.isPresent()) {
             MemberTripListEntity memberTripListEntity = optionalMemberTripListEntity.get();
             return MemberTripListDTO.toTripListDTO(memberTripListEntity);

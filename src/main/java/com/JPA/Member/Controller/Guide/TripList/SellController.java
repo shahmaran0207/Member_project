@@ -4,6 +4,7 @@ import com.JPA.Member.Service.Guide.TripList.TripListService;
 import com.JPA.Member.Service.Member.MemberTripListService;
 import com.JPA.Member.DTO.Guide.TripList.TripListDTO;
 import org.springframework.data.web.PageableDefault;
+import com.JPA.Member.DTO.Member.MemberTripListDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -51,12 +52,16 @@ public class SellController {
     }
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable Long id, Model model,
+    public String findById(@PathVariable Long id, Model model, HttpSession session,
                            @PageableDefault(page=1) Pageable pageable) {
         tripListService.updateHits(id);
 
-        TripListDTO tripListDTO = tripListService.findById(id);
+        Long MemberId = (Long) session.getAttribute("loginId");
 
+        TripListDTO tripListDTO = tripListService.findById(id);
+        MemberTripListDTO memberTripListDTO = memberTripListService.findByMemberId(MemberId);
+
+        model.addAttribute("membertrip", memberTripListDTO);
         model.addAttribute("triplist", tripListDTO);
         model.addAttribute("page", pageable.getPageNumber());
         return "/TripList/detail";
@@ -71,8 +76,9 @@ public class SellController {
     @PostMapping("/payment")
     public String updateDeliveryInfo(@RequestBody TripListDTO tripListDTO, HttpSession session) throws IOException {
         Long MemberId = (Long) session.getAttribute("loginId");
+        Long TripListId = tripListDTO.getId();
 
-        memberTripListService.save(tripListDTO, MemberId);
+        memberTripListService.save(tripListDTO, MemberId, TripListId);
 
         return "redirect:/member/myPage";
     }

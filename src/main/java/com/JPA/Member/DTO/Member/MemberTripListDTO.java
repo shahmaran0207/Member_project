@@ -14,7 +14,7 @@ import lombok.Setter;
 public class MemberTripListDTO {
 
     private Long id;
-    private Long guide_id;
+    private Long trip_list_id;
     private Long member_id;
 
     private int price;
@@ -28,7 +28,7 @@ public class MemberTripListDTO {
     private List<String> trip_list;
 
     public MemberTripListDTO(Long id, List<String> tripList, List<String> zipcodeList,
-                              String title , String season, String content, int date, int price, Long member_id) {
+                              String title , String season, String content, int date, int price, Long member_id, Long trip_list_id) {
         this.id = id;
         this.season = season;
         this.trip_list = tripList;
@@ -38,6 +38,7 @@ public class MemberTripListDTO {
         this.date = date;
         this.price = price;
         this.member_id = member_id;
+        this.trip_list_id = trip_list_id;
     }
 
     public static MemberTripListDTO toTripListDTO(MemberTripListEntity tripListEntity) {
@@ -51,6 +52,7 @@ public class MemberTripListDTO {
         tripListDTO.setSeason(tripListEntity.getSeason());
         tripListDTO.setDate(tripListEntity.getDate());
         tripListDTO.setPrice(tripListEntity.getPrice());
+        tripListDTO.setTrip_list_id(tripListEntity.getId());
 
         return tripListDTO;
     }

@@ -96,11 +96,10 @@
       <th:block th:if="${session.GuideID == triplist.guide_id}">
         <button class="btn-primary" onclick="deleteReq()">삭제</button>
       </th:block>
-      <th:block th:if="${session.GuideID != triplist.guide_id}">
+      <th:block th:if="${session.GuideID != triplist.guide_id && membertrip.trip_list_id != triplist.id}">
         <button id="checkoutBtn" onclick="requestPay()" class="btn-primary">결제하기</button>
       </th:block>
     </div>
-
 
     <div class="button-container">
     <button style="background-color: #38bdf8 !important; color: white !important;" id="like-button" onclick="toggleLike()">👍 좋아요</button>

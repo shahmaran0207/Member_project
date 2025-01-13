@@ -1,8 +1,7 @@
 package com.JPA.Member.Entity.Member;
 
+import com.JPA.Member.Entity.Guide.TripList.TripListEntity;
 import com.JPA.Member.DTO.Guide.TripList.TripListDTO;
-import com.JPA.Member.Entity.Guide.Guide.GuideEntity;
-import com.JPA.Member.DTO.Member.MemberTripListDTO;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,11 @@ public class MemberTripListEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity memberEntity;
 
-    public static MemberTripListEntity toSaveEntity(TripListDTO tripListDTO, MemberEntity memberEntity) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trip_list_id", nullable = false)
+    private TripListEntity tripListEntity;
+
+    public static MemberTripListEntity toSaveEntity(TripListDTO tripListDTO, MemberEntity memberEntity, TripListEntity tripListEntity) {
 
         MemberTripListEntity memberTripListEntity = new MemberTripListEntity();
         memberTripListEntity.setId(tripListDTO.getId());
@@ -59,6 +62,7 @@ public class MemberTripListEntity {
         memberTripListEntity.setDate(tripListDTO.getDate());
         memberTripListEntity.setContent(tripListDTO.getContent());
         memberTripListEntity.setMemberEntity(memberEntity);
+        memberTripListEntity.setTripListEntity(tripListEntity);
         return memberTripListEntity;
     }
 
