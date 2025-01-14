@@ -140,6 +140,7 @@ public class MemberController {
         } else return "/member/login";
     }
 
+
     @PostMapping("/update")
     public String update(@ModelAttribute MemberDTO memberdto) {
         ms.update(memberdto);

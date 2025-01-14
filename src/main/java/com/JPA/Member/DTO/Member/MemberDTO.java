@@ -31,6 +31,22 @@ public class MemberDTO {
     @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardEntity> boardEntities = new ArrayList<>();
 
+    public String getFileName(String storedFileName) {
+        String baseUrl = "https://www.wit.com.s3.ap-northeast-2.amazonaws.com/";
+        if (storedFileName.startsWith(baseUrl)) {
+            return storedFileName.substring(baseUrl.length());
+        }
+        return storedFileName; // URL이 아닌 경우 그대로 반환
+    }
+
+    private String convertS3Url(String storedFileName) {
+        // 변환이 필요한 경우
+        String region = "ap-northeast-2";  // 리전
+        String bucketName = "www.wit.com";  // 버킷 이름 (www 제외)
+        String fileName= getFileName(storedFileName);
+        return "https://s3." + region + ".amazonaws.com/" + bucketName + "/" + fileName;
+    }
+
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(memberEntity.getId());
@@ -43,7 +59,12 @@ public class MemberDTO {
         } else {
             memberDTO.setFileAttached(memberEntity.getFileAttached());
             memberDTO.setOriginalFileName(memberEntity.getMemberProfileEntityList().get(0).getOriginalFileName());
-            memberDTO.setStoredFileName(memberEntity.getMemberProfileEntityList().get(0).getStoredFileName());
+
+            // 저장된 파일명 가져오기
+            String storedFileName = memberEntity.getMemberProfileEntityList().get(0).getStoredFileName();
+
+            storedFileName = memberDTO.convertS3Url(storedFileName);  // S3 URL 변환
+            memberDTO.setStoredFileName(storedFileName);  // S3 URL 설정
         }
         return memberDTO;
     }
