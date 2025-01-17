@@ -29,12 +29,12 @@ public class Travel_Review_Controller {
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        return "/Travel_Review/paging";
+        return "Travel_Review/paging";
     }
 
     @GetMapping("/save")
     public String save(Model model) {
-        return "/Travel_Review/save";
+        return "Travel_Review/save";
     }
 
     @PostMapping("/save")
@@ -53,6 +53,6 @@ public class Travel_Review_Controller {
 
         model.addAttribute("review", reviewDTO);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/Travel_Review/detail";
+        return "Travel_Review/detail";
     }
 }

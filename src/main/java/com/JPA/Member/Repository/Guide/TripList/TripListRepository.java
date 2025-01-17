@@ -14,4 +14,5 @@ public interface TripListRepository extends JpaRepository<TripListEntity, Long> 
     @Modifying(clearAutomatically = true)
     @Query("update TripListEntity r set r.trip_list_hits = r.trip_list_hits + 1 where r.id = :id")
     void updateHits(@Param("id") Long id);
+
 }

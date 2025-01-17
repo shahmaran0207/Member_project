@@ -24,7 +24,7 @@ public class BoardController {
 
     @GetMapping("/save")
     public String saveForm() {
-        return "/board/save";
+        return "board/save";
     }
 
     @PostMapping("/save")
@@ -43,14 +43,14 @@ public class BoardController {
         model.addAttribute("commentList", commentDTOList);
         model.addAttribute("board", boardDTO);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/board/detail";
+        return "board/detail";
     }
 
     @GetMapping("/update/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("boardUpdate", boardDTO);
-        return "/board/update";
+        return "board/update";
     }
 
     @PostMapping("/update")
@@ -58,7 +58,7 @@ public class BoardController {
         Long memberId = (Long) session.getAttribute("loginId");
         BoardDTO board = boardService.update(boardDTO, memberId);
         model.addAttribute("board", board);
-        return "/board/detail";
+        return "board/detail";
     }
 
     @GetMapping("/delete/{id}")
@@ -77,6 +77,6 @@ public class BoardController {
         model.addAttribute("boardList", boardList);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        return "/board/paging";
+        return "board/paging";
     }
 }

@@ -36,12 +36,12 @@ public class SellController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
-        return "/TripList/paging";
+        return "TripList/paging";
     }
 
     @GetMapping("/save")
     public String save(Model model) {
-        return "/TripList/save";
+        return "TripList/save";
     }
 
     @PostMapping("/save")
@@ -59,12 +59,12 @@ public class SellController {
         Long MemberId = (Long) session.getAttribute("loginId");
 
         TripListDTO tripListDTO = tripListService.findById(id);
-        MemberTripListDTO memberTripListDTO = memberTripListService.findByMemberId(MemberId);
+        MemberTripListDTO memberTripListDTO = memberTripListService.findByMemberId(id);
 
         model.addAttribute("membertrip", memberTripListDTO);
         model.addAttribute("triplist", tripListDTO);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/TripList/detail";
+        return "TripList/detail";
     }
 
     @GetMapping("/delete/{id}")

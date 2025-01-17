@@ -30,6 +30,6 @@ public class AnswerController {
             Long member = memberId.longValue();
             answerService.save(member, commentContents, question);
 
-            return "/home";
+            return "home";
         }
     }

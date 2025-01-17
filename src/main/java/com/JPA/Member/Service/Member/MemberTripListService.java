@@ -63,8 +63,8 @@ public class MemberTripListService {
     }
 
     @Transactional
-    public MemberTripListDTO findByMemberId(Long MemberId) {
-        Optional<MemberTripListEntity> optionalMemberTripListEntity = memberTripListRepository.findByMemberEntityId(MemberId);
+    public MemberTripListDTO findByMemberId(Long id) {
+        Optional<MemberTripListEntity> optionalMemberTripListEntity = memberTripListRepository.findFirstByMemberTripListEntityId(id);
         if (optionalMemberTripListEntity.isPresent()) {
             MemberTripListEntity memberTripListEntity = optionalMemberTripListEntity.get();
             return MemberTripListDTO.toTripListDTO(memberTripListEntity);

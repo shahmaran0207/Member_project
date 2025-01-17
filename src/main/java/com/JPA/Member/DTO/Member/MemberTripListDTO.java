@@ -52,7 +52,7 @@ public class MemberTripListDTO {
         tripListDTO.setSeason(tripListEntity.getSeason());
         tripListDTO.setDate(tripListEntity.getDate());
         tripListDTO.setPrice(tripListEntity.getPrice());
-        tripListDTO.setTrip_list_id(tripListEntity.getId());
+        tripListDTO.setTrip_list_id(tripListEntity.getTripListEntity().getId());
 
         return tripListDTO;
     }

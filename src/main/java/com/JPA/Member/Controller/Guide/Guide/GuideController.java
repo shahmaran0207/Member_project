@@ -25,14 +25,14 @@ public class GuideController {
     public String findAll(Model model) {
         List<GuideDTO> GuideDTOLIST = guideService.findAll();
         model.addAttribute("GuideDTOLIST", GuideDTOLIST);
-        return "/guide/list";
+        return "guide/list";
     }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
         GuideDTO guideDTO = guideService.findById(id);
         model.addAttribute("guide", guideDTO);
-        return "/guide/detail";
+        return "guide/detail";
 
     }
 

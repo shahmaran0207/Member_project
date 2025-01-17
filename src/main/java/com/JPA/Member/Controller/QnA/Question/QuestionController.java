@@ -30,7 +30,7 @@ public class QuestionController {
         model.addAttribute("answer", answerDTO);
         model.addAttribute("question", questionDTO);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/QnA/Question/detail";
+        return "QnA/Question/detail";
     }
 
     @GetMapping("/list")
@@ -43,7 +43,7 @@ public class QuestionController {
         model.addAttribute("questionEntityList", questionDTOLists);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        return "/QnA/Question/list";
+        return "QnA/Question/list";
     }
 
     @GetMapping("/delete/{id}")
@@ -54,7 +54,7 @@ public class QuestionController {
 
     @GetMapping("/write")
     public String saveForm() {
-        return "/QnA/Question/write";
+        return "QnA/Question/write";
     }
 
     @PostMapping("/write")

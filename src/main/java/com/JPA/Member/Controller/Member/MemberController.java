@@ -41,39 +41,39 @@ public class MemberController {
 
     @GetMapping("/save")
     public String save() {
-        return "/member/save";
+        return "member/save";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "/member/login";
+        return "member/login";
     }
 
     @GetMapping("/list")
     public String findAll(Model model) {
         List<MemberDTO> memberDTOList = ms.findAll();
         model.addAttribute("memberDTOList", memberDTOList);
-        return "/member/list";
+        return "member/list";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute MemberDTO memberdto) throws IOException, FirebaseAuthException {
         ms.save(memberdto);
-        return "/home";
+        return "home";
     }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
         MemberDTO memberDTO = ms.findById(id);
         model.addAttribute("member", memberDTO);
-        return "/member/detail";
+        return "member/detail";
     }
 
     @GetMapping("/update/{id}")
     public String update(@PathVariable Long id, Model model) {
         MemberDTO memberDTO = ms.findById(id);
         model.addAttribute("updateMember", memberDTO);
-        return "/member/update";
+        return "member/update";
     }
 
     @GetMapping("/delete/{id}")
@@ -124,7 +124,7 @@ public class MemberController {
 
             return ResponseEntity.ok("/");
         } catch (Exception e) {
-            return ResponseEntity.status(401).body("/member/login");
+            return ResponseEntity.status(401).body("member/login");
         }
     }
 
@@ -135,9 +135,9 @@ public class MemberController {
 
         if (memberId != null) {
             model.addAttribute("member", ms.findById(memberId));
-            return "/member/myPage";
+            return "member/myPage";
 
-        } else return "/member/login";
+        } else return "member/login";
     }
 
 
@@ -185,7 +185,7 @@ public class MemberController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
-        return "/member/buylist";
+        return "member/buylist";
     }
 
     @GetMapping("/buydetail/{id}")
@@ -196,6 +196,6 @@ public class MemberController {
 
         model.addAttribute("triplist", memberTripListDTO);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/member/buydetail";
+        return "member/buydetail";
     }
 }
