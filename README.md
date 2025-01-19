@@ -356,7 +356,7 @@
 
 | 초기화면 |
 |----------|
-|(https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/wit.png)|
+|![first](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/wit.png)|
 
 <br>
 
@@ -368,6 +368,6 @@
 
 | 회원가입 |
 |----------|
-|(https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/membersave.gif)|
+|![save](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/membersave.gif)|
 
 <br>
