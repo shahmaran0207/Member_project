@@ -330,22 +330,3 @@
 ```
 
 <br>
-
-## 6️⃣ 신경 쓴 부분
-### 1. Firebase
-<br>
-
-### 2. S3
-
-<br>
-
-## 7️⃣ 페이지별 기능
-
-### [초기화면]
-- 
-
-| 초기화면 |
-|----------|
-|![splash](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/wit.png)|
-
-<br>
