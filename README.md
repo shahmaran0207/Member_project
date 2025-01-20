@@ -371,6 +371,7 @@
 |![save](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/membersave.gif)|
 
 <br>
+
 ### [로그인]
 - 이메일 주소와 비밀번호를 입력 후, 로그인 버튼을 누르면 Firebase를 통해 회원가입한 이메일과 비밀번호와 일치하는지 체크합니다.
 - 회원가입한 이메일과 비밀번호와 일치한다면 특정 토큰값을 반환하고 이를 세션에 저장합니다.
