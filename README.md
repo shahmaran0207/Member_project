@@ -371,3 +371,26 @@
 |![save](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/membersave.gif)|
 
 <br>
+### [로그인]
+- 이메일 주소와 비밀번호를 입력 후, 로그인 버튼을 누르면 Firebase를 통해 회원가입한 이메일과 비밀번호와 일치하는지 체크합니다.
+- 회원가입한 이메일과 비밀번호와 일치한다면 특정 토큰값을 반환하고 이를 세션에 저장합니다.
+- 비밀번호는 따로 DB에 저장하지 않기에 로그인 페이지 내에서 직접 유효성 검사는 불가합니다.
+- 로그인 성공 시, 메인 페이지로 이동합니다.
+
+<br>
+
+| 로그인 |
+|----------|
+|![login](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/login.gif)|
+
+<br>
+
+### [로그아웃]
+- 상단 의 헤더에 있는 로그아웃 버튼을 클릭하면 로그아웃이됩니다.
+- 로그아웃 시, 세션에 저장한 멤버 아이디, 이메일, 파이어베이스의 토큰 값 등이 전부 삭제됩니다.
+
+| 로그아웃 |
+|----------|
+|![logout](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/logout.gif)|
+
+<br>
