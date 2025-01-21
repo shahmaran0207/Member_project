@@ -54,7 +54,7 @@
 
 | RDS | EC2 | S3 |
 |:---:|:---:|:--:|
-| <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/wit.png" alt="RDS" width="60"/> | <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/wit.png" alt="EC2" width="60"/>| <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/wit.png" alt="S3" width="60"/> |
+| <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/rds.png" alt="RDS" width="60"/> | <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/ec2.png" alt="EC2" width="60"/>| <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/s3.png" alt="S3" width="60"/> |
 
 <br>
 
