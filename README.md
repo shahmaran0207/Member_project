@@ -413,7 +413,7 @@
 |상단 배너  |
 |-------------------|
 | ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/banner_login.png)|
-| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/banner_loggout.png) |
+| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/banner_logout.png) |
 
 <br>
 
@@ -425,7 +425,7 @@
 
 | 가이드 상태일 때| 가이드가 아닐 때 |
 |----------|----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-yes)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-no.png)|
+|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-yes.png)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-no.png)|
 
 <br>
 
