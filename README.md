@@ -395,3 +395,127 @@
 |![logout](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/logout.gif)|
 
 <br>
+
+
+<br>
+
+# 상단 배너
+- 상단 배너의 WIT 버튼을 클릭하면 언제든 홈 화면으로 돌아옵니다.
+
+- Guide를 누르면 Gudie 목록으로 이동하며 원하는 가이드를 조회할 수 있습니다.
+  -Community를 누르면 자유게시판으로 이동합니다.
+- 여행후기를 누르면 여행후기 게시판으로 이동합니다.
+- 고객지원을 누르면 QnA 게시판으로 이동합니다.
+- 로그인을 하지 않은 상태에서는 로그인, 회원가입 버튼이 보입니다.
+- 로그인을 한 상태에서는 로그아웃과 마이페이지 버튼이 보입니다.
+- Guide, Community, 여행후기, 고객지원은 로그인 하지 않은 상태에서 누르면 강제로 로그인 페이지로 이동합니다.
+
+|상단 배너  |
+|-------------------|
+| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/banner_login.png)|
+| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/banner_loggout.png) |
+
+<br>
+
+### [마이페이지]
+- 개인 아이디, 이메일, 이름, 사진이 확인 가능하며, 프로필 사진이 없다면 사진 칸 자체가 뜨지 않습니다.
+
+- 정보수정, 회원탈퇴, 구매한 일정 조회가 가능합니다.
+- 가이드 상태일 때는 판매중 일정 관리 버튼이, 가이드가 아닐때는 가이드 신청 버튼이 뜨며, 가이드 신청 버튼을 누르면 가이드로 정보가 바뀌게 됩니다.
+
+| 가이드 상태일 때| 가이드가 아닐 때 |
+|----------|----------|
+|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-yes)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-no.png)|
+
+<br>
+
+
+### [가이드 목록]
+- 가입 인원 중 가이드로 신청한 목록을 볼 수 있습니다.
+- 조회 버튼 클릭 시, 상세조회 페이지로 넘어갑니다.
+
+| 가이드 목록 |
+|-------------------|
+| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-list.png)|
+
+<br>
+
+### [가이드 상세조회]
+- 가이드 이름, 이메일, 좋아요, 싫어요 개수를 확인 가능합니다.
+- 좋아요, 싫어요는 개인당 1번 누를 수 있으며, 다시한번 누르면 취소됩니다.
+
+|가이드 상세조회  |
+|-------------------|
+| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-detail.png)|
+
+
+<br>
+
+### [판매중인 일정]
+- 가이드 상세조회 페이지에서 판매중인 일정 관리 버튼을 누르면 그 가이드가 판매중인 여행일정 목록을 조회가능합니다.
+- 그 중 원하는 것을 조회하면 아래 페이지가 나타납니다.
+- 가이드가 설정한 일정, 계절, 가격, 조회수, 내용 등이 확인가능합니다.
+- 타인이 작성한 일정 혹은 내가 구매하지 않은 일정일 경우 결제하기 버튼이 나타납니다.
+- 구매한 일정의 경우 결제하기 버튼이 나타나지 않습니다.
+- 본인이 작성한 일정의 경우 결제하기 버튼 대신 삭제 버튼이 나타납니다.
+- 결제의 경우 KG 이니시스를 통한 카드결제로 이루어집니다.
+
+
+| 판매 일정 상세 조회  | 결제창  |
+|-------------------|-------------------|
+| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/sell.png)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/pay.png)|
+
+
+<br>
+
+### [Community - 목록]
+- 상단 배너에서 community를 누르면 자유게시판의 글 목록으로 이동합니다.
+
+- 각 게시글의 아이디, 제목, 작성자, 작성시간, 조회수 등을 확인가능합니다.
+
+- 한 페이지에 최대 10개의 게시글 까지 보이며 10개를 초과할 시 다음페이지로 넘어갑니다.
+
+
+| 자유게시판 글 목록 |
+|----------|
+|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/community-list.png)|
+
+<br>
+
+### [Community - 작성]
+- community 목록 페이지에서 글 쓰기 버튼을 누를 시 글 작성 페이지로 이동합니다.
+
+- 게시글의 비밀번호, 제목, 내용, 파일 첨부 등이 가능하며, 글 작성 버튼을 누르면 글이 작성됩니다.
+
+
+| 자유게시판 - 글 작성 |
+|----------|
+|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/community-write.png)|
+
+<br>
+
+### [Community - 상세조회]
+- 게시글의 아이디, 제목, 작성자, 작성시간, 조회수, 내용 등이 확인 가능합니다.
+
+- 댓글 또한 남길 수 있으며, 댓글 작성 시 작성자는 자동으로 고정됩니다.
+
+- 자신이 작성한 게시그의 경우 수정, 삭제 버튼이 보이지만, 타인이 작성한 게시글의 경우 보이지 않습니다.
+
+- 좋아요, 싫어요를 누를 수 있으며, 개수 또한 확인 가능합니다.
+
+| 자유게시판 상세조회 |
+|----------|
+|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/community-detail.png)|
+
+<br>
+
+### [여행후기 목록]
+- 상단 배너에서 여행후기를 누르면 자유게시판의 글 목록으로 이동합니다.
+
+- 각 게시글의 아이디, 제목, 작성자, 작성시간, 조회수 등을 확인가능합니다.
+
+- 한 페이지에 최대 10개의 게시글 까지 보이며 10개를 초과할 시 다음페이지로 넘어갑니다.
+
+| 여행후기 목록 |
+|----------|
+|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/after-list.png)|
