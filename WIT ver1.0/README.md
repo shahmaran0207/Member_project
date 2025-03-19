@@ -598,10 +598,10 @@
 
 <br>
 
-| Q&A 상세정보 - 답변한 문의사항|Q&A 상세정보 - 답변하지 않은 문의사항|
+| Q&A 상세정보 - 답변한 문의사항 | Q&A 상세정보 - 답변하지 않은 문의사항 |
 |----------|----------|
-|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-yes.png)|
-![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-not.png)|
+| <img src="https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-yes.png" width="300"/> | <img src="https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-not.png" width="300"/> |
+
 
 <br>
 
