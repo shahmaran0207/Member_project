@@ -350,7 +350,8 @@
 
 | 초기화면 |
 |----------|
-|![first](https://github.com/shahmaran0207/Member_project/blob/main/WIT ver1.0/Readme_images/wit.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/wit.png)|
+
 <br>
 
 ### [회원가입]
@@ -361,7 +362,7 @@
 
 | 회원가입 |
 |----------|
-|![save](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/membersave.gif)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/membersave.gif)|
 
 <br>
 
@@ -375,8 +376,7 @@
 
 | 로그인 |
 |----------|
-|![login](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/login.gif)|
-
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/login.gif)|
 <br>
 
 ### [로그아웃]
@@ -385,7 +385,8 @@
 
 | 로그아웃 |
 |----------|
-|![logout](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/logout.gif)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/logout.gif)|
+
 
 <br>
 
@@ -405,8 +406,8 @@
 
 |상단 배너  |
 |-------------------|
-| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/banner_login.png)|
-| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/banner_logout.png) |
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/banner_login.gif)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/banner_logout.gif)|
 
 <br>
 
@@ -418,7 +419,8 @@
 
 | 가이드 상태일 때| 가이드가 아닐 때 |
 |----------|----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-yes.png)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-no.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/guide-yes.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/guide-no.png)|
 
 <br>
 
@@ -429,6 +431,8 @@
 
 | 가이드 목록 |
 |-------------------|
+
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/guide-list.png)|
 | ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-list.png)|
 
 <br>
@@ -439,8 +443,8 @@
 
 |가이드 상세조회  |
 |-------------------|
-| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/guide-detail.png)|
 
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/guide-detail.png)|
 
 <br>
 
@@ -456,8 +460,8 @@
 
 | 판매 일정 상세 조회  | 결제창  |
 |-------------------|-------------------|
-| ![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/sell.png)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/pay.png)|
-
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/sell.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/pay.png)|
 
 <br>
 
@@ -471,8 +475,8 @@
 
 | 자유게시판 글 목록 |
 |----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/community-list.png)|
 
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/community-list.png)|
 <br>
 
 ### [Community - 작성]
@@ -483,7 +487,8 @@
 
 | 자유게시판 - 글 작성 |
 |----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/community-write.png)|
+
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/community-write.png)|
 
 <br>
 
@@ -498,7 +503,7 @@
 
 | 자유게시판 상세조회 |
 |----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/community-detail.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/community-detail.png)|
 
 <br>
 
@@ -511,7 +516,7 @@
 
 | 여행후기 목록 |
 |----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/after-list.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/after-list.png)|
 
 <br>
 
@@ -524,7 +529,7 @@
 
 | 여행후기 상세조회 |
 |----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/after-detail.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/after-detail.png)|
 
 <br>
 
@@ -545,8 +550,8 @@
 
 | 여행후기 작성(날짜 선택 전)|여행후기 작성(날짜 선택 후)|
 |----------|----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/after-write.png)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/after-write2.png)|
-
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/after-write.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/after-write2.png)|
 <br>
 
 ### [Q&A 목록]
@@ -564,7 +569,7 @@
 
 | Q&A 목록|
 |----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/Q&A-list.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-list.png)|
 
 <br>
 
@@ -577,7 +582,7 @@
 
 | Q&A 작성|
 |----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/Q&A-write.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-write.png)|
 
 <br>
 
@@ -595,7 +600,8 @@
 
 | Q&A 상세정보 - 답변한 문의사항|Q&A 상세정보 - 답변하지 않은 문의사항|
 |----------|----------|
-|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/Q&A-yes.png)|![tab](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/Q&A-not.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-yes.png)|
+|![save](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/Q&A-not.png)|
 
 <br>
 
