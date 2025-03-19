@@ -48,7 +48,7 @@
 
 | RDS | EC2 | S3 |
 |:---:|:---:|:--:|
-| <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/rds.png" alt="RDS" width="60"/> | <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/ec2.png" alt="EC2" width="60"/>| <img src="https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/s3.png" alt="S3" width="60"/> |
+| <img src="https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT ver1.0/Readme_images/rds.png" alt="RDS" width="60"/> | <img src="https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT ver1.0/Readme_images/ec2.png" alt="EC2" width="60"/>| <img src="https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT ver1.0/Readme_images/s3.png" alt="S3" width="60"/> |
 
 <br>
 
@@ -350,8 +350,7 @@
 
 | 초기화면 |
 |----------|
-|![first](https://github.com/shahmaran0207/Member_project/blob/main/Readme_images/wit.png)|
-
+|![first](https://github.com/shahmaran0207/Member_project/blob/main/WIT ver1.0/Readme_images/wit.png)|
 <br>
 
 ### [회원가입]
