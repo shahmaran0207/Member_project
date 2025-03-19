@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; }
+        h1 { text-align: center; color: #333; margin-bottom: 20px !important; font-weight: bold !important; font-size: 24px !important; margin-top: 20px !important; }
+        table { width: 80%; margin: 0 auto; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        img { max-width: 100%; height: auto; border-radius: 8px; }
+        .button-container { text-align: center; margin-top: 20px; }
+        button { background-color: #007BFF !important; color: white !important; border: none !important; padding: 10px 15px !important;
+            margin: 5px !important; cursor: pointer !important; border-radius: 5px !important;
+            transition: background-color 0.3s, transform 0.1s !important; }
+        button:hover { background-color: #0056b3; transform: scale(1.05); }
+        #comment-write input { width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-right: 10px; }
+        #comment-list { width: 80%; margin: 20px auto; background: white; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        .like-count {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-left: 10px;
+            cursor: default;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1">
+
+        <h1>질문 상세 정보</h1>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <td th:text="${question.id}"></td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td th:text="${question.title}"></td>
+            </tr>
+            <tr>
+                <th>Writer</th>
+                <td th:text="${question.memberName}"></td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            <tr>
+                <th>Hits</th>
+                <td th:text="${question.questionhits}"></td>
+            </tr>
+            <tr>
+                <th>Contents</th>
+                <td th:text="${question.content}"></td>
+            </tr>
+        </table>
+
+        <div class="button-container">
+            <button onclick="listReq()">목록</button>
+            <button th:if="${question.memberId == session.loginId} or ${session.memberRole== 0}" onclick="deleteReq()">삭제</button>
+        </div>
+        <div th:if="${question.answerStatus != 'answered'} and ${session.memberRole== 2}" id="comment-write">
+            <h2 class="text-center text-lg font-bold mt-5">답변 작성</h2>
+            <table style="width: 80%; margin: 0 auto; border: none; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 10px 0; border: none;">
+                        <input type="text" id="answer-title" th:value="'Re: ' + ${question.title}" readonly
+                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border: none;">
+                <textarea id="answer-content" placeholder="답변을 작성하세요..."
+                          style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" rows="5"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center" style="padding: 10px 0; border: none;">
+                        <button onclick="writeAnswer()">답변 작성</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div th:if="${question.answerStatus == 'answered'}">
+            <h2 class="text-center text-lg font-bold mt-5">답변 목록</h2>
+            <table style="width: 80%; margin: 0 auto; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <thead>
+                <tr>
+                    <th style="background-color: #4CAF50; color: white; padding: 10px;">답변 작성자</th>
+                    <th style="background-color: #4CAF50; color: white; padding: 10px;">작성일</th>
+                    <th style="background-color: #4CAF50; color: white; padding: 10px;">답변 내용</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;" th:text="${answer.memberName}"></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;" th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;" th:text="${answer.content}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </main>
+</div>
+
+<script>
+    const listReq = () => {
+        const page = [[${page}]];
+        location.href = "/QnA/Question/list?page=" + page;
+    };
+
+    const deleteReq = () => {
+        const id = [[${question.id}]];
+        location.href = "/QnA/Question/delete/" + id;
+    };
+
+    const writeAnswer = () => {
+        const memberId = [[${session.loginId}]];
+        const contents = document.getElementById('answer-content').value;
+        const id = [[${question.id}]];
+
+        console.log(memberId);
+        console.log(contents);
+        console.log(id);
+
+
+        if (!contents.trim()) {
+            alert('답변 내용을 입력해주세요.');
+            return;
+        }
+
+        $.ajax({
+            url: `/QnA/Answer/write/${id}`,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                memberId: memberId,
+                commentContents: contents,
+                Question: id,
+                answerStatus: "answered"
+            }),
+            success: () => {
+                alert('답변이 등록되었습니다.');
+                location.reload();
+            },
+            error: () => {
+                alert('답변 등록에 실패했습니다. 다시 시도해주세요.');
+            }
+        });
+
+    };
+</script>
+</body>
+</html>
