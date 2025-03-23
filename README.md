@@ -15,7 +15,7 @@
 ## 📂 프로젝트 버전  
 본 프로젝트는 지속적인 개선을 위해 버전별로 관리되고 있습니다.  
 
-🔹 [**버전 1.0**](https://github.com/shahmaran0207/Member_project/tree/main/WIT%20ver1.0) – 초기 MVP 버전  
+🔹 [**버전 1.0**](https://github.com/shahmaran0207/Member_project/tree/main/WIT%20ver1.0) – 초기 버전  
 🔹 [**버전 2.0**](https://github.com/shahmaran0207/Member_project/tree/main/WIT%20ver2.0) – 기능 개선 및 최적화  
 
 각 버전별 README에서 세부 기능과 기술 스택을 확인할 수 있습니다.  
