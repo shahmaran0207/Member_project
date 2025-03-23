@@ -8,7 +8,7 @@
 ---
 
 ## 🖥️ 프로젝트 미리보기  
-![WIT Banner](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT ver1.0/Readme_images/wit.png)
+![WIT Banner](https://raw.githubusercontent.com/shahmaran0207/Member_project/main/WIT%20ver1.0/Readme_images/wit.png)
 
 ---
 
