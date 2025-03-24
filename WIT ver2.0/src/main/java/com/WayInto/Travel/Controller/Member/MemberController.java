@@ -77,7 +77,6 @@ public class MemberController {
         String idToken = request.get("idToken");
         try {
             String existingLoginId = globalControllerAdvice.getCookieValue(httpRequest, "loginId");
-
             if (existingLoginId != null) {
                 return ResponseEntity.ok("/");
             }
@@ -86,46 +85,65 @@ public class MemberController {
             String email = decodedToken.getEmail();
             String firebaseUid = decodedToken.getUid();
 
-//            MemberDTO memberDTO = memberService.login(email);
+            MemberDTO memberDTO = memberService.login(email);
 
-//            setHttpOnlyCookie(httpResponse, "loginId", memberDTO.getId().toString());
-//            setHttpOnlyCookie(httpResponse, "memberRole", String.valueOf(memberDTO.getRole()));
-//            setHttpOnlyCookie(httpResponse, "loginEmail", memberDTO.getMemberEmail());
-//            setHttpOnlyCookie(httpResponse, "loginName", memberDTO.getMemberName());
-//            setHttpOnlyCookie(httpResponse, "firebaseUid", firebaseUid);
+            setHttpOnlyCookie(httpResponse, "loginId", memberDTO.getId().toString());
+            setHttpOnlyCookie(httpResponse, "memberRole", String.valueOf(memberDTO.getRole()));
+            setHttpOnlyCookie(httpResponse, "loginEmail", memberDTO.getMemberEmail());
+            setHttpOnlyCookie(httpResponse, "loginName", memberDTO.getMemberName());
+            setHttpOnlyCookie(httpResponse, "firebaseUid", firebaseUid);
 
             return ResponseEntity.ok("/"); // 로그인 성공
         } catch (Exception e) {
             return ResponseEntity.status(401).body("/Member/login"); // 로그인 실패
         }
+
     }
 
+    @GetMapping("/myPage")
+    public String myPage(Model model, HttpServletRequest request) {
+        String loginId = globalControllerAdvice.getCookieValue(request, "loginId");
+        Long memberId = (loginId != null) ? Long.valueOf(loginId) : null;
 
+        if (memberId != null) {
+            model.addAttribute("member", memberService.findById(memberId));
+            return "Member/myPage";
 
+        } else return "Member/login";
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @GetMapping("/guide/{id}")
+//    @GetMapping("/Guide/{id}")
 //    public String guide(HttpSession session, Model model) throws IOException {
 //        Long id = (Long) session.getAttribute("loginId");
-//        MemberDTO memberDTO = ms.findById(id);
-//        gs.save(memberDTO, id);
-//        return "redirect:/guide/list";
+//        MemberDTO memberDTO = memberService.findById(id);
+//        guideService.temp_save(memberDTO, id);
+//        return "redirect:/Guide/temp_list";
 //    }
+
+//    @GetMapping("/list")
+//    public String findAll(Model model) {
+//        List<MemberDTO> memberDTOList = ms.findAll();
+//        model.addAttribute("memberDTOList", memberDTOList);
+//        return "member/list";
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //    @GetMapping("/save")
 //    public String save() {
@@ -134,12 +152,7 @@ public class MemberController {
 //
 //
 //
-//    @GetMapping("/list")
-//    public String findAll(Model model) {
-//        List<MemberDTO> memberDTOList = ms.findAll();
-//        model.addAttribute("memberDTOList", memberDTOList);
-//        return "member/list";
-//    }
+
 //
 ////    @PostMapping("/save")
 ////    public String save(@ModelAttribute MemberDTO memberdto) throws IOException, FirebaseAuthException {

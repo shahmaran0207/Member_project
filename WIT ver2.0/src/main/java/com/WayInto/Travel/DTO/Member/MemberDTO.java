@@ -41,9 +41,13 @@ public class MemberDTO {
 
     private String convertS3Url(String storedFileName) {
         String region = "ap-northeast-2";
-        String bucketName = "www.wit.com";
-        String fileName= getFileName(storedFileName);
-        return "https://s3." + region + ".amazonaws.com/" + bucketName + "/" + fileName;
+        String bucketName = "www.witwit.com";
+
+        if (storedFileName.startsWith("https://")) {
+            storedFileName = storedFileName.substring(storedFileName.lastIndexOf("/") + 1);
+        }
+
+        return "https://s3." + region + ".amazonaws.com/" + bucketName + "/" + storedFileName;
     }
 
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {

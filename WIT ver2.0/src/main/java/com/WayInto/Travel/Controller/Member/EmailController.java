@@ -23,9 +23,6 @@ public class EmailController {
 
     @PostMapping("/verify")
     public String verify(EmailDTO emailDto) {
-        System.out.println(emailDto.getMail());
-        System.out.println(emailDto.getVerifyCode());
-
         boolean isVerify = emailService.verifyEmailCode(emailDto.getMail(), emailDto.getVerifyCode());
         return isVerify ? "인증이 완료되었습니다." : "인증 실패하셨습니다.";
     }

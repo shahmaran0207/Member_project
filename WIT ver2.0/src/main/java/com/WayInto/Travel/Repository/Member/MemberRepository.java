@@ -1,4 +1,4 @@
-package com.WayInto.Travel.Repository;
+package com.WayInto.Travel.Repository.Member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.WayInto.Travel.Entity.Member.MemberEntity;

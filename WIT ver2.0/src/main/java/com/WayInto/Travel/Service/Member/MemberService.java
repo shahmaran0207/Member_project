@@ -1,9 +1,9 @@
 package com.WayInto.Travel.Service.Member;
 
-import com.WayInto.Travel.Repository.MemberProfileRepository;
+import com.WayInto.Travel.Repository.Member.MemberProfileRepository;
 import com.WayInto.Travel.Entity.Member.MemberProfileEntity;
 import org.springframework.web.multipart.MultipartFile;
-import com.WayInto.Travel.Repository.MemberRepository;
+import com.WayInto.Travel.Repository.Member.MemberRepository;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.WayInto.Travel.Entity.Member.MemberEntity;
 import com.WayInto.Travel.Service.ImageService;
@@ -55,6 +55,23 @@ public class MemberService {
         if(optionalMemberEntity.isPresent()) {
             MemberEntity memberEntity = optionalMemberEntity.get();
             return memberEntity.getMemberEmail();
+        } else return null;
+    }
+
+    public MemberDTO login(String email) {
+        Optional<MemberEntity> bymemberemail = memberRepository.findByMemberEmail(email);
+
+        MemberEntity memberEntity = bymemberemail.get();
+        MemberDTO dto= MemberDTO.toMemberDTO(memberEntity);
+
+        return dto;
+    }
+
+    public MemberDTO findById(Long id) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+
+        if(optionalMemberEntity.isPresent()) {
+            return MemberDTO.toMemberDTO(optionalMemberEntity.get());
         } else return null;
     }
 }
