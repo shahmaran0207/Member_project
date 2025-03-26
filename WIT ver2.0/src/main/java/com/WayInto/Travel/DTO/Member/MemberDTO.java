@@ -32,7 +32,7 @@ public class MemberDTO {
     private List<BoardEntity> boardEntities = new ArrayList<>();
 
     public String getFileName(String storedFileName) {
-        String baseUrl = "https://www.wit.com.s3.ap-northeast-2.amazonaws.com/";
+        String baseUrl = "https://www.witwit.com.s3.ap-northeast-2.amazonaws.com/";
         if (storedFileName.startsWith(baseUrl)) {
             return storedFileName.substring(baseUrl.length());
         }

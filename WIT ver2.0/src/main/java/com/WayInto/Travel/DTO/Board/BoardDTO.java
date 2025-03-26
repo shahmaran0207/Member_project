@@ -1,5 +1,7 @@
 package com.WayInto.Travel.DTO.Board;
 
+import com.WayInto.Travel.DTO.Member.MemberDTO;
+import com.WayInto.Travel.Entity.Member.MemberEntity;
 import org.springframework.web.multipart.MultipartFile;
 import com.WayInto.Travel.Entity.Board.BoardEntity;
 import java.time.LocalDateTime;
@@ -40,6 +42,17 @@ public class BoardDTO {
         this.likesCount =likesCount;
     }
 
+    private String convertS3Url(String storedFileName) {
+        String region = "ap-northeast-2";
+        String bucketName = "www.witwit.com";
+
+        if (storedFileName.startsWith("https://")) {
+            storedFileName = storedFileName.substring(storedFileName.lastIndexOf("/") + 1);
+        }
+
+        return "https://s3." + region + ".amazonaws.com/" + bucketName + "/" + storedFileName;
+    }
+
     public static BoardDTO toBoardDTO(BoardEntity boardEntity) {
         BoardDTO boardDTO = new BoardDTO();
         boardDTO.setId(boardEntity.getId());
@@ -57,9 +70,15 @@ public class BoardDTO {
         if (boardEntity.getFileAttached() == 0) {
             boardDTO.setFileAttached(boardEntity.getFileAttached());
         } else {
+
             boardDTO.setFileAttached(boardEntity.getFileAttached());
             boardDTO.setOriginalFileName(boardEntity.getBoardFileEntityList().get(0).getOriginalFileName());
-            boardDTO.setStoredFileName(boardEntity.getBoardFileEntityList().get(0).getStoredFileName());
+
+            String storedFileName = boardEntity.getBoardFileEntityList().get(0).getStoredFileName();
+
+            storedFileName = boardDTO.convertS3Url(storedFileName);
+            boardDTO.setStoredFileName(storedFileName);
+
         }
 
         return boardDTO;

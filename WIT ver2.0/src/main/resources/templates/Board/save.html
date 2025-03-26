@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIT - 게시글 작성</title>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: white;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px !important;
+            font-size: 40px !important;
+            font-weight: bold !important;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1">
+        <form action="/Board/save" method="post" enctype="multipart/form-data">
+            <h2>게시글 작성</h2>
+
+            <label for="boardPass">비밀번호</label>
+            <input type="text" id="boardPass" name="boardPass" placeholder="비밀번호를 입력하세요">
+
+            <label for="boardTitle">제목</label>
+            <input type="text" id="boardTitle" name="boardTitle" placeholder="제목을 입력하세요">
+
+            <label for="boardContents">내용</label>
+            <textarea id="boardContents" name="boardContents" cols="30" rows="5" placeholder="내용을 입력하세요"></textarea>
+
+            <label for="boardFile">파일 첨부</label>
+            <input type="file" id="boardFile" name="boardFile">
+
+            <input type="submit" value="글 작성">
+        </form>
+    </main>
+</div>
+</body>
+</html>

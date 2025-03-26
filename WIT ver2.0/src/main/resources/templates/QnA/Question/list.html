@@ -135,7 +135,7 @@
             </tr>
             </tbody>
         </table>
-        <div class="pagination">
+        <div class="pagination" th:if="${questionEntityList.totalPages > 0}">
             <a th:href="@{/QnA/Question/list(page=1)}">First</a>
             <a th:if="${!questionEntityList.first}" th:href="@{/QnA/Question/list(page=${questionEntityList.number})}">Prev</a>
             <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
