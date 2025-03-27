@@ -15,6 +15,8 @@ import lombok.*;
 public class BoardDTO {
 
     private Long id;
+    private Long memberId;
+
 
     private String boardPass;
     private String boardTitle;
@@ -33,13 +35,14 @@ public class BoardDTO {
 
     private MultipartFile boardFile;
 
-    public BoardDTO(Long id, String boardTitle, int boardHits, LocalDateTime boardCreatedTime, String memberName, int likesCount) {
+    public BoardDTO(Long id, String boardTitle, int boardHits, LocalDateTime boardCreatedTime, String memberName, int likesCount, Long memberId) {
         this.id = id;
         this.boardTitle = boardTitle;
         this.boardHits = boardHits;
         this.boardCreatedTime = boardCreatedTime;
         this.memberName = memberName;
         this.likesCount =likesCount;
+        this.memberId = memberId;
     }
 
     private String convertS3Url(String storedFileName) {
@@ -56,6 +59,7 @@ public class BoardDTO {
     public static BoardDTO toBoardDTO(BoardEntity boardEntity) {
         BoardDTO boardDTO = new BoardDTO();
         boardDTO.setId(boardEntity.getId());
+        boardDTO.setMemberId(boardEntity.getMemberEntity().getId());
         boardDTO.setBoardPass(boardEntity.getBoardPass());
         boardDTO.setBoardTitle(boardEntity.getBoardTitle());
         boardDTO.setBoardContents(boardEntity.getBoardContents());

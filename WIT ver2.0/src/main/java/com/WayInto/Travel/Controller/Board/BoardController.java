@@ -54,12 +54,14 @@ public class BoardController {
     @GetMapping("/{id}")
     public String findById(@CookieValue(value = "loginId", defaultValue = "") String loginId,
                            @CookieValue(value = "loginName", defaultValue = "") String loginName,
-                           @PathVariable("id") Long id, Model model, @PageableDefault(page=1) Pageable pageable) {
+                           @PathVariable("id") Long id, Model model, @PageableDefault(page=1) Pageable pageable,
+                           @CookieValue(value = "memberRole", defaultValue = "") String memberRole) {
         boardService.updateHits(id);
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("loginId", loginId);
         model.addAttribute("loginName", loginName);
         List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("memberRole", memberRole);
         model.addAttribute("commentList", commentDTOList);
         model.addAttribute("board", boardDTO);
         model.addAttribute("page", pageable.getPageNumber());

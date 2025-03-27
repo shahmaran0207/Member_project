@@ -47,6 +47,17 @@ public class QuestionDTO {
         this.answerStatus = answerStatus;
     }
 
+    private String convertS3Url(String storedFileName) {
+        String region = "ap-northeast-2";
+        String bucketName = "www.witwit.com";
+
+        if (storedFileName.startsWith("https://")) {
+            storedFileName = storedFileName.substring(storedFileName.lastIndexOf("/") + 1);
+        }
+
+        return "https://s3." + region + ".amazonaws.com/" + bucketName + "/" + storedFileName;
+    }
+
     public static QuestionDTO toQuestionDTO(QuestionEntity questionEntity) {
         QuestionDTO questionDTO = new QuestionDTO();
         questionDTO.setId(questionEntity.getId());
@@ -65,6 +76,14 @@ public class QuestionDTO {
             questionDTO.setFileAttached(questionEntity.getFileAttached());
             questionDTO.setOriginalFileName(questionEntity.getQuestionFileEntityList().get(0).getOriginalFileName());
             questionDTO.setStoredFileName(questionEntity.getQuestionFileEntityList().get(0).getStoredFileName());
+
+            questionDTO.setFileAttached(questionEntity.getFileAttached());
+            questionDTO.setOriginalFileName(questionEntity.getQuestionFileEntityList().get(0).getOriginalFileName());
+
+            String storedFileName = questionEntity.getQuestionFileEntityList().get(0).getStoredFileName();
+
+            storedFileName = questionDTO.convertS3Url(storedFileName);
+            questionDTO.setStoredFileName(storedFileName);
         }
 
         return questionDTO;
