@@ -83,8 +83,8 @@
 
     <div class="button-container">
       <button onclick="listReq()">목록</button>
-      <button onclick="updateReq()">수정</button>
-      <button onclick="deleteReq()">삭제</button>
+      <button th:if="(${board.memberId} == ${loginId})" onclick="updateReq()">수정</button>
+      <button th:if="(${board.memberId} == ${loginId}) or (${memberRole} == 0)" onclick="deleteReq()">삭제</button>
     </div><br>
 
     <div class="button-container">
@@ -93,8 +93,7 @@
 
       <button style="background-color: #f87171 !important; color: white !important;" id="hate-button" onclick="toggleHate()">👎 싫어요</button>
       <span id="hate-count" class="like-count" th:text="${board.hatesCount}" style="background-color: #f87171 !important; color: white !important;">0</span>
-
-
+0
     </div>
 
     <div id="comment-write">

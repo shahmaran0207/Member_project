@@ -58,6 +58,17 @@ public class ReviewDTO {
         this.endDate = endDate;
     }
 
+    private String convertS3Url(String storedFileName) {
+        String region = "ap-northeast-2";
+        String bucketName = "www.witwit.com";
+
+        if (storedFileName.startsWith("https://")) {
+            storedFileName = storedFileName.substring(storedFileName.lastIndexOf("/") + 1);
+        }
+
+        return "https://s3." + region + ".amazonaws.com/" + bucketName + "/" + storedFileName;
+    }
+
 
     public static ReviewDTO toReviewDTO(ReviewEntity reviewEntity) {
         ReviewDTO reviewDTO = new ReviewDTO();
@@ -80,7 +91,11 @@ public class ReviewDTO {
         } else{
             reviewDTO.setFileAttached(reviewEntity.getFileAttached());
             reviewDTO.setOriginalFileName(reviewEntity.getReviewFileEntityList().get(0).getOriginalFileName());
-            reviewDTO.setStoredFileName(reviewEntity.getReviewFileEntityList().get(0).getStoredFileName());
+
+            String storedFileName = reviewEntity.getReviewFileEntityList().get(0).getStoredFileName();
+
+            storedFileName = reviewDTO.convertS3Url(storedFileName);
+            reviewDTO.setStoredFileName(storedFileName);
         }
 
         return reviewDTO;

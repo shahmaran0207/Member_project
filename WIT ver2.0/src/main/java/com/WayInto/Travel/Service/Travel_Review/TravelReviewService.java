@@ -1,18 +1,30 @@
 package com.WayInto.Travel.Service.Travel_Review;
 
+import com.WayInto.Travel.Repository.Travel_Review.TravelReviewFileRepository;
 import com.WayInto.Travel.Repository.Travel_Review.Travel_ReviewRepository;
+import com.WayInto.Travel.Entity.Travel_Review.ReviewFileEntity;
+import com.WayInto.Travel.Repository.Member.MemberRepository;
 import com.WayInto.Travel.Entity.Travel_Review.ReviewEntity;
+import org.springframework.web.multipart.MultipartFile;
 import com.WayInto.Travel.DTO.Travel_Review.ReviewDTO;
+import com.WayInto.Travel.Entity.Member.MemberEntity;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import com.WayInto.Travel.Service.ImageService;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @Service
 public class TravelReviewService {
+
+    private final ImageService imageService;
+    private final MemberRepository memberRepository;
+    private final Travel_ReviewRepository travelReviewRepository;
+    private final TravelReviewFileRepository travelReviewFileRepository;
     private final Travel_ReviewRepository travel_ReviewRepository;
 
     public Page<ReviewDTO> paging(Pageable pageable) {
@@ -28,6 +40,31 @@ public class TravelReviewService {
                         review.getMemberEntity().getMemberName(), review.getReview_hits(), review.getZipcodeList(), review.getStartDate(), review.getEndDate()
                 ));
         return reviewDTOS;
+    }
+
+    public void save(ReviewDTO reviewDTO, Long id) throws IOException {
+        MemberEntity memberEntity = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
+
+        MultipartFile reviewImage = reviewDTO.getReviewImage();
+        if (reviewImage == null || reviewImage.isEmpty()) {
+            ReviewEntity reviewEntity = ReviewEntity.toSaveEntity(reviewDTO, memberEntity);
+            travelReviewRepository.save(reviewEntity);
+        } else {
+            MultipartFile reviewUploadImage = reviewDTO.getReviewImage();
+
+            String s3Url = imageService.imageUploadFromFile(reviewUploadImage);
+
+            String originalFilename = reviewUploadImage.getOriginalFilename();
+            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
+
+            ReviewEntity reviewEntity = ReviewEntity.toSaveFileEntity(reviewDTO, memberEntity);
+            Long savedId = travelReviewRepository.save(reviewEntity).getId();
+            ReviewEntity savedReviewEntity = travelReviewRepository.findById(savedId).get();
+
+            ReviewFileEntity reviewFileEntity = ReviewFileEntity.toReviewFileEntity(savedReviewEntity, storedFileName, s3Url);
+            travelReviewFileRepository.save(reviewFileEntity);
+        }
     }
 
 }
