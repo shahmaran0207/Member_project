@@ -62,7 +62,6 @@ public class MemberController {
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(3600);
-
         response.addCookie(cookie);
     }
 
@@ -97,7 +96,16 @@ public class MemberController {
         } catch (Exception e) {
             return ResponseEntity.status(401).body("/Member/login"); // 로그인 실패
         }
+    }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        deleteCookie(response, "loginId");
+        deleteCookie(response, "memberRole");
+        deleteCookie(response, "firebaseUid");
+        deleteCookie(response, "loginName");
+        deleteCookie(response, "loginEmail");
+        return "redirect:/";
     }
 
     @GetMapping("/myPage")
@@ -110,6 +118,15 @@ public class MemberController {
             return "Member/myPage";
 
         } else return "Member/login";
+    }
+
+    private void deleteCookie(HttpServletResponse response, String name) {
+        Cookie cookie = new Cookie(name, null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // 쿠키 즉시 만료
+        response.addCookie(cookie);
     }
 
 //    @GetMapping("/Guide/{id}")

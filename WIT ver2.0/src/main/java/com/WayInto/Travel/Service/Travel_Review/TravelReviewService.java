@@ -3,6 +3,7 @@ package com.WayInto.Travel.Service.Travel_Review;
 import com.WayInto.Travel.Repository.Travel_Review.TravelReviewFileRepository;
 import com.WayInto.Travel.Repository.Travel_Review.Travel_ReviewRepository;
 import com.WayInto.Travel.Entity.Travel_Review.ReviewFileEntity;
+import org.springframework.transaction.annotation.Transactional;
 import com.WayInto.Travel.Repository.Member.MemberRepository;
 import com.WayInto.Travel.Entity.Travel_Review.ReviewEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -67,4 +69,19 @@ public class TravelReviewService {
         }
     }
 
+    @Transactional
+    public void updateHits(Long id) {
+        travelReviewRepository.updateHits(id);
+    }
+
+    @Transactional
+    public ReviewDTO findById(Long id) {
+        Optional<ReviewEntity> optionalReviewEntity = travelReviewRepository.findById(id);
+        if (optionalReviewEntity.isPresent()) {
+            ReviewEntity reviewEntity = optionalReviewEntity.get();
+            return ReviewDTO.toReviewDTO(reviewEntity);
+        } else {
+            return null;
+        }
+    }
 }
