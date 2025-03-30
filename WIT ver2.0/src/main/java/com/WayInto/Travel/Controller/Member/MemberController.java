@@ -3,23 +3,20 @@ package com.WayInto.Travel.Controller.Member;
 import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
 import com.WayInto.Travel.Service.Member.MemberService;
 import com.google.firebase.auth.FirebaseAuthException;
-import org.springframework.data.web.PageableDefault;
+import com.WayInto.Travel.Service.Guide.GuideService;
+import com.WayInto.Travel.DTO.Guide.guide.GuideDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.data.domain.Pageable;
 import com.WayInto.Travel.DTO.Member.MemberDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuth;
-import org.springframework.data.domain.Page;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.Cookie;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -29,6 +26,7 @@ public class MemberController {
 
     private final GlobalControllerAdvice globalControllerAdvice;
     private final MemberService memberService;
+    private final GuideService guideService;
 
     @GetMapping("/save")
     public String save() {
@@ -86,20 +84,24 @@ public class MemberController {
 
             MemberDTO memberDTO = memberService.login(email);
 
+            GuideDTO guideDTO = guideService.findByMemberId(memberDTO.getId());
+
+            if (guideDTO != null) setHttpOnlyCookie(httpResponse, "GuideID", guideDTO.getId().toString());
             setHttpOnlyCookie(httpResponse, "loginId", memberDTO.getId().toString());
             setHttpOnlyCookie(httpResponse, "memberRole", String.valueOf(memberDTO.getRole()));
             setHttpOnlyCookie(httpResponse, "loginEmail", memberDTO.getMemberEmail());
             setHttpOnlyCookie(httpResponse, "loginName", memberDTO.getMemberName());
             setHttpOnlyCookie(httpResponse, "firebaseUid", firebaseUid);
 
-            return ResponseEntity.ok("/"); // 로그인 성공
+            return ResponseEntity.ok("/");
         } catch (Exception e) {
-            return ResponseEntity.status(401).body("/Member/login"); // 로그인 실패
+            return ResponseEntity.status(401).body("/Member/login");
         }
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
+        deleteCookie(response, "GuideID");
         deleteCookie(response, "loginId");
         deleteCookie(response, "memberRole");
         deleteCookie(response, "firebaseUid");
@@ -150,25 +152,6 @@ public class MemberController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-//
-//    @GetMapping("/save")
-//    public String save() {
-//        return "member/save";
-//    }
-//
-//
-//
 
 //
 ////    @PostMapping("/save")

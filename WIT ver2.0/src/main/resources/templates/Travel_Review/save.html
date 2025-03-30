@@ -135,19 +135,6 @@
         return Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1;
     }
 
-    function loadKakaoMap() {
-        const kakaoScript = document.createElement("script");
-        kakaoScript.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=1b890231fdd9e52518e28721a1a0c41b&libraries=services,clusterer,drawing,places";
-        kakaoScript.onload = () => {
-            console.log("Kakao API 로드 완료");
-            initMap();
-        };
-        kakaoScript.onerror = () => {
-            console.error("Kakao API 로드 실패");
-        };
-        document.head.appendChild(kakaoScript);
-    }
-
     function waitForKakao(callback) {
         if (typeof kakao !== "undefined" && kakao.maps) {
             callback();
@@ -210,7 +197,10 @@
                 const addressInput = document.getElementById(`address${index}`);
                 if (addressInput) {
                     addressInput.value = data.address;
-                    zipcodes[index - 1] = data.address;
+                    zipcodes[index - 1] = data.address; // zipcodes 배열 업데이트
+
+                    // 🚀 zipcodes 배열을 hidden input에 반영 (중요!)
+                    document.getElementById('zipcodeList').value = zipcodes.join(",");
                 }
             }
         }).open();

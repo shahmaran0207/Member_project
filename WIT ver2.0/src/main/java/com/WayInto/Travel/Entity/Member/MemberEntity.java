@@ -26,6 +26,12 @@ public class MemberEntity {
     private int role;
 
     @Column
+    private int memberMoney;
+
+    @Column
+    private String memberArea;
+
+    @Column
     private int fileAttached;
 
     private String memberPassword;
@@ -37,6 +43,8 @@ public class MemberEntity {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setRole(memberDTO.getRole());
+        memberEntity.setMemberMoney(memberDTO.getMemberMoney());
+        memberEntity.setMemberArea(memberDTO.getMemberArea());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
@@ -47,6 +55,8 @@ public class MemberEntity {
         memberEntity.setId(memberDTO.getId());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setRole(memberDTO.getRole());
+        memberEntity.setMemberMoney(memberDTO.getMemberMoney());
+        memberEntity.setMemberArea(memberDTO.getMemberArea());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
@@ -56,6 +66,8 @@ public class MemberEntity {
         MemberEntity member = new MemberEntity();
         member.setMemberEmail(memberDTO.getMemberEmail());
         member.setMemberName(memberDTO.getMemberName());
+        member.setMemberArea(memberDTO.getMemberArea());
+        member.setMemberMoney(0);
         member.setRole(1);
         member.setId(memberDTO.getId());
         member.setFileAttached(0);
@@ -65,10 +77,12 @@ public class MemberEntity {
     public static MemberEntity toSaveMemberFile(MemberDTO memberDTO) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setId(memberDTO.getId());
+        memberEntity.setMemberArea(memberDTO.getMemberArea());
         memberEntity.setRole(memberDTO.getRole());
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setFileAttached(1);
+        memberEntity.setMemberMoney(0);
         return memberEntity;
     }
 }

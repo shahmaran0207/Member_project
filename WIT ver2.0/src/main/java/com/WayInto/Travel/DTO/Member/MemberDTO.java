@@ -19,9 +19,11 @@ public class MemberDTO {
 
     private int fileAttached;
     private int role;
+    private int memberMoney;
 
     private MultipartFile memberProfile;
 
+    private String memberArea;
     private String memberEmail;
     private String memberName;
     private String originalFileName;
@@ -54,6 +56,8 @@ public class MemberDTO {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(memberEntity.getId());
         memberDTO.setRole(memberEntity.getRole());
+        memberDTO.setMemberMoney(memberEntity.getMemberMoney());
+        memberDTO.setMemberArea(memberEntity.getMemberArea());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());
         memberDTO.setMemberName(memberEntity.getMemberName());
 

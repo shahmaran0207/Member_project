@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Detail</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=af44dc4fb8ca5f1da00446135050eeed&libraries=services,clusterer,drawing,places"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b890231fdd9e52518e28721a1a0c41b&libraries=services,clusterer,drawing,places"></script>
   <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -40,7 +40,6 @@
       cursor: default;
       pointer-events: none;
     }
-
   </style>
 </head>
 
@@ -83,12 +82,12 @@
       <tr th:if="${review.fileAttached == 1}">
         <th>Image</th>
         <td th:each="fileName: ${review.storedFileName}">
-          <img th:src="@{|/upload/${fileName}|}" alt="Uploaded Image">
+          <img th:src="@{|${fileName}|}" alt="Uploaded Image">
         </td>
       </tr>
     </table>
 
-    <div id="map" style="width: 80%; height: 400px; margin: 20px auto; border: 1px solid #ddd;"></div> <!-- 지도 추가 -->
+    <div id="map" style="width: 80%; height: 400px; margin: 20px auto; border: 1px solid #ddd;"></div>
 
     <div class="button-container">
       <button onclick="listReq()">목록</button>
@@ -107,8 +106,9 @@
 
 <script th:inline="javascript">
   const addresses = /*[[${review.zipcodeList}]]*/ [];
-  const travelReviewId = /*[[${review.id}]]*/ 0; // travelReviewId 값 할당
-  const memberId = /*[[${session.loginId}]]*/ ''; // memberId 값 할당
+  const travelReviewId = /*[[${review.id}]]*/ 0;
+  const memberId = /*[[${loginId}]]*/ "";
+  console.log(memberId);
   let likeCount = 0;
   let hateCount = 0;
 
@@ -116,7 +116,6 @@
     loadHates();
     loadLikes();
   });
-
 
   const geocoder = new kakao.maps.services.Geocoder();
   const mapContainer = document.getElementById('map');
@@ -178,7 +177,6 @@
       }
     });
   });
-
 
   window.toggleHate = () => {
     $.ajax({

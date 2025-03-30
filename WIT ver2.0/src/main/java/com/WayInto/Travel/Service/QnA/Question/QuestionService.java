@@ -2,6 +2,7 @@ package com.WayInto.Travel.Service.QnA.Question;
 
 import com.WayInto.Travel.Repository.QnA.Question.QuestionFileRepository;
 import com.WayInto.Travel.Repository.QnA.Question.QuestionRepository;
+import com.WayInto.Travel.Repository.QnA.Answer.AnswerRepository;
 import com.WayInto.Travel.Entity.QnA.Question.QuestionFileEntity;
 import org.springframework.transaction.annotation.Transactional;
 import com.WayInto.Travel.Entity.QnA.Question.QuestionEntity;
@@ -18,11 +19,13 @@ import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final AnswerRepository answerRepository;
     private final QuestionFileRepository questionFileRepository;
     private final ImageService imageService;
     private final MemberRepository memberRepository;
@@ -83,4 +86,22 @@ public class QuestionService {
         }
     }
 
+    @Transactional
+    public void delete(Long id) {
+        List<QuestionFileEntity> questionFiles = questionFileRepository.findByQuestionEntity_Id(id);
+
+        if(questionFiles.isEmpty()) {
+            answerRepository.deleteByQuestionEntity_Id(id);
+            questionRepository.deleteById(id);
+        }
+        else {
+            for (QuestionFileEntity file : questionFiles) {
+
+                imageService.deleteImage(file.getStoredFileName());
+                questionFileRepository.delete(file);
+            }
+            answerRepository.deleteByQuestionEntity_Id(id);
+            questionRepository.deleteById(id);
+        }
+    }
 }

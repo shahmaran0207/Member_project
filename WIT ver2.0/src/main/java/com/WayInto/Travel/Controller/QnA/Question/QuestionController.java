@@ -63,6 +63,7 @@ public class QuestionController {
         questionService.updateHits(id);
         QuestionDTO questionDTO = questionService.findById(id);
         AnswerDTO answerDTO = answerService.findByQuestionId(id);
+
         model.addAttribute("loginId", loginId);
         model.addAttribute("loginName", loginName);
         model.addAttribute("memberRole", memberRole);
@@ -70,5 +71,11 @@ public class QuestionController {
         model.addAttribute("question", questionDTO);
         model.addAttribute("page", pageable.getPageNumber());
         return "QnA/Question/detail";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        questionService.delete(id);
+        return "redirect:/QnA/Question/list";
     }
 }

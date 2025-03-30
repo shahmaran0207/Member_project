@@ -22,6 +22,9 @@ public class GuideEntity {
     private String guideName;
 
     @Column
+    private String guideArea;
+
+    @Column
     private int hateCounts;
 
     @Column
@@ -55,6 +58,7 @@ public class GuideEntity {
         GuideEntity guideEntity = new GuideEntity();
         guideEntity.setGuideName(memberEntity.getMemberName());
         guideEntity.setGuideEmail(memberDTO.getMemberEmail());
+        guideEntity.setGuideArea(memberDTO.getMemberArea());
         guideEntity.setMemberEntity(memberEntity);
         return guideEntity;
     }

@@ -49,4 +49,18 @@ public class Travel_ReviewController {
         return "home";
     }
 
+    @GetMapping("/{id}")
+    public String findById(@CookieValue(value = "loginId", defaultValue = "") String loginId,
+            @PathVariable Long id, Model model,
+                           @PageableDefault(page=1) Pageable pageable) {
+        travelReviewService.updateHits(id);
+
+        ReviewDTO reviewDTO = travelReviewService.findById(id);
+
+        model.addAttribute("loginId", loginId);
+        model.addAttribute("review", reviewDTO);
+        model.addAttribute("page", pageable.getPageNumber());
+        return "Travel_Review/detail";
+    }
 }
+
