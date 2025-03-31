@@ -26,6 +26,12 @@ public class MemberEntity {
     private int role;
 
     @Column
+    private int likesCount;
+
+    @Column
+    private int hatesCount;
+
+    @Column
     private int memberMoney;
 
     @Column
@@ -46,6 +52,8 @@ public class MemberEntity {
         memberEntity.setMemberMoney(memberDTO.getMemberMoney());
         memberEntity.setMemberArea(memberDTO.getMemberArea());
         memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setLikesCount(memberDTO.getLikesCount());
+        memberEntity.setHatesCount(memberDTO.getHatesCount());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
     }
@@ -58,6 +66,8 @@ public class MemberEntity {
         memberEntity.setMemberMoney(memberDTO.getMemberMoney());
         memberEntity.setMemberArea(memberDTO.getMemberArea());
         memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setLikesCount(memberDTO.getLikesCount());
+        memberEntity.setHatesCount(memberDTO.getHatesCount());
         memberEntity.setFileAttached(memberDTO.getFileAttached());
         return memberEntity;
     }
@@ -67,6 +77,8 @@ public class MemberEntity {
         member.setMemberEmail(memberDTO.getMemberEmail());
         member.setMemberName(memberDTO.getMemberName());
         member.setMemberArea(memberDTO.getMemberArea());
+        member.setLikesCount(0);
+        member.setHatesCount(0);
         member.setMemberMoney(0);
         member.setRole(1);
         member.setId(memberDTO.getId());
@@ -82,6 +94,8 @@ public class MemberEntity {
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setFileAttached(1);
+        memberEntity.setLikesCount(0);
+        memberEntity.setHatesCount(0);
         memberEntity.setMemberMoney(0);
         return memberEntity;
     }

@@ -19,6 +19,8 @@ public class MemberDTO {
 
     private int fileAttached;
     private int role;
+    private int likesCount;
+    private int hatesCount;
     private int memberMoney;
 
     private MultipartFile memberProfile;
@@ -32,6 +34,17 @@ public class MemberDTO {
 
     @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardEntity> boardEntities = new ArrayList<>();
+
+    public MemberDTO(Long id, int role, int memberMoney, String memberName, String memberArea, String memberEmail, int likesCount, int hatesCount) {
+        this.id = id;
+        this.role = role;
+        this.memberMoney = memberMoney;
+        this.memberName = memberName;
+        this.memberArea = memberArea;
+        this.memberEmail = memberEmail;
+        this.likesCount = likesCount;
+        this.hatesCount = hatesCount;
+    }
 
     public String getFileName(String storedFileName) {
         String baseUrl = "https://www.witwit.com.s3.ap-northeast-2.amazonaws.com/";
@@ -60,6 +73,8 @@ public class MemberDTO {
         memberDTO.setMemberArea(memberEntity.getMemberArea());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());
         memberDTO.setMemberName(memberEntity.getMemberName());
+        memberDTO.setLikesCount(memberEntity.getLikesCount());
+        memberDTO.setHatesCount(memberEntity.getHatesCount());
 
         if (memberEntity.getFileAttached() == 0) {
             memberDTO.setFileAttached(memberEntity.getFileAttached());

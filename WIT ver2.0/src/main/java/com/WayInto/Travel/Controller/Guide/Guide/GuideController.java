@@ -1,4 +1,4 @@
-package com.WayInto.Travel.Controller.Guide;
+package com.WayInto.Travel.Controller.Guide.Guide;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
