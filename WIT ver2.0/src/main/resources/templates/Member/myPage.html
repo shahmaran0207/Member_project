@@ -104,11 +104,14 @@
                 <a th:href="@{/Member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
                 <a th:href="@{/Member/buylist/{id}(id=${member.id})}" class="update-button">구매한 일정</a>
 
-                <th:block th:if="${session.GuideID == null}">
+                <th:block th:if="${GuideID == ''}">
                     <a th:href="@{/Member/Guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>
                 </th:block>
-                <th:block th:if="${session.GuideID != null}">
-                    <a th:href="@{|/TripList/paging/${session.GuideID}|}" class="update-button">판매중인 일정 관리</a>
+                <th:block th:if="${GuideID != ''}">
+                    <a th:href="@{|/TripList/paging/${GuideID}|}" class="update-button">판매중인 일정 관리</a>
+                </th:block>
+                <th:block th:if="${memberRole} == 2">
+                    <a th:href="@{|/Temp_Guide/paging|}" class="update-button">가이드 신청자 목록</a>
                 </th:block>
             </div>
         </div>

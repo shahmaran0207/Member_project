@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "member_comment_table")
+@Table(name = "Guide_comment_table")
 public class GuideCommentEntity {
 
     @Id
@@ -18,29 +18,29 @@ public class GuideCommentEntity {
     private Long id;
 
     @Column(length = 20, nullable = false)
-    private String commentWriter;
+    private String GuidecommentWriter;
 
     @Column
-    private String commentContents;
+    private String GuidecommentContents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "commenterid")
-    private MemberEntity commenter;
+    @JoinColumn(name = "Guidecommenterid")
+    private MemberEntity Guidecommenter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "commentTargetId")
-    private GuideEntity commentTarget;
+    @JoinColumn(name = "GuidecommentTargetId")
+    private GuideEntity GuidecommentTarget;
 
     @Column
-    private LocalDateTime commentCreatedTime;
+    private LocalDateTime GuidecommentCreatedTime;
 
     public static GuideCommentEntity toSaveEntity(GuideCommentDTO commentDTO, GuideEntity target, MemberEntity memberEntity) {
         GuideCommentEntity commentEntity = new GuideCommentEntity();
-        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
-        commentEntity.setCommentContents(commentDTO.getCommentContents());
-        commentEntity.setCommentTarget(target);
-        commentEntity.setCommentCreatedTime(LocalDateTime.now());
-        commentEntity.setCommenter(memberEntity);
+        commentEntity.setGuidecommentWriter(commentDTO.getGuidecommentWriter());
+        commentEntity.setGuidecommentContents(commentDTO.getGuidecommentContents());
+        commentEntity.setGuidecommentTarget(target);
+        commentEntity.setGuidecommentCreatedTime(LocalDateTime.now());
+        commentEntity.setGuidecommenter(memberEntity);
         return commentEntity;
     }
 }

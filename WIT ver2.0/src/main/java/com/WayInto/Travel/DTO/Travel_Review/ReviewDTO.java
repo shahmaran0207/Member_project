@@ -85,6 +85,7 @@ public class ReviewDTO {
         reviewDTO.setStartDate(reviewEntity.getStartDate());
         reviewDTO.setEndDate(reviewEntity.getEndDate());
         reviewDTO.setMember_name(reviewEntity.getMemberEntity().getMemberName());
+        reviewDTO.setMember_id(reviewEntity.getMemberEntity().getId());
 
         if(reviewEntity.getFileAttached()==0){
             reviewDTO.setFileAttached(reviewEntity.getFileAttached());

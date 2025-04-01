@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>WIT - 멤버 Detail</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+          integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+          crossorigin="anonymous"></script>
+
+  <style>
+    body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; }
+    h1 { text-align: center; color: #333; margin-bottom: 20px !important; font-weight: bold !important; font-size: 24px !important; margin-top: 20px !important; }
+    table { width: 80%; margin: 0 auto; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    th { background-color: #4CAF50; color: white; }
+    img { max-width: 100%; height: auto; border-radius: 8px; }
+    .button-container { text-align: center; margin-top: 20px; }
+    button { background-color: #007BFF !important; color: white !important; border: none !important; padding: 10px 15px !important;
+      margin: 5px !important; cursor: pointer !important; border-radius: 5px !important;
+      transition: background-color 0.3s, transform 0.1s !important; }
+    button:hover { background-color: #0056b3; transform: scale(1.05); }
+    #comment-write { width: 80%; margin: 20px auto; display: flex; justify-content: space-between; }
+    #comment-write input { width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-right: 10px; }
+    #comment-write-button { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s, transform 0.1s; }
+    #comment-write-button:hover { background-color: #218838; transform: scale(1.05); }
+    #comment-list { width: 80%; margin: 20px auto; background: white; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    .like-count {
+      display: inline-block;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      padding: 10px 15px;
+      margin-left: 10px;
+      cursor: default;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="min-h-screen flex flex-col">
+  <div th:replace="~{header :: header}"></div>
+  <main class="flex-1">
+
+    <h1><span th:text="${member.memberName}"></span> 님 상세 정보</h1>
+
+    <table>
+      <tr>
+        <th>Email</th>
+        <td th:text="${member.memberEmail}"></td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <td th:text="${member.memberName}"></td>
+      </tr>
+      <tr>
+        <th>Area</th>
+        <td th:text="${member.memberArea}"></td>
+      </tr>
+      <tr th:if="${member.fileAttached == 1}">
+        <th>Image</th>
+        <td>
+          <img th:src="${member.storedFileName}" alt="Uploaded Image">
+        </td>
+      </tr>
+    </table>
+
+    <div class="button-container">
+      <button style="background-color: #38bdf8 !important; color: white !important;" id="like-button" onclick="toggleLike()">👍 좋아요</button>
+      <span id="like-count" class="like-count" th:text="${member.likesCount}" style="background-color: #38bdf8 !important; color: white !important;">0</span>
+
+      <button style="background-color: #f87171 !important; color: white !important;" id="hate-button" onclick="toggleHate()">👎 싫어요</button>
+      <span id="hate-count" class="like-count" th:text="${member.hatesCount}" style="background-color: #f87171 !important; color: white !important;">0</span>
+    </div>
+
+    <div id="comment-write">
+      <input type="hidden" id="memberId" th:value="${loginId}">
+      <input type="text" id="commentWrite" th:value="${loginName}" th:readonly="true" placeholder="작성자">
+      <input type="text" id="commentContents" placeholder="내용">
+      <button id="comment-write-button" onclick="commentWrite()">댓글 작성</button>
+    </div>
+
+    <div id="comment-list">
+    </div>
+  </main>
+</div>
+
+<script th:inline="javascript">
+  const listReq = () => {
+    const page = [[${page}]];
+    location.href = "/Member/list?page=" + page;
+  };
+
+  const liker = /*[[${loginId}]]*/ "";
+  const hater = /*[[${loginId}]]*/ "";
+  const target = [[${member.id}]];
+  const targetHater = [[${member.id}]];
+
+  let isLiked = false;
+  let likeCount = 0;
+
+  let isHated = false;
+  let hateCount = 0;
+
+  $(document).ready(function () {
+    loadLikes();
+    loadHates();
+    loadComments();
+  });
+
+  const loadLikes = () => {
+    $.ajax({
+      type: "GET",
+      url: `/api/member_likes/count/${target}`,
+      success: function (count) {
+        likeCount = count;
+        $('#like-count').text(likeCount);
+      },
+      error: function (err) {
+        console.log("좋아요 수 로드 실패", err);
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: `/api/member_likes/status/${target}/${liker}`,
+      success: function (isLiked) {
+        $('#like-button').text(isLiked ? "👍 좋아요 취소" : "👍 좋아요");
+      },
+      error: function (err) {
+        console.log("좋아요 상태 로드 실패", err);
+      }
+    });
+  };
+
+  window.toggleLike = () => {
+    $.ajax({
+      type: "POST",
+      url: "/api/member_likes/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "liker": liker, "target": target }),
+      success: function (res) {
+        likeCount += res === "Like added" ? 1 : -1;
+        $('#like-count').text(likeCount);
+        $('#like-button').text(res === "Like added" ? "👍 좋아요 취소" : "👍 좋아요");
+      },
+      error: function (err) {
+        console.log("좋아요 처리 실패", err);
+      }
+    });
+  };
+
+  const loadHates = () => {
+    $.ajax({
+      type: "GET",
+      url: `/api/member_hates/count/${targetHater}`,
+      success: function (count) {
+        hateCount = count;
+        $('#hate-count').text(hateCount);
+      },
+      error: function (err) {
+        console.log("싫어요 수 로드 실패", err);
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: `/api/member_hates/status/${targetHater}/${hater}`,
+      success: function (isHated) {
+        $('#hate-button').text(isHated ? "👎 싫어요 취소" : "👎 싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 상태 로드 실패", err);
+      }
+    });
+  };
+
+  window.toggleHate = () => {
+    $.ajax({
+      type: "POST",
+      url: "/api/member_hates/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "targetHater": targetHater, "hater": hater }),
+      success: function (res) {
+        hateCount += res === "Hate added" ? 1 : -1;
+        $('#hate-count').text(hateCount);
+        $('#hate-button').text(res === "Hate added" ? "👎 싫어요 취소" : "👎 싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 처리 실패", err);
+      }
+    });
+  };
+
+  const loadComments = () => {
+    const id = [[${member.id}]];
+
+    $.ajax({
+      type: "GET",
+      url: "/member_comment/list/" + id,
+      success: function (res) {
+        renderComments(res);
+      },
+      error: function (err) {
+        console.log("댓글 로드 실패", err);
+      }
+    });
+  };
+
+  const renderComments = (res) => {
+    let output = "<table>";
+    output += "<tr><th>댓글번호</th><th>작성자</th><th>내용</th><th>작성시간</th></tr>";
+    for (let i in res) {
+      output += "<tr>";
+      output += "<td>" + res[i].id + "</td>";
+      output += "<td>" + res[i].commentWriter + "</td>";
+      output += "<td>" + res[i].commentContents + "</td>";
+      output += "<td>" + res[i].commentCreatedTime + "</td>";
+      output += "</tr>";
+    }
+    output += "</table>";
+    document.getElementById('comment-list').innerHTML = output;
+  };
+
+  const commentWrite = () => {
+    const memberId = document.getElementById('memberId').value;
+    const writer = document.getElementById('commentWrite').value;
+    const contents = document.getElementById('commentContents').value;
+    const id = [[${member.id}]];
+    $.ajax({
+      type: "POST",
+      url: "/member_comment/save",
+      data: {
+        "memberId": memberId,
+        "commentWriter": writer,
+        "commentContents": contents,
+        "commentTargetId": id
+      },
+      success: function (res) {
+        console.log("댓글 저장 성공", res);
+        renderComments(res);
+        document.getElementById('commentContents').value = '';
+      },
+      error: function (err) {
+        console.log("댓글 저장 실패", err);
+      }
+    });
+  };
+</script>
+
+</body>
+</html>

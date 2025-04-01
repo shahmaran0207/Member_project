@@ -6,6 +6,7 @@ import com.WayInto.Travel.DTO.Guide.guide.GuideDTO;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.List;
 
 @Service
@@ -22,5 +23,13 @@ public class GuideService {
         }
 
         return dtoList;
+    }
+
+    public GuideDTO findByMemberId(Long id) {
+        Optional<GuideEntity> optionalGuideEntity = guideRepository.findByMemberEntity_Id(id);
+
+        if(optionalGuideEntity.isPresent()) {
+            return GuideDTO.toGuideDTO(optionalGuideEntity.get());
+        } else return null;
     }
 }
