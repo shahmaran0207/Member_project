@@ -62,5 +62,15 @@ public class Travel_ReviewController {
         model.addAttribute("page", pageable.getPageNumber());
         return "Travel_Review/detail";
     }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@CookieValue(value = "loginId", defaultValue = "") String loginId, @PathVariable("id") Long id,
+                         Model model) {
+        travelReviewService.delete(id);
+
+        model.addAttribute("msg", "여행 후기가 삭제 되었습니다.");
+        model.addAttribute("redirectUrl", "/Travel_Review/paging");
+        return "alert";
+    }
 }
 

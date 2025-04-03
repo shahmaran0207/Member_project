@@ -1,4 +1,4 @@
-package com.WayInto.Travel.Entity.Guide.Guide;
+package com.WayInto.Travel.Entity.Guide.guide;
 
 import com.WayInto.Travel.DTO.Guide.guide.GuideCommentDTO;
 import com.WayInto.Travel.Entity.Member.MemberEntity;
@@ -18,21 +18,21 @@ public class GuideCommentEntity {
     private Long id;
 
     @Column(length = 20, nullable = false)
-    private String GuidecommentWriter;
+    private String guidecommentWriter;
 
     @Column
-    private String GuidecommentContents;
+    private String guidecommentContents;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Guidecommenterid")
-    private MemberEntity Guidecommenter;
+    private MemberEntity guidecommenter;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GuidecommentTargetId")
-    private GuideEntity GuidecommentTarget;
+    private GuideEntity guidecommentTarget;
 
     @Column
-    private LocalDateTime GuidecommentCreatedTime;
+    private LocalDateTime guidecommentCreatedTime;
 
     public static GuideCommentEntity toSaveEntity(GuideCommentDTO commentDTO, GuideEntity target, MemberEntity memberEntity) {
         GuideCommentEntity commentEntity = new GuideCommentEntity();

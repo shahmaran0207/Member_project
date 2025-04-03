@@ -1,6 +1,8 @@
 package com.WayInto.Travel.Service.Travel_Review;
 
 import com.WayInto.Travel.Repository.Travel_Review.TravelReviewFileRepository;
+import com.WayInto.Travel.Repository.Travel_Review.TravelReviewHateRepository;
+import com.WayInto.Travel.Repository.Travel_Review.TravelReviewLikeRepository;
 import com.WayInto.Travel.Repository.Travel_Review.Travel_ReviewRepository;
 import com.WayInto.Travel.Entity.Travel_Review.ReviewFileEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -28,6 +31,8 @@ public class TravelReviewService {
     private final Travel_ReviewRepository travelReviewRepository;
     private final TravelReviewFileRepository travelReviewFileRepository;
     private final Travel_ReviewRepository travel_ReviewRepository;
+    private final TravelReviewHateRepository travelReviewHateRepository;
+    private final TravelReviewLikeRepository travelReviewLikeRepository;
 
     public Page<ReviewDTO> paging(Pageable pageable) {
         int page = pageable.getPageNumber() - 1;
@@ -82,6 +87,24 @@ public class TravelReviewService {
             return ReviewDTO.toReviewDTO(reviewEntity);
         } else {
             return null;
+        }
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        List<ReviewFileEntity> reviewFiles = travelReviewFileRepository.findByReviewEntity_Id(id);
+
+        if(reviewFiles.isEmpty()) {
+            travel_ReviewRepository.deleteById(id);
+        } else {
+            for (ReviewFileEntity file : reviewFiles) {
+                imageService.deleteImage(file.getStoredFileName());
+                travelReviewFileRepository.delete(file);
+            }
+
+            travelReviewHateRepository.deleteByReviewEntity_Id(id);
+            travelReviewLikeRepository.deleteByReviewEntity_Id(id);
+            travel_ReviewRepository.deleteById(id);
         }
     }
 }

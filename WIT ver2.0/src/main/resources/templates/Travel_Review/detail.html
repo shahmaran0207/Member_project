@@ -91,8 +91,7 @@
 
     <div class="button-container">
       <button onclick="listReq()">목록</button>
-      <button onclick="updateReq()">수정</button>
-      <button onclick="deleteReq()">삭제</button>
+      <button th:if="${review.member_id} == ${loginId}" onclick="deleteReq()">삭제</button>
     </div>
     <div class="button-container">
     <button style="background-color: #38bdf8 !important; color: white !important;" id="like-button" onclick="toggleLike()">👍 좋아요</button>
@@ -260,6 +259,11 @@
         console.log("좋아요 처리 실패", err);
       }
     });
+  };
+
+  const deleteReq = () => {
+    const id = [[${review.id}]];
+    location.href = "/Travel_Review/delete/" + id;
   };
 </script>
 

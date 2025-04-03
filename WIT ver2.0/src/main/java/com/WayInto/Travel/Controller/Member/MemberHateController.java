@@ -1,7 +1,7 @@
 package com.WayInto.Travel.Controller.Member;
 
-import com.WayInto.Travel.DTO.Member.MemberHateDTO;
 import com.WayInto.Travel.Service.Member.MemberHateService;
+import com.WayInto.Travel.DTO.Member.MemberHateDTO;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.WayInto.Travel.Entity.Guide.Guide;
+package com.WayInto.Travel.Entity.Guide.guide;
 
 import com.WayInto.Travel.Entity.Member.MemberEntity;
 import com.WayInto.Travel.DTO.Member.MemberDTO;
