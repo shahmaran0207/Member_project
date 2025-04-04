@@ -1,6 +1,6 @@
 package com.WayInto.Travel.DTO.Guide.guide;
 
-import com.WayInto.Travel.Entity.Guide.Guide.GuideEntity;
+import com.WayInto.Travel.Entity.Guide.guide.GuideEntity;
 import lombok.*;
 
 @Getter
