@@ -1,7 +1,7 @@
 package com.WayInto.Travel.Entity.Guide.TripList;
 
 import com.WayInto.Travel.DTO.Guide.TripList.TripListDTO;
-import com.WayInto.Travel.Entity.Guide.Guide.GuideEntity;
+import com.WayInto.Travel.Entity.Guide.guide.GuideEntity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
