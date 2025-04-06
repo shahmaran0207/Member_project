@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <title>가이드 신청자 리스트</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .btn-primary {
+            display: block;
+            margin: 0 auto 20px auto;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td a {
+            text-decoration: none;
+            color: #007BFF;
+            transition: color 0.2s;
+        }
+
+        td a:hover {
+            color: #0056b3;
+        }
+
+        .pagination {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            text-decoration: none;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            color: #007BFF;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .pagination span {
+            margin: 0 5px;
+            padding: 8px 12px;
+            font-weight: bold;
+        }
+
+        h1{
+            text-align: center;
+            font-size: 2rem !important;
+            font-weight: bold !important;
+            margin-top: 10px !important;
+            margin-bottom: 30px !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1">
+        <h1>가이드 신청자 목록</h1>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>이름</th>
+                <th>지역</th>
+                <th>이메일</th>
+            </tr>
+            <tr th:each="temp: ${tempGuideDTOS}">
+                <td th:text="${temp.id}"></td>
+                <td>
+                    <a th:href="@{|/Temp_Guide/${temp.id}|(page=${tempGuideDTOS.number + 1})}"
+                       th:text="${temp.guideName}"></a>
+                </td>
+                <td th:text="${temp.guideArea}"></td>
+                <td th:text="${temp.guideEmail}"></td>
+            </tr>
+        </table>
+
+        <div class="pagination" th:if="${tempGuideDTOS.totalPages > 0}">
+            <a th:href="@{/Temp_Guide/paging(page=1)}">First</a>
+
+            <a th:href="${tempGuideDTOS.first} ? '#' : @{/Temp_Guide/paging(page=${tempGuideDTOS.number})}">Prev</a>
+
+            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+        <span th:if="${page == tempGuideDTOS.number + 1}" th:text="${page}"></span>
+        <a th:unless="${page == tempGuideDTOS.number + 1}"
+           th:href="@{/Temp_Guide/paging(page=${page})}" th:text="${page}"></a>
+    </span>
+
+            <a th:href="${tempGuideDTOS.last} ? '#' : @{/Temp_Guide/paging(page=${tempGuideDTOS.number + 2})}">Next</a>
+
+            <a th:href="@{/Temp_Guide/paging(page=${tempGuideDTOS.totalPages})}">Last</a>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

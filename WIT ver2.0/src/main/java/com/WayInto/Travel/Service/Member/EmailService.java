@@ -21,21 +21,22 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
-    private final TemplateEngine templateEngine; // 🔹 주입받도록 변경
+    private final TemplateEngine templateEngine;
 
     private static final String SENDER_EMAIL = "shahmaran0207@gmail.com";
     private static final String EMAIL_SUBJECT = "[WIT - Way Into Travel] 회원가입 인증 코드 안내";
-    private static final int CODE_LENGTH = 6;
-    private static final long CODE_EXPIRE_TIME = 60 * 30L; // 30분
 
-    // 인증 코드 생성
+    private static final int CODE_LENGTH = 6;
+
+    private static final long CODE_EXPIRE_TIME = 60 * 30L;
+
     private String createCode() {
-        int leftLimit = 48; // '0'
-        int rightLimit = 122; // 'z'
+        int leftLimit = 48;
+        int rightLimit = 122;
         Random random = new Random();
 
         return random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)) // 알파벳과 숫자만 필터링
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
                 .limit(CODE_LENGTH)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
@@ -44,11 +45,10 @@ public class EmailService {
     private String setContext(String code) {
         Context context = new Context();
         context.setVariable("code", code);
-        log.info("Generated code: {}", code);  // 인증 코드 로그 출력
+        log.info("Generated code: {}", code);
 
         String content = templateEngine.process("mail", context);
 
-        log.info("Generated email content: {}", content);  // 이메일 본문 로그 출력
         return content;
     }
 
@@ -59,11 +59,11 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setTo(email);
-        helper.setSubject(MimeUtility.encodeText(EMAIL_SUBJECT, "UTF-8", "B")); // 제목 인코딩 처리
+        helper.setSubject(MimeUtility.encodeText(EMAIL_SUBJECT, "UTF-8", "B"));
         helper.setFrom(SENDER_EMAIL);
 
         String content = setContext(authCode);
-        helper.setText(content, true); // 🔹 HTML 본문 설정
+        helper.setText(content, true);
 
         redisUtil.setDataExpire(email, authCode, CODE_EXPIRE_TIME);
 
