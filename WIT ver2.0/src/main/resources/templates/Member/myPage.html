@@ -91,6 +91,10 @@
                     <td th:text="${member.memberEmail}"></td>
                 </tr>
                 <tr>
+                    <th>Point</th>
+                    <td th:text="${member.memberMoney}"></td>
+                </tr>
+                <tr>
                     <th>Name</th>
                     <td th:text="${member.memberName}"></td>
                 </tr>
@@ -102,9 +106,11 @@
             </table>
             <div class="button-container" style="margin-left: 150px">
                 <a th:href="@{/Member/update/{id}(id=${member.id})}" class="update-button">정보 수정</a>
+                <a th:href="@{/PayMent/payment}" class="update-button">포인트 충전</a>
+                <a th:href="@{/Member/attendance_check}" class="update-button">출석 체크</a>
                 <a th:href="@{/Member/buylist/{id}(id=${member.id})}" class="update-button">구매한 일정</a>
 
-                <th:block th:if="${GuideID == ''}">
+                <th:block th:if="(${GuideID} == '') and (${tempGuide} == 0)">
                     <a th:href="@{/Member/Guide/{id}(id=${member.id})}" class="update-button">가이드 신청</a>
                 </th:block>
                 <th:block th:if="${GuideID != ''}">

@@ -42,6 +42,7 @@
 </head>
 
 <body>
+
 <div class="min-h-screen flex flex-col">
   <div th:replace="~{header :: header}"></div>
   <main class="flex-1">
@@ -84,7 +85,7 @@
     <div class="button-container">
       <button onclick="listReq()">목록</button>
       <button th:if="(${board.memberId} == ${loginId})" onclick="updateReq()">수정</button>
-      <button th:if="(${board.memberId} == ${loginId}) or (${memberRole} == 0)" onclick="deleteReq()">삭제</button>
+      <button th:if="(${board.memberId} == ${loginId}) or (${memberRole} == 2)" onclick="deleteReq()">삭제</button>
     </div><br>
 
     <div class="button-container">
