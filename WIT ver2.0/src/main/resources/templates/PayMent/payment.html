@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WIT - 포인트 충전</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+            crossorigin="anonymous"></script>
+
+    <style>
+        .charge-box {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 320px;
+            height: 320px;
+            display: flex;
+            flex-direction: column; /* 세로 정렬 추가 */
+            justify-content: center; /* 수직 중앙 정렬 */
+            align-items: center; /* 가로 중앙 정렬 */
+        }
+
+        .charge-box input,
+        .charge-box button {
+            width: 100%; /* 입력 칸과 버튼을 박스 크기에 맞춤 */
+        }
+
+        .charge-box h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .charge-box label {
+            font-size: 1rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .charge-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .charge-box input:focus {
+            border-color: #007BFF;
+        }
+
+        .charge-box button {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 1rem;
+        }
+
+        .charge-box button:hover {
+            background-color: #0056b3;
+        }
+
+        .charge-box button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        input[type="number"] {
+            width: 250px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .btn-primary {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1 flex justify-center items-center">
+
+        <div class="charge-box">
+
+        <h2>포인트 충전</h2>
+
+        <label for="chargeAmount" class="block text-lg font-semibold mb-2">충전할 포인트</label>
+        <input type="number" id="chargeAmount" min="100" placeholder="100 이상 입력" oninput="checkAmount()">
+
+        <button id="chargeButton" class="btn-primary" onclick="requestPay()" disabled>충전하기</button>
+        </div>
+    </main>
+</div>
+
+<script>
+    function checkAmount() {
+        let amount = document.getElementById("chargeAmount").value;
+        let button = document.getElementById("chargeButton");
+        button.disabled = amount < 100;
+    }
+
+    function requestPay() {
+        let amount = document.getElementById("chargeAmount").value;
+        const name  = "[[${loginName}]]";
+        const email = "[[${loginEmail}]]";
+
+        if (amount < 100) {
+            alert("충전 금액은 최소 100 이상이어야 합니다.");
+            return;
+        }
+
+        var IMP = window.IMP;
+        IMP.init("imp01786831");
+        IMP.request_pay({
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: "order_" + new Date().getTime(),
+            name: "포인트 충전",
+            amount: amount,
+            buyer_email: email,
+            buyer_name: name,
+        }, function (rsp) {
+            if (rsp.success) {
+                var paymentData = { memberMoney: amount };
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/PayMent/charge", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        alert("결제가 완료 되었습니다.");
+                        window.location.href = "/Member/myPage";
+                    }
+                };
+                xhr.send(JSON.stringify(paymentData));
+            } else {
+                alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

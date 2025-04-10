@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+  <title>WIT - 출석 체크</title>
+  <style>
+    body { background-color: #f4f4f9; text-align: center; }
+    table { max-width: 500px; width: 100%; border-collapse: collapse; margin: 20px auto; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; }
+    th, td { padding: 10px; text-align: center; border-bottom: 1px solid #ddd; }
+    th { background-color: #007bff; color: white; }
+    .calendar td { text-align: center; padding: 10px; border: 1px solid #ddd; }
+    .calendar .today { background-color: #38bdf8; color: white; }
+    .calendar .attended { background-color: #4CAF50; color: white; }
+    .btn-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+    .btn-container button { background-color: #007bff; color: white; padding: 10px 15px; border-radius: 5px; border: none; cursor: pointer; }
+    .btn-container button:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+<div class="min-h-screen flex flex-col">
+  <div th:replace="~{header :: header}"></div>
+  <h1 class="text-center text-xl font-bold mb-4">출석 체크</h1>
+  <div class="btn-container">
+    <button id="prevMonth">◀ 이전 달</button>
+    <h2 id="currentMonth"></h2>
+    <button id="nextMonth">다음 달 ▶</button>
+  </div>
+  <table class="calendar w-full border-collapse">
+    <thead>
+    <tr>
+      <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
+    </tr>
+    </thead>
+    <tbody id="calendar-body"></tbody>
+  </table>
+  <div class="text-center mt-4">
+    <button id="attendanceBtn" class="bg-green-500 text-white px-4 py-2 rounded">출석 체크</button>
+  </div>
+</div>
+<script>
+  let today = new Date();
+  let currentMonth = today.getMonth();
+  let currentYear = today.getFullYear();
+
+  const memberId = /*[[${loginId}]]*/ "";
+
+  $(document).ready(() => {
+    loadCalendar(currentYear, currentMonth);
+    checkTodayAttendance();
+    $('#prevMonth').click(() => changeMonth(-1));
+    $('#nextMonth').click(() => changeMonth(1));
+    $('#attendanceBtn').click(markAttendance);
+  });
+
+  function loadCalendar(year, month) {
+    let firstDay = new Date(year, month, 1).getDay();
+    let lastDate = new Date(year, month + 1, 0).getDate();
+    $('#currentMonth').text(`${year}년 ${month + 1}월`);
+    let tableBody = '';
+    let day = 1;
+    for (let i = 0; i < 6; i++) {
+      let row = '<tr>';
+      for (let j = 0; j < 7; j++) {
+        if (i === 0 && j < firstDay) {
+          row += '<td></td>';
+        } else if (day > lastDate) {
+          break;
+        } else {
+          let className = (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) ? 'today' : '';
+          row += `<td class="${className}" data-date="${year}-${month + 1}-${day}">${day}</td>`;
+          day++;
+        }
+      }
+      row += '</tr>';
+      tableBody += row;
+      if (day > lastDate) break;
+    }
+    $('#calendar-body').html(tableBody);
+    loadAttendance();
+  }
+
+  function changeMonth(change) {
+    currentMonth += change;
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    else if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    loadCalendar(currentYear, currentMonth);
+  }
+
+  function checkTodayAttendance() {
+    $.get("/api/attendance/status", (response) => {  // 올바른 엔드포인트로 수정
+      if (response.attended) {
+        $("#attendanceBtn").prop("disabled", true).text("출석 완료 ✅");
+      }
+    });
+  }
+
+  function loadAttendance() {
+    $.get(`/api/attendance?memberId=${memberId}&year=${currentYear}&month=${currentMonth + 1}`, (attendedDates) => {
+      $("td").each(function () {
+        let date = $(this).data("date");
+        if (date && attendedDates.includes(date)) {
+          $(this).addClass("attended");
+        }
+      });
+    });
+  }
+
+  function markAttendance() {
+    $.post("/api/attendance/check", {}, () => {
+      alert("출석 체크 완료!");
+      $("#attendanceBtn").prop("disabled", true).text("출석 완료 ✅");
+      $(`td[data-date="${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}"]`).addClass("attended");
+    }).fail((xhr) => {
+      alert("출석 체크 실패: " + xhr.responseText);
+    });
+  }
+</script>
+</body>
+</html>
