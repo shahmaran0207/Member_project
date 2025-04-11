@@ -54,6 +54,7 @@ public class EmailService {
 
     private MimeMessage createEmailForm(String email) throws MessagingException, UnsupportedEncodingException {
         String authCode = createCode();
+        System.out.println("authCode: " + authCode);
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");

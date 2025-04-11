@@ -18,6 +18,7 @@ import com.google.firebase.auth.UserRecord;
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -79,17 +80,95 @@ public class MemberService {
         } else return null;
     }
 
-    public Page<MemberDTO> paging(Pageable pageable) {
+    public Page<MemberDTO> paging(Pageable pageable, String area) {
         int page = pageable.getPageNumber() - 1;
         int pageLimit = 10;
 
-        Page<MemberEntity> memberEntities =
-                memberRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+        Page<MemberEntity> memberEntities;
 
-        Page<MemberDTO> memberDTOS = memberEntities.map(member ->
+        PageRequest pageRequest = PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id"));
+
+        if (area == null || area.isEmpty()) {
+            memberEntities = memberRepository.findAll(pageRequest);
+        } else {
+            memberEntities = memberRepository.findByMemberArea(area, pageRequest);
+        }
+
+        return memberEntities.map(member ->
                 new MemberDTO(member.getId(), member.getRole(), member.getMemberMoney(), member.getMemberName(), member.getMemberArea(),
-                        member.getMemberEmail(), member.getLikesCount(), member.getHatesCount()));
-        return memberDTOS;
+                        member.getMemberEmail(), member.getLikesCount(), member.getHatesCount(), member.getTempGuide(), member.getTotalAttendance()));
     }
 
+    public void saveTempGuide(Long memberId) {
+        MemberEntity existingMemberEntity = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid board ID: " + memberId));
+
+        existingMemberEntity.setTempGuide(1);
+        memberRepository.save(existingMemberEntity);
+    }
+
+    public MemberDTO deleteTemp(Long memberId) {
+        MemberEntity existingMemberEntity = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid board ID: " + memberId));
+
+        existingMemberEntity.setTempGuide(0);
+        memberRepository.save(existingMemberEntity);
+
+        MemberDTO memberDTO = MemberDTO.toMemberDTO(existingMemberEntity);
+
+        return  memberDTO;
+    }
+
+    public void buyPoint(Long memberId, MemberDTO memberDTO) {
+
+        MemberEntity exisitingMemberEntity = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberDTO.getId()));
+
+        exisitingMemberEntity.setMemberMoney(exisitingMemberEntity.getMemberMoney()+ memberDTO.getMemberMoney());
+        memberRepository.save(exisitingMemberEntity);
+    }
+
+    public MemberDTO update(MemberDTO memberDTO) throws IOException, FirebaseAuthException {
+        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+                .setEmail(memberDTO.getMemberEmail())
+                .setPassword(memberDTO.getMemberPassword());
+        UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
+
+        MemberEntity existingMemberEntity = memberRepository.findById(memberDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberDTO.getId()));
+
+        if (!memberDTO.getMemberProfile().isEmpty()) {
+            List<MemberProfileEntity> existingProfiles = memberProfileRepository.findByMemberEntity(existingMemberEntity);
+
+            for (MemberProfileEntity profile : existingProfiles) {
+                imageService.deleteImage(profile.getStoredFileName());
+                memberProfileRepository.delete(profile);
+            }
+
+            MultipartFile memberProfile = memberDTO.getMemberProfile();
+            String s3Url = imageService.imageUploadFromFile(memberProfile);
+
+            String originalFilename = memberProfile.getOriginalFilename();
+            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
+
+            MemberProfileEntity memberProfileEntity = MemberProfileEntity.toMemberProfileEntity(existingMemberEntity, storedFileName, s3Url);
+            memberProfileRepository.save(memberProfileEntity);
+        }
+
+        if (!memberDTO.getMemberName().isEmpty()) {
+            existingMemberEntity.setMemberName(memberDTO.getMemberName());
+        }
+
+        existingMemberEntity.setHatesCount(existingMemberEntity.getHatesCount());
+        existingMemberEntity.setLikesCount(existingMemberEntity.getLikesCount());
+        existingMemberEntity.setMemberArea(existingMemberEntity.getMemberArea());
+        existingMemberEntity.setMemberMoney(existingMemberEntity.getMemberMoney());
+        existingMemberEntity.setMemberName(existingMemberEntity.getMemberName());
+        existingMemberEntity.setRole(existingMemberEntity.getRole());
+        existingMemberEntity.setTempGuide(existingMemberEntity.getTempGuide());
+        existingMemberEntity.setTotalAttendance(existingMemberEntity.getTotalAttendance());
+
+        memberRepository.save(existingMemberEntity);
+        return findById(memberDTO.getId());
+    }
 }

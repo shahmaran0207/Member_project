@@ -22,6 +22,8 @@ public class MemberDTO {
     private int likesCount;
     private int hatesCount;
     private int memberMoney;
+    private int tempGuide;
+    private int totalAttendance;
 
     private MultipartFile memberProfile;
 
@@ -35,7 +37,10 @@ public class MemberDTO {
     @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardEntity> boardEntities = new ArrayList<>();
 
-    public MemberDTO(Long id, int role, int memberMoney, String memberName, String memberArea, String memberEmail, int likesCount, int hatesCount) {
+    private List<AttendanceDTO> attendanceRecords = new ArrayList<>();  // 추가된 필드
+
+    public MemberDTO(Long id, int role, int memberMoney, String memberName, String memberArea, String memberEmail,
+                     int likesCount, int hatesCount, int tempGuide, int totalAttendance) {
         this.id = id;
         this.role = role;
         this.memberMoney = memberMoney;
@@ -44,6 +49,8 @@ public class MemberDTO {
         this.memberEmail = memberEmail;
         this.likesCount = likesCount;
         this.hatesCount = hatesCount;
+        this.tempGuide = tempGuide;
+        this.totalAttendance = totalAttendance;
     }
 
     public String getFileName(String storedFileName) {
@@ -75,6 +82,8 @@ public class MemberDTO {
         memberDTO.setMemberName(memberEntity.getMemberName());
         memberDTO.setLikesCount(memberEntity.getLikesCount());
         memberDTO.setHatesCount(memberEntity.getHatesCount());
+        memberDTO.setTempGuide(memberEntity.getTempGuide());
+        memberDTO.setTotalAttendance(memberEntity.getTotalAttendance());
 
         if (memberEntity.getFileAttached() == 0) {
             memberDTO.setFileAttached(memberEntity.getFileAttached());
@@ -87,6 +96,13 @@ public class MemberDTO {
             storedFileName = memberDTO.convertS3Url(storedFileName);
             memberDTO.setStoredFileName(storedFileName);
         }
+
+        if (memberEntity.getAttendanceRecords() != null) {
+            memberEntity.getAttendanceRecords().forEach(attendance -> {
+                memberDTO.getAttendanceRecords().add(AttendanceDTO.toAttendanceDTO(attendance));
+            });
+        }
+
         return memberDTO;
     }
 }
