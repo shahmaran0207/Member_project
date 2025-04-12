@@ -1,6 +1,6 @@
 package com.WayInto.Travel.DTO.Guide.guide;
 
-import com.WayInto.Travel.Entity.Guide.Guide.GuideCommentEntity;
+import com.WayInto.Travel.Entity.Guide.guide.GuideCommentEntity;
 import java.time.LocalDateTime;
 import lombok.ToString;
 import lombok.Getter;
@@ -12,21 +12,21 @@ import lombok.Setter;
 public class GuideCommentDTO {
 
     private Long id;
-    private Long commentTargetId;
+    private Long guidecommentTargetId;
     private Long memberId;
 
-    private String commentWriter;
-    private String commentContents;
+    private String guidecommentWriter;
+    private String guidecommentContents;
 
-    private LocalDateTime commentCreatedTime;
+    private LocalDateTime guidecommentCreatedTime;
 
     public static GuideCommentDTO toCommentDTO(GuideCommentEntity commentEntity, Long commentTargetId) {
         GuideCommentDTO commentDTO = new GuideCommentDTO();
         commentDTO.setId(commentEntity.getId());
-        commentDTO.setCommentWriter(commentEntity.getCommentWriter());
-        commentDTO.setCommentContents(commentEntity.getCommentContents());
-        commentDTO.setCommentCreatedTime(commentEntity.getCommentCreatedTime());
-        commentDTO.setCommentTargetId(commentTargetId);
+        commentDTO.setGuidecommentWriter(commentEntity.getGuidecommentWriter());
+        commentDTO.setGuidecommentContents(commentEntity.getGuidecommentContents());
+        commentDTO.setGuidecommentCreatedTime(commentEntity.getGuidecommentCreatedTime());
+        commentDTO.setGuidecommentTargetId(commentTargetId);
         return commentDTO;
     }
 }
