@@ -105,7 +105,7 @@
     <main class="flex-1">
         <h1>여행일정 목록</h1>
 
-        <th:block th:if="${session.GuideID == id}">
+        <th:block th:if="${GuideID != ''}">
             <button class="btn-primary">
                 <a th:href="@{/TripList/save}">글작성</a>
             </button>

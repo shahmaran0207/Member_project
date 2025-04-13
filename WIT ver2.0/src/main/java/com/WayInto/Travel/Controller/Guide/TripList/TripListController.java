@@ -1,17 +1,19 @@
 package com.WayInto.Travel.Controller.Guide.TripList;
 
+import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
 import com.WayInto.Travel.Service.Guide.TripList.TripListService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.WayInto.Travel.Service.Member.MemberTripListService;
 import com.WayInto.Travel.DTO.Guide.TripList.TripListDTO;
+import com.WayInto.Travel.DTO.Member.MemberTripListDTO;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.data.domain.Pageable;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/TripList")
@@ -19,6 +21,8 @@ import org.springframework.ui.Model;
 public class TripListController {
 
     private final TripListService tripListService;
+    private final GlobalControllerAdvice globalControllerAdvice;
+    private final MemberTripListService MemberTripListService;
 
     @GetMapping("/save")
     public String save(@CookieValue(value = "GuideID", defaultValue = "") String GuideID,
@@ -29,6 +33,16 @@ public class TripListController {
             return "alert";
         }
         return "TripList/save";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute TripListDTO tripListDTO,
+                       @CookieValue(value = "GuideID", defaultValue = "") String GuideID) throws IOException {
+
+        Long memberId = Long.valueOf(GuideID);
+
+        tripListService.save(tripListDTO, memberId);
+        return "home";
     }
 
     @GetMapping("/paging/{id}")
@@ -53,4 +67,39 @@ public class TripListController {
         return "TripList/paging";
     }
 
+    @GetMapping("/{id}")
+    public String findById(@PathVariable Long id, Model model,
+                           @PageableDefault(page=1) Pageable pageable,
+                           @CookieValue(value = "loginName", defaultValue = "") String loginName,
+                           @CookieValue(value = "loginEmail", defaultValue = "") String loginEmail,
+                           @CookieValue(value = "loginId", defaultValue = "") String loginId,
+                           @CookieValue(value = "GuideID", defaultValue = "") String GuideID) {
+
+        tripListService.updateHits(id);
+
+        TripListDTO tripListDTO = tripListService.findById(id);
+        MemberTripListDTO memberTripListDTO = MemberTripListService.findByMemberId(id);
+
+        model.addAttribute("loginId", loginId);
+        model.addAttribute("loginName", loginName);
+        model.addAttribute("GuideID", GuideID);
+        model.addAttribute("loginEmail", loginEmail);
+        model.addAttribute("membertrip", memberTripListDTO);
+        model.addAttribute("triplist", tripListDTO);
+        model.addAttribute("page", pageable.getPageNumber());
+        return "TripList/detail";
+    }
+
+    @PostMapping("/payment")
+    public String updateDeliveryInfo(@RequestBody TripListDTO tripListDTO, HttpServletRequest request) throws IOException {
+
+        String loginId = globalControllerAdvice.getCookieValue(request, "loginId");
+        Long memberId = (loginId != null) ? Long.valueOf(loginId) : null;
+
+        Long TripListId = tripListDTO.getId();
+
+        MemberTripListService.save(tripListDTO, memberId, TripListId);
+
+        return "redirect:/Member/myPage";
+    }
 }

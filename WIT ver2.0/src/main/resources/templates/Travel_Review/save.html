@@ -197,9 +197,8 @@
                 const addressInput = document.getElementById(`address${index}`);
                 if (addressInput) {
                     addressInput.value = data.address;
-                    zipcodes[index - 1] = data.address; // zipcodes 배열 업데이트
+                    zipcodes[index - 1] = data.address;
 
-                    // 🚀 zipcodes 배열을 hidden input에 반영 (중요!)
                     document.getElementById('zipcodeList').value = zipcodes.join(",");
                 }
             }
