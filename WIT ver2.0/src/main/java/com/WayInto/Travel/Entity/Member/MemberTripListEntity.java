@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name="member_buy_list_table")
+@Table(name="member_trip_list_table")
 public class MemberTripListEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +54,6 @@ public class MemberTripListEntity {
     public static MemberTripListEntity toSaveEntity(TripListDTO tripListDTO, MemberEntity memberEntity, TripListEntity tripListEntity) {
 
         MemberTripListEntity memberTripListEntity = new MemberTripListEntity();
-        memberTripListEntity.setId(tripListDTO.getId());
         memberTripListEntity.setTitle(tripListDTO.getTitle());
         memberTripListEntity.setPrice(tripListDTO.getPrice());
         memberTripListEntity.setSeason(tripListDTO.getSeason());

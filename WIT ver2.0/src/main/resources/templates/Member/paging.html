@@ -1,144 +1,88 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <title>WIT - Member List</title>
-
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        .btn-primary {
-            display: block;
-            margin: 0 auto 20px auto;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        table {
-            width: 80%;
-            margin: 0 auto;
-            border-collapse: collapse;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        td a {
-            text-decoration: none;
-            color: #007BFF;
-            transition: color 0.2s;
-        }
-
-        td a:hover {
-            color: #0056b3;
-        }
-
-        .pagination {
-            width: 80%;
-            margin: 20px auto;
-            text-align: center;
-        }
-
-        .pagination a {
-            margin: 0 5px;
-            padding: 8px 12px;
-            text-decoration: none;
-            border: 1px solid #007BFF;
-            border-radius: 5px;
-            color: #007BFF;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .pagination a:hover {
-            background-color: #007BFF;
-            color: white;
-        }
-
-        .pagination span {
-            margin: 0 5px;
-            padding: 8px 12px;
-            font-weight: bold;
-        }
-
-        h1{
-            text-align: center;
-            font-size: 2rem !important;
-            font-weight: bold !important;
-            margin-top: 10px !important;
-            margin-bottom: 30px !important;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body>
+<body class="bg-gray-100 font-sans">
 
 <div class="min-h-screen flex flex-col">
     <div th:replace="~{header :: header}"></div>
-    <main class="flex-1">
-        <h1>멤버 목록</h1>
 
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Area</th>
-            </tr>
-            <tr th:each="member: ${memberList}">
-                <td th:text="${member.id}"></td>
-                <td>
-                    <a th:href="@{|/Member/${member.id}|(page=${memberList.number + 1})}"
-                       th:text="${member.memberEmail}"></a>
-                </td>
-                <td th:text="${member.memberName}"></td>
-                <td th:text="${member.memberArea}"></td>
-            </tr>
-        </table>
+    <main class="flex-1 px-4 py-6">
+        <h1 class="text-3xl font-bold text-center mb-8">멤버 목록</h1>
 
-        <div class="pagination" th:if="${memberList.totalPages > 0}">
-            <a th:href="@{/Member/paging(page=1)}">First</a>
+        <form action="/Member/paging" method="get" class="text-center mb-6">
+            <label for="area" class="font-medium mr-2">지역 필터:</label>
+            <select name="area" id="area" onchange="this.form.submit()" class="px-3 py-2 rounded border border-gray-300 shadow-sm">
+                <option value="">전체 지역</option>
+                <option value="서울특별시" th:selected="${area == '서울특별시'}">서울특별시</option>
+                <option value="부산광역시" th:selected="${area == '부산광역시'}">부산광역시</option>
+                <option value="대구광역시" th:selected="${area == '대구광역시'}">대구광역시</option>
+                <option value="인천광역시" th:selected="${area == '인천광역시'}">인천광역시</option>
+                <option value="광주광역시" th:selected="${area == '광주광역시'}">광주광역시</option>
+                <option value="대전광역시" th:selected="${area == '대전광역시'}">대전광역시</option>
+                <option value="울산광역시" th:selected="${area == '울산광역시'}">울산광역시</option>
+                <option value="세종특별자치시" th:selected="${area == '세종특별자치시'}">세종특별자치시</option>
+                <option value="경기도" th:selected="${area == '경기도'}">경기도</option>
+                <option value="강원도" th:selected="${area == '강원도'}">강원도</option>
+                <option value="충청북도" th:selected="${area == '충청북도'}">충청북도</option>
+                <option value="충청남도" th:selected="${area == '충청남도'}">충청남도</option>
+                <option value="전라북도" th:selected="${area == '전라북도'}">전라북도</option>
+                <option value="전라남도" th:selected="${area == '전라남도'}">전라남도</option>
+                <option value="경상북도" th:selected="${area == '경상북도'}">경상북도</option>
+                <option value="경상남도" th:selected="${area == '경상남도'}">경상남도</option>
+                <option value="제주특별자치도" th:selected="${area == '제주특별자치도'}">제주특별자치도</option>
+            </select>
+            <input type="hidden" name="page" value="1"/>
+        </form>
 
-            <a th:href="${memberList.first} ? '#' : @{/Member/paging(page=${memberList.number})}">Prev</a>
-
-            <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-        <span th:if="${page == memberList.number + 1}" th:text="${page}"></span>
-        <a th:unless="${page == memberList.number + 1}"
-           th:href="@{/Member/paging(page=${page})}" th:text="${page}"></a>
-    </span>
-
-            <a th:href="${memberList.last} ? '#' : @{/Member/paging(page=${memberList.number + 2})}">Next</a>
-
-            <a th:href="@{/Member/paging(page=${memberList.totalPages})}">Last</a>
+        <div class="overflow-x-auto">
+            <table class="w-full max-w-5xl mx-auto bg-white shadow-md rounded border border-gray-200">
+                <thead class="bg-green-600 text-white">
+                <tr>
+                    <th class="py-3 px-4 text-left">ID</th>
+                    <th class="py-3 px-4 text-left">Email</th>
+                    <th class="py-3 px-4 text-left">Name</th>
+                    <th class="py-3 px-4 text-left">Area</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member : ${memberList}" class="border-t hover:bg-gray-100">
+                    <td class="py-2 px-4" th:text="${member.id}"></td>
+                    <td class="py-2 px-4">
+                        <a th:href="@{|/Member/${member.id}|(page=${memberList.number + 1})}"
+                           th:text="${member.memberEmail}"
+                           class="text-blue-600 hover:text-blue-800 font-medium"></a>
+                    </td>
+                    <td class="py-2 px-4" th:text="${member.memberName}"></td>
+                    <td class="py-2 px-4" th:text="${member.memberArea}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
+        <div class="flex justify-center items-center gap-2 mt-8" th:if="${memberList.totalPages > 0}">
+            <a th:href="@{/Member/paging(page=1)}" class="px-3 py-1 border rounded hover:bg-blue-100 text-blue-600">First</a>
+            <a th:href="${memberList.first} ? '#' : @{/Member/paging(page=${memberList.number})}"
+               class="px-3 py-1 border rounded hover:bg-blue-100 text-blue-600">Prev</a>
+
+            <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <span th:if="${page == memberList.number + 1}"
+                      class="px-3 py-1 border border-blue-600 text-white bg-blue-600 rounded font-bold"
+                      th:text="${page}"></span>
+                <a th:unless="${page == memberList.number + 1}"
+                   th:href="@{/Member/paging(page=${page})}"
+                   th:text="${page}"
+                   class="px-3 py-1 border rounded hover:bg-blue-100 text-blue-600"></a>
+            </span>
+
+            <a th:href="${memberList.last} ? '#' : @{/Member/paging(page=${memberList.number + 2})}"
+               class="px-3 py-1 border rounded hover:bg-blue-100 text-blue-600">Next</a>
+            <a th:href="@{/Member/paging(page=${memberList.totalPages})}" class="px-3 py-1 border rounded hover:bg-blue-100 text-blue-600">Last</a>
+        </div>
     </main>
 </div>
 

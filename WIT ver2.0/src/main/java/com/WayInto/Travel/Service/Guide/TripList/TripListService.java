@@ -59,8 +59,4 @@ public class TripListService {
             return null;
         }
     }
-
-    public void delete(Long id) {
-        tripListRepository.deleteById(id);
-    }
 }
