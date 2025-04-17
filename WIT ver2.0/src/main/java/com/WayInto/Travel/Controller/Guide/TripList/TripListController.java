@@ -4,6 +4,7 @@ import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
 import com.WayInto.Travel.Service.Guide.TripList.TripListService;
 import com.WayInto.Travel.Service.Member.MemberTripListService;
 import com.WayInto.Travel.DTO.Guide.TripList.TripListDTO;
+import com.WayInto.Travel.Service.Member.MemberService;
 import com.WayInto.Travel.DTO.Member.MemberTripListDTO;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class TripListController {
 
     private final TripListService tripListService;
+    private final MemberService memberService;
     private final GlobalControllerAdvice globalControllerAdvice;
     private final MemberTripListService MemberTripListService;
 
@@ -75,6 +77,8 @@ public class TripListController {
                            @CookieValue(value = "loginId", defaultValue = "") String loginId,
                            @CookieValue(value = "GuideID", defaultValue = "") String GuideID) {
 
+        Long guide = (GuideID != null) ? Long.valueOf(GuideID) : null;
+
         tripListService.updateHits(id);
 
         TripListDTO tripListDTO = tripListService.findById(id);
@@ -82,7 +86,7 @@ public class TripListController {
 
         model.addAttribute("loginId", loginId);
         model.addAttribute("loginName", loginName);
-        model.addAttribute("GuideID", GuideID);
+        model.addAttribute("GuideID", guide);
         model.addAttribute("loginEmail", loginEmail);
         model.addAttribute("membertrip", memberTripListDTO);
         model.addAttribute("triplist", tripListDTO);
@@ -98,6 +102,7 @@ public class TripListController {
 
         Long TripListId = tripListDTO.getId();
 
+        memberService.sellTripList(tripListDTO.getGuide_id(), tripListDTO.getPrice());
         MemberTripListService.save(tripListDTO, memberId, TripListId);
 
         return "redirect:/Member/myPage";
