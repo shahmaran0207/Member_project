@@ -1,7 +1,7 @@
 package com.WayInto.Travel.Entity.Board;
 
-import com.WayInto.Travel.DTO.Board.BoardDTO;
 import com.WayInto.Travel.Entity.Member.MemberEntity;
+import com.WayInto.Travel.DTO.Board.BoardDTO;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

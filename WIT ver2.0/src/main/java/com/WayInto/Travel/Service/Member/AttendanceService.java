@@ -43,7 +43,7 @@ public class AttendanceService {
 
         // 총 출석 횟수 증가
         member.increaseTotalAttendance();
-        member.setMemberMoney(member.getMemberMoney() + 10); // 출석 체크 시 10포인트 추가
+        member.setMemberMoney(member.getMemberMoney() + 10);
         memberRepository.save(member);
 
         return true;

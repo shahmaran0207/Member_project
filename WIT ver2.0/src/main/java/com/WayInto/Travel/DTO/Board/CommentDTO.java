@@ -1,8 +1,7 @@
 package com.WayInto.Travel.DTO.Board;
 
-import java.time.LocalDateTime;
-
 import com.WayInto.Travel.Entity.Board.CommentEntity;
+import java.time.LocalDateTime;
 import lombok.ToString;
 import lombok.Getter;
 import lombok.Setter;

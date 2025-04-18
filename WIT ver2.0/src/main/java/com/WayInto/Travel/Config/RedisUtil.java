@@ -18,7 +18,7 @@ public class RedisUtil {
 
     public boolean existData(String key) {
         if (key == null || key.trim().isEmpty()) {
-            return false; // 또는 예외를 던지는 방식도 가능
+            return false;
         }
         return Boolean.TRUE.equals(template.hasKey(key));
     }

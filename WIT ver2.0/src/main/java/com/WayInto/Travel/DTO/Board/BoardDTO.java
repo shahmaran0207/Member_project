@@ -1,7 +1,5 @@
 package com.WayInto.Travel.DTO.Board;
 
-import com.WayInto.Travel.DTO.Member.MemberDTO;
-import com.WayInto.Travel.Entity.Member.MemberEntity;
 import org.springframework.web.multipart.MultipartFile;
 import com.WayInto.Travel.Entity.Board.BoardEntity;
 import java.time.LocalDateTime;

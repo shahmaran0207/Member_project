@@ -1,9 +1,8 @@
 package com.WayInto.Travel.Entity.QnA.Answer;
 
-import java.time.LocalDateTime;
-
-import com.WayInto.Travel.Entity.Member.MemberEntity;
 import com.WayInto.Travel.Entity.QnA.Question.QuestionEntity;
+import com.WayInto.Travel.Entity.Member.MemberEntity;
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

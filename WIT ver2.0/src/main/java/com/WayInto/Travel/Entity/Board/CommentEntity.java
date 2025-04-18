@@ -1,7 +1,7 @@
 package com.WayInto.Travel.Entity.Board;
 
-import com.WayInto.Travel.DTO.Board.CommentDTO;
 import com.WayInto.Travel.Entity.Member.MemberEntity;
+import com.WayInto.Travel.DTO.Board.CommentDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
