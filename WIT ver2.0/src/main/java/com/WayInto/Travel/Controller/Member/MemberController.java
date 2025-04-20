@@ -2,10 +2,10 @@ package com.WayInto.Travel.Controller.Member;
 
 import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
 import com.WayInto.Travel.Service.Guide.Guide.Temp_GuideService;
-import com.WayInto.Travel.Service.Guide.Guide.GuideService;
-import com.WayInto.Travel.DTO.Member.MemberTripListDTO;
-import com.WayInto.Travel.Service.Member.MemberService;
 import com.WayInto.Travel.Service.Member.MemberTripListService;
+import com.WayInto.Travel.Service.Guide.Guide.GuideService;
+import com.WayInto.Travel.Service.Member.MemberService;
+import com.WayInto.Travel.DTO.Member.MemberTripListDTO;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.data.web.PageableDefault;
 import com.WayInto.Travel.DTO.Guide.guide.GuideDTO;
@@ -201,7 +201,9 @@ public class MemberController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateForm(@CookieValue(value = "loginId", defaultValue = "") String loginId, @PathVariable Long id, Model model) {
+    public String updateForm(@CookieValue(value = "loginId", defaultValue = "") String loginId,
+                             @PathVariable("id") Long id,
+                             Model model) {
         model.addAttribute("loginId", loginId);
         MemberDTO memberDTO = memberService.findById(id);
         model.addAttribute("updateMember", memberDTO);
@@ -245,15 +247,21 @@ public class MemberController {
 
         return "Member/buylist";
     }
-//
-//    @GetMapping("/buydetail/{id}")
-//    public String findById(@PathVariable Long id, Model model,
-//                           @PageableDefault(page=1) Pageable pageable) {
-//
-//        MemberTripListDTO memberTripListDTO = memberTripListService.findById(id);
-//
-//        model.addAttribute("triplist", memberTripListDTO);
-//        model.addAttribute("page", pageable.getPageNumber());
-//        return "member/buydetail";
-//    }
+
+    @GetMapping("/buydetail/{id}")
+    public String findById(@PathVariable Long id, Model model, HttpServletRequest request,
+                           @PageableDefault(page=1) Pageable pageable) {
+
+        String loginId = globalControllerAdvice.getCookieValue(request, "loginId");
+        Long memberId = (loginId != null) ? Long.valueOf(loginId) : null;
+
+        MemberTripListDTO memberTripListDTO = memberTripListService.findById(id);
+
+        System.out.println(memberTripListDTO.getZipcodeList());
+
+        model.addAttribute("memberId", memberId);
+        model.addAttribute("triplist", memberTripListDTO);
+        model.addAttribute("page", pageable.getPageNumber());
+        return "Member/buydetail";
+    }
 }

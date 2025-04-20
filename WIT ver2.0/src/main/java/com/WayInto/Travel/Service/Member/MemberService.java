@@ -1,8 +1,10 @@
 package com.WayInto.Travel.Service.Member;
 
 import com.WayInto.Travel.Repository.Member.MemberProfileRepository;
+import com.WayInto.Travel.Repository.Guide.Guide.GuideRepository;
 import com.WayInto.Travel.Repository.Member.MemberRepository;
 import com.WayInto.Travel.Entity.Member.MemberProfileEntity;
+import com.WayInto.Travel.Entity.Guide.guide.GuideEntity;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.WayInto.Travel.Entity.Member.MemberEntity;
@@ -24,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final GuideRepository guideRepository;
     private final MemberRepository memberRepository;
     private final ImageService imageService;
     private final MemberProfileRepository memberProfileRepository;
@@ -170,5 +173,16 @@ public class MemberService {
 
         memberRepository.save(existingMemberEntity);
         return findById(memberDTO.getId());
+    }
+
+    public void sellTripList(Long guideId, int price) {
+        GuideEntity guideEntity = guideRepository.findById(guideId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid guide ID: " + guideId));
+
+        MemberEntity existingMemberEntity = guideEntity.getMemberEntity();
+
+        existingMemberEntity.setMemberMoney(existingMemberEntity.getMemberMoney() + price);
+
+        memberRepository.save(existingMemberEntity);
     }
 }
