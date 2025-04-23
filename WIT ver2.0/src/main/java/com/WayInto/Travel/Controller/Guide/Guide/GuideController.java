@@ -37,6 +37,8 @@ public class GuideController {
         Long memberId = (loginId != null) ? Long.valueOf(loginId) : null;
 
         GuideDTO guideDTO = guideService.findById(id);
+
+        model.addAttribute("guideId", guideDTO.getMemberId());
         model.addAttribute("guide", guideDTO);
         model.addAttribute("loginId", memberId);
         model.addAttribute("loginName", loginName);

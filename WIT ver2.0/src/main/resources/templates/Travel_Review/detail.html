@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Detail</title>
+  <title>WIT - 여행 후기 Detail</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b890231fdd9e52518e28721a1a0c41b&libraries=services,clusterer,drawing,places"></script>
   <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -25,11 +25,7 @@
       margin: 5px !important; cursor: pointer !important; border-radius: 5px !important;
       transition: background-color 0.3s, transform 0.1s !important; }
     button:hover { background-color: #0056b3; transform: scale(1.05); }
-    #comment-write { width: 80%; margin: 20px auto; display: flex; justify-content: space-between; }
     #comment-write input { width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-right: 10px; }
-    #comment-write-button { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s, transform 0.1s; }
-    #comment-write-button:hover { background-color: #218838; transform: scale(1.05); }
-    #comment-list { width: 80%; margin: 20px auto; background: white; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
     .like-count {
       display: inline-block;
       background-color: #007BFF;
@@ -119,8 +115,8 @@
   const geocoder = new kakao.maps.services.Geocoder();
   const mapContainer = document.getElementById('map');
   const mapOption = {
-    center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심 좌표
-    level: 5, // 확대 레벨
+    center: new kakao.maps.LatLng(37.5665, 126.9780),
+    level: 5,
   };
   const map = new kakao.maps.Map(mapContainer, mapOption);
 
