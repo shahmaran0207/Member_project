@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>WIT - 채팅방</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<div class="max-w-2xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold" th:text="'💬 ' + ${receiver.memberName} + ' 님과의 채팅'"></h2>
+        <button onclick="reportChatRoom()" class="text-red-500 text-sm hover:underline">🚨 신고</button>
+    </div>
+
+    <div class="h-96 overflow-y-scroll border rounded p-4 bg-gray-50" id="chatBox">
+        <div th:if="${#lists.isEmpty(chatList)}">
+            <p class="text-gray-500 text-center mt-10">아직 채팅이 없습니다.</p>
+        </div>
+
+        <div th:each="chat : ${chatList}">
+            <div th:if="${chat.sender == sender.id}" class="text-right mb-2">
+                <p class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg" th:text="${chat.content}"></p>
+                <div class="text-sm text-gray-500 flex justify-end items-center space-x-2">
+                    <span th:text="${#temporals.format(chat.sentAt, 'HH:mm')}"></span>
+                    <span th:if="${chat.read}" class="text-xs text-green-500">읽음</span>
+                </div>
+            </div>
+
+            <div th:if="${chat.sender != sender.id}" class="text-left mb-2">
+                <p class="inline-block bg-gray-300 text-black px-4 py-2 rounded-lg" th:text="${chat.content}"></p>
+                <div class="text-sm text-gray-500" th:text="${#temporals.format(chat.sentAt, 'HH:mm')}"></div>
+            </div>
+        </div>
+    </div>
+
+    <form id="chatForm" class="flex items-center mt-4" onsubmit="sendMessage(event)">
+        <input type="hidden" id="senderName" th:value="${sender.id}">
+        <input type="hidden" id="receiverName" th:value="${receiver.id}">
+
+        <input type="text" id="chatMessage" placeholder="메시지를 입력하세요"
+               class="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">전송</button>
+    </form>
+</div>
+
+<script>
+    function sendMessage(event) {
+        event.preventDefault();
+
+        const messageInput = document.getElementById('chatMessage');
+        const message = messageInput.value.trim();
+
+        if (message === '') return;
+
+        const senderName = document.getElementById('senderName').value;
+        const receiverName = document.getElementById('receiverName').value;
+
+        const payload = {
+            sender: senderName,
+            receiver: receiverName,
+            content: message
+        };
+
+        fetch('/chat/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }).then(res => {
+            if (res.ok) {
+                messageInput.value = '';
+                appendMessage(payload);
+            } else {
+                alert('메시지 전송 실패');
+            }
+        });
+    }
+
+    function appendMessage(chat) {
+        const chatBox = document.getElementById('chatBox');
+
+        const wrapper = document.createElement('div');
+        wrapper.className = chat.sender === document.getElementById('senderName').value
+            ? 'text-right mb-2'
+            : 'text-left mb-2';
+
+        const message = document.createElement('p');
+        message.className = chat.sender === document.getElementById('senderName').value
+            ? 'inline-block bg-blue-500 text-white px-4 py-2 rounded-lg'
+            : 'inline-block bg-gray-300 text-black px-4 py-2 rounded-lg';
+        message.textContent = chat.content;
+
+        const time = document.createElement('div');
+        time.className = 'text-sm text-gray-500';
+        const now = new Date();
+        time.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+        wrapper.appendChild(message);
+        wrapper.appendChild(time);
+        chatBox.appendChild(wrapper);
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function reportChatRoom() {
+        const receiverName = document.getElementById('receiverName').value;
+        if (confirm(`${receiverName} 님을 신고하시겠습니까?`)) {
+            fetch('/chat/report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ receiverName })
+            }).then(res => {
+                if (res.ok) {
+                    alert('신고가 접수되었습니다.');
+                } else {
+                    alert('신고 처리 중 오류가 발생했습니다.');
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

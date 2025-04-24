@@ -11,8 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class AttendanceDTO {
+
     private Long id;
     private Long memberId;
+
     private LocalDate attendanceDate;
 
     public static AttendanceDTO toAttendanceDTO(AttendanceEntity attendanceEntity) {

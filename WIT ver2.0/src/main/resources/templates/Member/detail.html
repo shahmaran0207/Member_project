@@ -76,6 +76,10 @@
 
       <button style="background-color: #f87171 !important; color: white !important;" id="hate-button" onclick="toggleHate()">👎 싫어요</button>
       <span id="hate-count" class="like-count" th:text="${member.hatesCount}" style="background-color: #f87171 !important; color: white !important;">0</span>
+
+      <th:block th:if="${member.id != loginId}">
+        <button style="background-color: #10b981 !important; color: white !important;" id="chat-request-button" onclick="requestChat()">💬 채팅 신청</button>
+      </th:block>
     </div>
 
     <div id="comment-write">
@@ -91,9 +95,44 @@
 </div>
 
 <script th:inline="javascript">
+  const fromMemberId = [[${loginId}]];
+  const toMemberId = [[${member.id}]];
+
   const listReq = () => {
     const page = [[${page}]];
     location.href = "/Member/list?page=" + page;
+  };
+
+  const requestChat = () => {
+    const fromMemberId = [[${loginId}]];
+    const toMemberId = [[${member.id}]];
+
+    if (fromMemberId === toMemberId) {
+      alert("본인에게는 채팅을 신청할 수 없습니다.");
+      return;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/chat/request",
+      contentType: "application/json",
+      data: JSON.stringify({
+        fromMemberId: fromMemberId,
+        toMemberId: toMemberId
+      }),
+      success: function (res) {
+        const roomId = res.roomId;
+        if (roomId) {
+          window.location.href = "/chat/room/" + roomId;
+        } else {
+          alert("채팅방 이동에 실패했습니다.");
+        }
+      },
+      error: function (err) {
+        alert("채팅 신청에 실패했습니다.");
+        console.error("채팅 요청 실패:", err);
+      }
+    });
   };
 
   const liker = /*[[${loginId}]]*/ "";
