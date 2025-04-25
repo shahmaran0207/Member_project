@@ -17,7 +17,7 @@
             <p class="text-gray-500 text-center mt-10">아직 채팅이 없습니다.</p>
         </div>
 
-        <div th:each="chat : ${chatList}">
+        <div th:each="chat : ${chatList}" th:attr="data-chat-id=${chat.id}">
             <div th:if="${chat.sender == sender.id}" class="text-right mb-2">
                 <p class="inline-block bg-blue-500 text-white px-4 py-2 rounded-lg" th:text="${chat.content}"></p>
                 <div class="text-sm text-gray-500 flex justify-end items-center space-x-2">
@@ -105,6 +105,8 @@
     }
 
     function reportChatRoom() {
+        const lastChatElement = document.querySelector('#chatBox > div:last-child');
+        const chatId = lastChatElement?.getAttribute('data-chat-id');
         const receiverName = document.getElementById('receiverName').value;
         if (confirm(`${receiverName} 님을 신고하시겠습니까?`)) {
             fetch('/chat/report', {
@@ -112,7 +114,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ receiverName })
+                body: JSON.stringify({ chatId: chatId })
             }).then(res => {
                 if (res.ok) {
                     alert('신고가 접수되었습니다.');
