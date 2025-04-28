@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIT - 채팅 목록</title>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e9f5ff;
+        }
+    </style>
+</head>
+<body>
+<div class="min-h-screen flex flex-col">
+    <div th:replace="~{header :: header}"></div>
+    <main class="flex-1">
+        <div class="min-h-screen flex flex-col">
+            <main class="flex-1">
+                <h1>나의 채팅 목록</h1>
+                <table>
+                    <tr>
+                        <th>상대방</th>
+                        <th>최근 메시지</th>
+                        <th>시간</th>
+                    </tr>
+                    <tr th:each="room : ${chatRoomList}">
+                        <td>
+                            <a th:href="@{'/chat/room/' + ${room.chatPartnerId}}" th:text="${room.chatPartnerName}">상대방 이름</a>
+                        </td>
+                        <td th:text="${room.content}">최근 메시지</td>
+                        <td th:text="${room.sentAt}">시간</td>
+                    </tr>
+                </table>
+
+            </main>
+        </div>
+    </main>
+</div>
+</body>
+</html>

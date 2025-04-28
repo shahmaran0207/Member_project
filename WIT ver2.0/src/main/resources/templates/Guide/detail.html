@@ -99,7 +99,7 @@
 
 <body id="top">
 <div class="min-h-screen flex flex-col">
-  <div th:replace="~{header :: header}" class="header-spacing"></div> <!-- 헤더 파일 불러오기 -->
+  <div th:replace="~{header :: header}" class="header-spacing"></div>
 
   <main class="flex-1">
     <div class="section">
@@ -128,6 +128,9 @@
           <button id="hate-button" onclick="toggleHate()">👎 싫어요</button>
           <div id="hate-count" class="count" th:text="${guide.hateCounts}">0</div>
         </div>
+        <th:block th:if="${guide.memberId != loginId}">
+          <button style="background-color: #10b981 !important; color: white !important;" id="chat-request-button" onclick="requestChat()">💬 채팅 신청</button>
+        </th:block>
       </div>
 
       <div class="button-container">
@@ -157,6 +160,38 @@
   let hateCount = 0;
   const guideId = [[${guide.id}]];
   const memberId = [[${loginId}]];
+
+  const requestChat = () => {
+    const fromMemberId = [[${loginId}]];
+    const toMemberId = [[${guideId}]];
+
+    if (fromMemberId === toMemberId) {
+      alert("본인에게는 채팅을 신청할 수 없습니다.");
+      return;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/chat/request",
+      contentType: "application/json",
+      data: JSON.stringify({
+        fromMemberId: fromMemberId,
+        toMemberId: toMemberId
+      }),
+      success: function (res) {
+        const roomId = res.roomId;
+        if (roomId) {
+          window.location.href = "/chat/room/" + roomId;
+        } else {
+          alert("채팅방 이동에 실패했습니다.");
+        }
+      },
+      error: function (err) {
+        alert("채팅 신청에 실패했습니다.");
+        console.error("채팅 요청 실패:", err);
+      }
+    });
+  };
 
   document.addEventListener("DOMContentLoaded", function () {
     loadLikes();
