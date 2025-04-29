@@ -107,14 +107,20 @@
     function reportChatRoom() {
         const lastChatElement = document.querySelector('#chatBox > div:last-child');
         const chatId = lastChatElement?.getAttribute('data-chat-id');
-        const receiverName = document.getElementById('receiverName').value;
-        if (confirm(`${receiverName} 님을 신고하시겠습니까?`)) {
+        const reporterId = document.getElementById('senderName').value;
+        const partnerId = document.getElementById('receiverName').value;
+
+        if (confirm(`${partnerId} 님을 신고하시겠습니까?`)) {
             fetch('/chat/report', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ chatId: chatId })
+                body: JSON.stringify({
+                    chatId: chatId,
+                    reporterId: reporterId,
+                    partnerId: partnerId
+                })
             }).then(res => {
                 if (res.ok) {
                     alert('신고가 접수되었습니다.');
@@ -124,6 +130,21 @@
             });
         }
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const senderId = document.getElementById('senderName').value;
+        const receiverId = document.getElementById('receiverName').value;
+
+        fetch(`/chat/blocked?senderId=${senderId}&receiverId=${receiverId}`)
+            .then(res => res.json())
+            .then(blocked => {
+                if (blocked) {
+                    document.getElementById('chatMessage').disabled = true;
+                    document.querySelector('button[type="submit"]').disabled = true;
+                    document.getElementById('chatMessage').placeholder = '채팅이 차단된 상대입니다.';
+                }
+            });
+    });
 </script>
 </body>
 </html>

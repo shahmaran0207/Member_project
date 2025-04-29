@@ -1,5 +1,6 @@
 package com.WayInto.Travel.Entity.Member;
 
+import com.WayInto.Travel.Entity.Member.MemberChat.ChatReportEntity;
 import com.WayInto.Travel.DTO.Member.MemberDTO;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -62,6 +63,9 @@ public class MemberEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AttendanceEntity> attendanceRecords = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL)
+    private List<ChatReportEntity> reports = new ArrayList<>();
 
     @Column
     private int totalAttendance = 0;
