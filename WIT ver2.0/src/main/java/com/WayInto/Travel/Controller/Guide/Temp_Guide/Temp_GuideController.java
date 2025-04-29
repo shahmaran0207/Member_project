@@ -67,7 +67,6 @@ public class Temp_GuideController {
                           @RequestParam(name = "memberId", required = false) Long tempGuideId,
                            @CookieValue(value = "loginName", defaultValue = "") String loginName) throws IOException {
 
-        System.out.println("tempGuideId"+tempGuideId);
         String loginId = globalControllerAdvice.getCookieValue(request, "loginId");
         Long memberId = (loginId != null) ? Long.valueOf(loginId) : null;
 

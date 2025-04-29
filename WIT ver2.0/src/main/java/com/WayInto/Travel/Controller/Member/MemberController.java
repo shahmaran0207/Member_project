@@ -257,8 +257,6 @@ public class MemberController {
 
         MemberTripListDTO memberTripListDTO = memberTripListService.findById(id);
 
-        System.out.println(memberTripListDTO.getZipcodeList());
-
         model.addAttribute("memberId", memberId);
         model.addAttribute("triplist", memberTripListDTO);
         model.addAttribute("page", pageable.getPageNumber());

@@ -29,7 +29,6 @@ public class GuideCommentController {
     @PostMapping("/save")
     public ResponseEntity save(@ModelAttribute GuideCommentDTO commentDTO) {
 
-        System.out.println(commentDTO);
         Long saveResult = guideCommentService.save(commentDTO);
 
         if (saveResult != null) {

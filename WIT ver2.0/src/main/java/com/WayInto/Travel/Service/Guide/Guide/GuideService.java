@@ -42,8 +42,6 @@ public class GuideService {
     public void save(MemberDTO memberDTO, Long id) throws IOException {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + id));
-        System.out.println("memberDTO"+memberDTO);
-        System.out.println("memberEntity"+memberEntity);
         GuideEntity guideEntity = GuideEntity.toSaveEntity(memberDTO, memberEntity);
         guideRepository.save(guideEntity);
     }

@@ -32,8 +32,6 @@ public class AttendanceController {
 
         boolean success = attendanceService.markAttendance(memberId);
 
-        System.out.println(success);
-
         Map<String, String> response = new HashMap<>();
 
         if (success) {
