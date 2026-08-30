@@ -36,11 +36,16 @@ out/
 ### VS Code ###
 .vscode/
 
-/src/main/resources/service.json
-**/application.yml
+### Node ###
+node_modules/
+package-lock.json
 
 ### 작업용 로컬 문서 (커밋 금지) ###
 plan.md
 
-### Node ###
-node_modules/
+### Secrets ###
+/src/main/resources/service.json
+/src/main/resources/application-local.yml
+.env
+.env.*
+!.env.example
