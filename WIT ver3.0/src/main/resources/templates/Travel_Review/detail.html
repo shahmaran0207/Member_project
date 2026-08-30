@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>WIT - 여행 후기 Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b890231fdd9e52518e28721a1a0c41b&libraries=services,clusterer,drawing,places"></script>
+  <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-p+drxTe2EuU3nT5VnZW5hK5p5qA1oVh4RL68AH/RC3C3dp7cy1+xoy73X7O7J5GvnkFhEX3t0a3j8DeMTFF4Hg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+          integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+          crossorigin="anonymous"></script>
+
+  <style>
+    body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; }
+    h1 { text-align: center; color: #333; margin-bottom: 20px !important; font-weight: bold !important; font-size: 24px !important; margin-top: 20px !important; }
+    table { width: 80%; margin: 0 auto; border-collapse: collapse; background: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    th { background-color: #4CAF50; color: white; }
+    img { max-width: 100%; height: auto; border-radius: 8px; }
+    .button-container { text-align: center; margin-top: 20px; }
+    button { background-color: #007BFF !important; color: white !important; border: none !important; padding: 10px 15px !important;
+      margin: 5px !important; cursor: pointer !important; border-radius: 5px !important;
+      transition: background-color 0.3s, transform 0.1s !important; }
+    button:hover { background-color: #0056b3; transform: scale(1.05); }
+    #comment-write input { width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-right: 10px; }
+    .like-count {
+      display: inline-block;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      padding: 10px 15px;
+      margin-left: 10px;
+      cursor: default;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+<div class="min-h-screen flex flex-col">
+  <div th:replace="~{header :: header}"></div>
+  <main class="flex-1">
+
+    <h1>여행 후기 상세 정보</h1>
+
+    <table>
+      <tr>
+        <th>ID</th>
+        <td th:text="${review.id}"></td>
+      </tr>
+      <tr>
+        <th>Title</th>
+        <td th:text="${review.title}"></td>
+      </tr>
+      <tr>
+        <th>Writer</th>
+        <td th:text="${review.member_name}"></td>
+      </tr>
+      <tr>
+        <th>시작일</th>
+        <td th:text="${#temporals.format(review.startDate, 'yyyy-MM-dd')}"></td>
+      </tr>
+      <tr>
+        <th>종료일</th>
+        <td th:text="${#temporals.format(review.endDate, 'yyyy-MM-dd')}"></td>
+      </tr>
+      <tr>
+        <th>Hits</th>
+        <td th:text="${review.review_hits}"></td>
+      </tr>
+      <tr>
+        <th>Contents</th>
+        <td th:text="${review.content}"></td>
+      </tr>
+      <tr th:if="${review.fileAttached == 1}">
+        <th>Image</th>
+        <td th:each="fileName: ${review.storedFileName}">
+          <img th:src="@{|${fileName}|}" alt="Uploaded Image">
+        </td>
+      </tr>
+    </table>
+
+    <div id="map" style="width: 80%; height: 400px; margin: 20px auto; border: 1px solid #ddd;"></div>
+
+    <div class="button-container">
+      <button onclick="listReq()">목록</button>
+      <button th:if="${review.member_id} == ${loginId}" onclick="deleteReq()">삭제</button>
+    </div>
+    <div class="button-container">
+    <button style="background-color: #38bdf8 !important; color: white !important;" id="like-button" onclick="toggleLike()">👍 좋아요</button>
+    <span id="like-count" class="like-count"  style="background-color: #38bdf8 !important; color: white !important;">0</span>
+
+    <button style="background-color: #f87171 !important; color: white !important;" id="hate-button" onclick="toggleHate()">👎 싫어요</button>
+    <span id="hate-count" th:text="${review.hatesCount}" class="like-count"  style="background-color: #f87171 !important; color: white !important;">0</span>
+    </div>
+  </main>
+</div>
+
+<script th:inline="javascript">
+  const addresses = /*[[${review.zipcodeList}]]*/ [];
+  const travelReviewId = /*[[${review.id}]]*/ 0;
+  const memberId = /*[[${loginId}]]*/ "";
+  console.log(memberId);
+  let likeCount = 0;
+  let hateCount = 0;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    loadHates();
+    loadLikes();
+  });
+
+  const geocoder = new kakao.maps.services.Geocoder();
+  const mapContainer = document.getElementById('map');
+  const mapOption = {
+    center: new kakao.maps.LatLng(37.5665, 126.9780),
+    level: 5,
+  };
+  const map = new kakao.maps.Map(mapContainer, mapOption);
+
+  const markers = [];
+  const path = [];
+
+  addresses.forEach((address, index) => {
+    geocoder.addressSearch(address, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+        if (index === 0) {
+          map.setCenter(coords);
+        }
+
+        const marker = new kakao.maps.Marker({
+          map: map,
+          position: coords,
+          label: {
+            text: String(index + 1),
+            color: '#ffffff',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            backgroundColor: '#007BFF',
+            padding: '5px',
+          },
+        });
+
+        markers.push(marker);
+
+        path.push(coords);
+
+        const content = `<div style="background-color: #007BFF; color: white; font-size: 14px; padding: 5px 10px; border-radius: 5px;">${index + 1}</div>`;
+        const overlay = new kakao.maps.CustomOverlay({
+          map: map,
+          position: coords,
+          content: content,
+          yAnchor: 1,
+        });
+
+        if (path.length > 1) {
+          const polyline = new kakao.maps.Polyline({
+            map: map,
+            path: path,
+            strokeWeight: 3,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeStyle: 'solid',
+          });
+        }
+      } else {
+        console.error(`주소 검색 실패: ${address}, 상태 코드: ${status}`);
+      }
+    });
+  });
+
+  window.toggleHate = () => {
+    $.ajax({
+      type: "POST",
+      url: "/api/travel_review_hate/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "reviewId": travelReviewId, "memberId": memberId }),
+      success: function (res) {
+        hateCount += res === "Hate added" ? 1 : -1;
+        $('#hate-count').text(hateCount);
+        $('#hate-button').text(res === "Hate added" ? "👎 싫어요 취소" : "👎 싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 처리 실패", err);
+      }
+    });
+  };
+
+  const loadHates = () => {
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_hate/count/${travelReviewId}`,
+      success: function (count) {
+        hateCount = count;
+        $('#hate-count').text(hateCount);
+      },
+      error: function (err) {
+        console.log("싫어요 수 로드 실패", err);
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_hate/status/${travelReviewId}/${memberId}`,
+      success: function (isHated) {
+        $('#hate-button').text(isHated ? "👎 싫어요 취소" : "👎 싫어요");
+      },
+      error: function (err) {
+        console.log("싫어요 상태 로드 실패", err);
+      }
+    });
+  };
+
+  const loadLikes = () => {
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_like/count/${travelReviewId}`,
+      success: function (count) {
+        likeCount = count;
+        $('#like-count').text(likeCount);
+      },
+      error: function (err) {
+        console.log("좋아요 수 로드 실패", err);
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: `/api/travel_review_like/status/${travelReviewId}/${memberId}`,
+      success: function (isLiked) {
+        $('#like-button').text(isLiked ? "👍 좋아요 취소" : "👍 좋아요");
+      },
+      error: function (err) {
+        console.log("좋아요 상태 로드 실패", err);
+      }
+    });
+  };
+
+  window.toggleLike = () => {
+    $.ajax({
+      type: "POST",
+      url: "/api/travel_review_like/toggle",
+      contentType: "application/json",
+      data: JSON.stringify({ "reviewId": travelReviewId, "memberId": memberId }),
+      success: function (res) {
+        likeCount += res === "Like added" ? 1 : -1;
+        $('#like-count').text(likeCount);
+        $('#like-button').text(res === "Like added" ? "👍 좋아요 취소" : "👍 좋아요");
+      },
+      error: function (err) {
+        console.log("좋아요 처리 실패", err);
+      }
+    });
+  };
+
+  const deleteReq = () => {
+    const id = [[${review.id}]];
+    location.href = "/Travel_Review/delete/" + id;
+  };
+</script>
+
+</body>
+</html>
