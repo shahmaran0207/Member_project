@@ -1,0 +1,114 @@
+# WIT ver3.0 기본 설정
+#
+# 이 파일에는 비밀정보를 직접 적지 않는다. 모든 민감한 값은 환경변수로 주입한다.
+# 로컬 개발용 실제 값이 필요하면 application-local.yml을 만들어 쓴다 (.gitignore로 차단됨).
+#   실행: --spring.profiles.active=local
+#
+# 필요한 환경변수 목록과 발급처는 .env.example 참고.
+
+spring:
+  application:
+    name: WIT
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 1800000
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      # Upstash 등 관리형 Redis는 TLS를 요구한다. 로컬은 false.
+      ssl:
+        enabled: ${REDIS_SSL:false}
+      password: ${REDIS_PASSWORD:}
+
+  datasource:
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/wit?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    # 운영에서는 캐시를 켜야 한다. 로컬에서만 false로 덮어쓴다.
+    cache: ${THYMELEAF_CACHE:true}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect: ${JPA_DIALECT:org.hibernate.dialect.MySQL8Dialect}
+
+server:
+  # 배포 플랫폼이 PORT를 주입하는 경우가 많아 변수로 받는다.
+  port: ${PORT:8084}
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# 이미지 저장소. ver3에서 Cloudflare R2(S3 API 호환)로 전환 예정이라
+# endpoint를 변수로 열어둔다. 비워두면 기존 AWS S3로 동작한다.
+cloud:
+  aws:
+    credentials:
+      access-key: ${STORAGE_ACCESS_KEY:}
+      secret-key: ${STORAGE_SECRET_KEY:}
+    region:
+      static: ${STORAGE_REGION:ap-northeast-2}
+    stack:
+      auto: false
+    s3:
+      bucket: ${STORAGE_BUCKET:}
+      endpoint: ${STORAGE_ENDPOINT:}
+
+# ver3 지도/라우팅 관련 설정
+app:
+  map:
+    kakao:
+      # 브라우저에 노출되는 키. 노출 자체는 정상이나
+      # 카카오 콘솔에서 도메인 화이트리스트를 반드시 걸어야 한다.
+      js-key: ${KAKAO_JS_KEY:}
+      # 서버 전용 키. 지오코딩/로컬 검색에 사용하며 절대 클라이언트로 내보내지 않는다.
+      rest-key: ${KAKAO_REST_KEY:}
+
+  # 이동수단별 경로 API. 아직 구현 전이라 비어 있어도 기동되도록 기본값을 둔다.
+  routing:
+    car:
+      api-key: ${KAKAO_MOBILITY_KEY:}
+    walk:
+      api-key: ${TMAP_APP_KEY:}
+    bike:
+      api-key: ${ORS_API_KEY:}
+    transit:
+      api-key: ${ODSAY_API_KEY:}
+
+  # 히트맵용 기상청 단기예보 (공공데이터포털)
+  weather:
+    kma:
+      service-key: ${KMA_SERVICE_KEY:}

@@ -49,3 +49,9 @@ plan.md
 .env
 .env.*
 !.env.example
+
+### 설정 파일 ###
+# 루트 .gitignore가 **/application.yml을 막고 있으나, ver3.0의 application.yml은
+# 환경변수 참조만 담고 비밀정보가 없으므로 커밋한다.
+# 실제 값은 application-local.yml(로컬) 또는 환경변수(배포)로 주입한다.
+!/src/main/resources/application.yml
