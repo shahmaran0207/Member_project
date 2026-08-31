@@ -87,8 +87,25 @@ cloud:
       bucket: ${STORAGE_BUCKET:}
       endpoint: ${STORAGE_ENDPOINT:}
 
-# ver3 지도/라우팅 관련 설정
 app:
+  security:
+    cookie:
+      # 로컬은 http라 Secure 쿠키가 전송되지 않는다. 개발 시에만 false.
+      secure: ${COOKIE_SECURE:true}
+      # CSRF 1차 방어. 외부 사이트에서 넘어오는 요청에는 쿠키가 실리지 않는다.
+      same-site: ${COOKIE_SAME_SITE:Lax}
+    session:
+      duration-minutes: ${SESSION_DURATION_MINUTES:120}
+      # true면 로그아웃/탈취가 즉시 반영되지만 매 요청마다 Firebase로 왕복이 생긴다.
+      # false는 로컬 서명 검증만 하며, 대신 세션 수명을 짧게 유지해 노출을 줄인다.
+      check-revoked: ${SESSION_CHECK_REVOKED:false}
+    principal-cache:
+      # 세션 검증은 로컬 연산이지만 회원 조회는 DB를 탄다.
+      # 이 캐시가 없으면 요청마다 조회가 2번씩 발생한다.
+      ttl-seconds: ${PRINCIPAL_CACHE_TTL:60}
+      max-size: ${PRINCIPAL_CACHE_MAX_SIZE:10000}
+
+# ver3 지도/라우팅 관련 설정
   map:
     kakao:
       # 브라우저에 노출되는 키. 노출 자체는 정상이나

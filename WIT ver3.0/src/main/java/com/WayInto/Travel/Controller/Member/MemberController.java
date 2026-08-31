@@ -4,11 +4,14 @@ import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
 import com.WayInto.Travel.Service.Guide.Guide.Temp_GuideService;
 import com.WayInto.Travel.Service.Member.MemberTripListService;
 import com.WayInto.Travel.Service.Guide.Guide.GuideService;
+import com.WayInto.Travel.Security.AuthenticatedMemberLoader;
+import com.WayInto.Travel.Security.FirebaseSessionService;
+import com.WayInto.Travel.Security.AuthenticatedMember;
 import com.WayInto.Travel.Service.Member.MemberService;
 import com.WayInto.Travel.DTO.Member.MemberTripListDTO;
+import com.WayInto.Travel.Security.LoginMember;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.data.web.PageableDefault;
-import com.WayInto.Travel.DTO.Guide.guide.GuideDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
-import jakarta.servlet.http.Cookie;
 import java.io.IOException;
 import java.util.Map;
 
@@ -35,6 +37,8 @@ public class MemberController {
     private final Temp_GuideService tempGuideService;
     private final MemberTripListService memberTripListService;
     private final GuideService guideService;
+    private final FirebaseSessionService sessionService;
+    private final AuthenticatedMemberLoader memberLoader;
 
     @GetMapping("/save")
     public String save() {
@@ -62,61 +66,58 @@ public class MemberController {
         return "home";
     }
 
-    private void setHttpOnlyCookie(HttpServletResponse response, String name, String value) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(3600);
-        response.addCookie(cookie);
-    }
-
     @GetMapping("/login")
     public String login() {
         return "Member/login";
     }
 
+    /**
+     * Firebase idToken을 검증하고 서명된 세션 쿠키를 발급한다.
+     *
+     * ver2는 loginId 쿠키가 이미 있으면 토큰 검증을 건너뛰고 성공을 반환했다.
+     * 위조 쿠키 하나로 인증을 통째로 우회할 수 있었기 때문에 그 분기를 제거했다.
+     *
+     * 신원 정보(loginId, memberRole 등)는 더 이상 브라우저로 내려보내지 않는다.
+     * 요청마다 서버가 세션 쿠키를 검증해 다시 만든다.
+     */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> request, HttpServletRequest httpRequest,
+    public ResponseEntity<String> login(@RequestBody Map<String, String> request,
                                         HttpServletResponse httpResponse) {
         String idToken = request.get("idToken");
-        try {
-            String existingLoginId = globalControllerAdvice.getCookieValue(httpRequest, "loginId");
-            if (existingLoginId != null) {
-                return ResponseEntity.ok("/");
-            }
+        if (idToken == null || idToken.isBlank()) {
+            return ResponseEntity.status(401).body("/Member/login");
+        }
 
-            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+        try {
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken, true);
             String email = decodedToken.getEmail();
-            String firebaseUid = decodedToken.getUid();
 
             MemberDTO memberDTO = memberService.login(email);
+            if (memberDTO == null || memberDTO.getId() == null) {
+                return ResponseEntity.status(401).body("/Member/login");
+            }
 
-            GuideDTO guideDTO = guideService.findByMemberId(memberDTO.getId());
+            String sessionCookie = sessionService.createSessionCookie(idToken);
+            sessionService.writeSessionCookie(httpResponse, sessionCookie);
 
-            if (guideDTO != null) setHttpOnlyCookie(httpResponse, "GuideID", guideDTO.getId().toString());
-            setHttpOnlyCookie(httpResponse, "loginId", memberDTO.getId().toString());
-            setHttpOnlyCookie(httpResponse, "memberRole", String.valueOf(memberDTO.getRole()));
-            setHttpOnlyCookie(httpResponse, "tempGuide", String.valueOf(memberDTO.getTempGuide()));
-            setHttpOnlyCookie(httpResponse, "loginEmail", memberDTO.getMemberEmail());
-            setHttpOnlyCookie(httpResponse, "loginName", memberDTO.getMemberName());
-            setHttpOnlyCookie(httpResponse, "firebaseUid", firebaseUid);
+            // 로그인 직전의 낡은 캐시가 남아 있으면 비운다.
+            memberLoader.evict(decodedToken.getUid());
 
             return ResponseEntity.ok("/");
         } catch (Exception e) {
+            // 실패 사유를 구분해 돌려주지 않는다. 계정 존재 여부를 알려주는 통로가 되기 때문이다.
             return ResponseEntity.status(401).body("/Member/login");
         }
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletResponse response) {
-        deleteCookie(response, "GuideID");
-        deleteCookie(response, "loginId");
-        deleteCookie(response, "tempGuide");
-        deleteCookie(response, "memberRole");
-        deleteCookie(response, "firebaseUid");
-        deleteCookie(response, "loginName");
-        deleteCookie(response, "loginEmail");
+    public String logout(@LoginMember(required = false) AuthenticatedMember member,
+                         HttpServletResponse response) {
+        if (member != null) {
+            sessionService.revoke(member.firebaseUid());
+            memberLoader.evict(member.firebaseUid());
+        }
+        sessionService.clearSessionCookie(response);
         return "redirect:/";
     }
 
@@ -137,15 +138,6 @@ public class MemberController {
             return "Member/myPage";
 
         } else return "Member/login";
-    }
-
-    private void deleteCookie(HttpServletResponse response, String name) {
-        Cookie cookie = new Cookie(name, null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0); // 쿠키 즉시 만료
-        response.addCookie(cookie);
     }
 
     @GetMapping("/paging")

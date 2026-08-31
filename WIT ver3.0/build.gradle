@@ -37,6 +37,10 @@ dependencies {
 	implementation 'org.mindrot:jbcrypt:0.4'
 	compileOnly 'org.projectlombok:lombok'
 	implementation 'ognl:ognl:3.2.19'
+
+	// 인증 principal 캐시. 세션 쿠키 검증은 로컬이지만 회원 조회는 DB를 타므로
+	// 매 요청 2회 조회를 막기 위해 짧은 TTL 캐시를 둔다.
+	implementation 'com.github.ben-manes.caffeine:caffeine'
 }
 
 tasks.named('test') {
