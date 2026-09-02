@@ -1,15 +1,15 @@
 package com.WayInto.Travel.Controller.Board;
 
 import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
-import com.WayInto.Travel.Security.AuthenticatedMember;
-import com.WayInto.Travel.Security.ResourceGuard;
-import com.WayInto.Travel.Security.LoginMember;
 import com.WayInto.Travel.Service.Board.CommentService;
+import com.WayInto.Travel.Security.AuthenticatedMember;
 import com.WayInto.Travel.Service.Board.BoardService;
 import org.springframework.data.web.PageableDefault;
+import com.WayInto.Travel.Security.ResourceGuard;
 import org.springframework.stereotype.Controller;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+import com.WayInto.Travel.Security.LoginMember;
 import com.WayInto.Travel.DTO.Board.CommentDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import com.WayInto.Travel.DTO.Board.BoardDTO;
