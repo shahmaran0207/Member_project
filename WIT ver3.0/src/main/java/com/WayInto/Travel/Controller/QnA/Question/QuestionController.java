@@ -3,6 +3,9 @@ package com.WayInto.Travel.Controller.QnA.Question;
 import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
 import com.WayInto.Travel.Service.QnA.Question.QuestionService;
 import com.WayInto.Travel.Service.QnA.Answer.AnswerService;
+import com.WayInto.Travel.Security.AuthenticatedMember;
+import com.WayInto.Travel.Security.ResourceGuard;
+import com.WayInto.Travel.Security.LoginMember;
 import com.WayInto.Travel.DTO.QnA.Question.QuestionDTO;
 import org.springframework.data.web.PageableDefault;
 import com.WayInto.Travel.DTO.QnA.Answer.AnswerDTO;
@@ -23,6 +26,7 @@ public class QuestionController {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final GlobalControllerAdvice globalControllerAdvice;
+    private final ResourceGuard resourceGuard;
 
     @GetMapping("/list")
     public String QnAList(@PageableDefault(page = 1) Pageable pageable, Model model) {
@@ -74,7 +78,12 @@ public class QuestionController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
+    public String delete(@LoginMember AuthenticatedMember member, @PathVariable Long id) {
+        // ver2는 작성자 확인 없이 id만 받아 삭제했다.
+        QuestionDTO question = questionService.findById(id);
+        resourceGuard.requireFound(question);
+        resourceGuard.requireOwnerOrAdmin(member, question.getMemberId());
+
         questionService.delete(id);
         return "redirect:/QnA/Question/list";
     }

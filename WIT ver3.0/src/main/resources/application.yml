@@ -89,6 +89,12 @@ cloud:
 
 app:
   security:
+    headers:
+      # 로컬(http)에서는 의미가 없고 브라우저에 https 강제가 각인되면 개발이 불편해진다.
+      hsts: ${HSTS_ENABLED:true}
+      # 템플릿에 인라인 <script>가 많아 현재는 'unsafe-inline'이 불가피하다.
+      # 인라인 스크립트를 외부 파일로 걷어내면 이 항목을 제거해 강도를 올릴 수 있다.
+      csp: ${CSP_POLICY:default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://dapi.kakao.com https://t1.daumcdn.net https://cdn.iamport.kr https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://dapi.kakao.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'}
     cookie:
       # 로컬은 http라 Secure 쿠키가 전송되지 않는다. 개발 시에만 false.
       secure: ${COOKIE_SECURE:true}

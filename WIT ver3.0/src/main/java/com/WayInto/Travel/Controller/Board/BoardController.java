@@ -1,6 +1,9 @@
 package com.WayInto.Travel.Controller.Board;
 
 import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
+import com.WayInto.Travel.Security.AuthenticatedMember;
+import com.WayInto.Travel.Security.ResourceGuard;
+import com.WayInto.Travel.Security.LoginMember;
 import com.WayInto.Travel.Service.Board.CommentService;
 import com.WayInto.Travel.Service.Board.BoardService;
 import org.springframework.data.web.PageableDefault;
@@ -24,6 +27,7 @@ public class BoardController {
     private final GlobalControllerAdvice globalControllerAdvice;
     private final CommentService commentService;
     private final BoardService boardService;
+    private final ResourceGuard resourceGuard;
 
     @GetMapping("/paging")
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
@@ -70,27 +74,40 @@ public class BoardController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@CookieValue(value = "loginId", defaultValue = "") String loginId, @PathVariable("id") Long id) {
+    public String delete(@LoginMember AuthenticatedMember member, @PathVariable("id") Long id) {
+        // ver2는 loginId를 받고도 쓰지 않아, 로그인만 하면 남의 글을 지울 수 있었다.
+        BoardDTO board = boardService.findById(id);
+        resourceGuard.requireFound(board);
+        resourceGuard.requireOwnerOrAdmin(member, board.getMemberId());
+
         boardService.delete(id);
         return "redirect:/Board/paging";
     }
 
     @GetMapping("/update/{id}")
-    public String updateForm(@CookieValue(value = "loginId", defaultValue = "") String loginId, @PathVariable Long id, Model model) {
-        model.addAttribute("loginId", loginId);
+    public String updateForm(@LoginMember AuthenticatedMember member, @PathVariable Long id, Model model) {
         BoardDTO boardDTO = boardService.findById(id);
+        resourceGuard.requireFound(boardDTO);
+        resourceGuard.requireOwnerOrAdmin(member, boardDTO.getMemberId());
+
+        model.addAttribute("loginId", member.id());
         model.addAttribute("boardUpdate", boardDTO);
         return "Board/update";
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute BoardDTO boardDTO, HttpServletRequest request,
-                         Model model) throws IOException {
-        String loginId = globalControllerAdvice.getCookieValue(request, "loginId");
-        Long memberId = (loginId != null) ? Long.valueOf(loginId) : null;
-        BoardDTO board = boardService.update(boardDTO, memberId);
+    public String update(@LoginMember AuthenticatedMember member,
+                         @ModelAttribute BoardDTO boardDTO, Model model) throws IOException {
+        // 폼으로 넘어온 id를 그대로 믿으면 남의 글을 수정할 수 있다.
+        // BoardService.update가 작성자를 요청자로 덮어쓰기 때문에 소유권까지 넘어간다.
+        BoardDTO existing = boardService.findById(boardDTO.getId());
+        resourceGuard.requireFound(existing);
+        resourceGuard.requireOwnerOrAdmin(member, existing.getMemberId());
 
-        model.addAttribute("loginId", loginId);
+        // 원래 작성자를 유지한다. 관리자가 수정해도 소유권은 옮겨가지 않는다.
+        BoardDTO board = boardService.update(boardDTO, existing.getMemberId());
+
+        model.addAttribute("loginId", member.id());
         model.addAttribute("board", board);
         return "Board/detail";
     }

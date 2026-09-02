@@ -3,6 +3,9 @@ package com.WayInto.Travel.Controller.Travel_Review;
 import com.WayInto.Travel.Controller.ControllerAdvice.GlobalControllerAdvice;
 import com.WayInto.Travel.Service.Travel_Review.TravelReviewService;
 import com.WayInto.Travel.DTO.Travel_Review.ReviewDTO;
+import com.WayInto.Travel.Security.AuthenticatedMember;
+import com.WayInto.Travel.Security.ResourceGuard;
+import com.WayInto.Travel.Security.LoginMember;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ public class Travel_ReviewController {
 
     private final GlobalControllerAdvice globalControllerAdvice;
     private final TravelReviewService travelReviewService;
+    private final ResourceGuard resourceGuard;
 
     @GetMapping("/paging")
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
@@ -64,8 +68,13 @@ public class Travel_ReviewController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@CookieValue(value = "loginId", defaultValue = "") String loginId, @PathVariable("id") Long id,
+    public String delete(@LoginMember AuthenticatedMember member, @PathVariable("id") Long id,
                          Model model) {
+        // ver2는 loginId를 받고도 쓰지 않아, 로그인만 하면 남의 후기를 지울 수 있었다.
+        ReviewDTO review = travelReviewService.findById(id);
+        resourceGuard.requireFound(review);
+        resourceGuard.requireOwnerOrAdmin(member, review.getMember_id());
+
         travelReviewService.delete(id);
 
         model.addAttribute("msg", "여행 후기가 삭제 되었습니다.");
